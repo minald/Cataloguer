@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cataloguer.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -10,20 +11,14 @@ namespace Cataloguer.Controllers
     {
         public ActionResult Index()
         {
+            ArtistContext db = new ArtistContext();
+            db.Artists.Add(new Artist { Name="ABC", PictureLink="QWE", Scrobbles = 2, Listeners = 1});
+            db.SaveChanges();
             return View();
         }
 
-        public ActionResult About()
+        public ActionResult Local()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
