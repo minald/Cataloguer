@@ -1,7 +1,29 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using Cataloguer.Models
+@model List<Artist>
+@{
+    ViewBag.Title = "Top artists";
 }
 
-<h2>Index</h2>
-
+<h1 class="text-center">Top artists from Last.fm</h1>
+<table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+            <th>Scrobbles</th>
+            <th>Listeners</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Artist artist in Model ?? new List<Artist>())
+        {
+            <tr>
+                <td>@artist.Name</td>
+                <td><img src="@artist.PictureLink" /></td>
+                <td>@artist.Scrobbles</td>
+                <td>@artist.Listeners</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
