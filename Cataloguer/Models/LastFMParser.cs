@@ -52,10 +52,13 @@ namespace Cataloguer.Models
 
             string xpathToTracks = "//*[@id='top-tracks-section']/div/table/tbody/tr";
             var untreatedTracks = profilePage.DocumentNode.SelectNodes(xpathToTracks);
-            List<string> tracks = new List<string>();
+            List<Track> tracks = new List<Track>();
             foreach (var untreatedTrack in untreatedTracks)
             {
-                string track = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
+                int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
+                string trackName = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
+                string trackListeners = untreatedTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
+                Track track = new Track(trackRating, trackName, trackListeners);
                 tracks.Add(track);
             }
 

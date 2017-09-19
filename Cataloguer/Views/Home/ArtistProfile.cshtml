@@ -1,7 +1,7 @@
 ﻿@using Cataloguer.Models
 @model Artist
 @{
-    ViewBag.Title = "ArtistProfile";
+    ViewBag.Title = Model.Name;
 }
 
 <h1 class="text-center"><img src="@Model.PictureLink"/>    @Model.Name</h1>
@@ -14,13 +14,15 @@
         <code>@tag</code>
     }
 </h4>
-<h2 class="text-center">Top tracks</h2>
+<h2 class="text-center">Top tracks for 7 days</h2>
 <table class="table table-hover table-striped">
     <tbody>
-        @foreach (string track in Model.Tracks ?? new List<string>())
+        @foreach (Track track in Model.Tracks ?? new List<Track>())
         {
             <tr>
-                <td>@track</td>
+                <td>@track.Rating</td>
+                <td>@track.Name</td>
+                <td>@track.Listeners</td>
             </tr>
         }
     </tbody>

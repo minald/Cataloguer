@@ -160,6 +160,7 @@
     <Compile Include="Models\ArtistContext.cs" />
     <Compile Include="Models\LastFMParser.cs" />
     <Compile Include="Models\Song.cs" />
+    <Compile Include="Models\Track.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

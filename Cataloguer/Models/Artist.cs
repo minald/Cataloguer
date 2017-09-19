@@ -21,14 +21,14 @@ namespace Cataloguer.Models
 
         public virtual List<Album> Albums { get; set; }
 
-        public virtual List<string> Tracks { get; set; }
+        public virtual List<Track> Tracks { get; set; }
 
         public virtual List<string> Tags { get; set; }
 
         public Artist()
         {
             Albums = new List<Album>();
-            Tracks = new List<string>();
+            Tracks = new List<Track>();
             Tags = new List<string>();
         }
 
@@ -38,12 +38,12 @@ namespace Cataloguer.Models
             PictureLink = pictureLink;
             ProfileLink = profileLink;
             Albums = new List<Album>();
-            Tracks = new List<string>();
+            Tracks = new List<Track>();
             Tags = new List<string>();
         }
 
         public Artist(string name, string pictureLink, string profileLink, 
-            string scrobbles, string listeners, List<string> tracks, List<string> tags)
+            string scrobbles, string listeners, List<Track> tracks, List<string> tags)
         {
             Name = name;
             PictureLink = pictureLink;
