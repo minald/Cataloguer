@@ -1,0 +1,27 @@
+﻿@using Cataloguer.Models
+@model Artist
+@{
+    ViewBag.Title = "ArtistProfile";
+}
+
+<h1 class="text-center"><img src="@Model.PictureLink"/>    @Model.Name</h1>
+<h4>Scrobbles : @Model.Scrobbles</h4>
+<h4>Listeners : @Model.Listeners</h4>
+<h4>
+    Tags :
+    @foreach (string tag in Model.Tags)
+    {
+        <code>@tag</code>
+    }
+</h4>
+<h2 class="text-center">Top tracks</h2>
+<table class="table table-hover table-striped">
+    <tbody>
+        @foreach (string track in Model.Tracks ?? new List<string>())
+        {
+            <tr>
+                <td>@track</td>
+            </tr>
+        }
+    </tbody>
+</table>

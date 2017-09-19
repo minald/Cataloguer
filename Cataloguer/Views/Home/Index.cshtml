@@ -10,18 +10,15 @@
         <tr>
             <th>Name</th>
             <th>Image</th>
-            <th>Scrobbles</th>
-            <th>Listeners</th>
         </tr>
     </thead>
     <tbody>
         @foreach (Artist artist in Model ?? new List<Artist>())
         {
             <tr>
-                <td>@artist.Name</td>
+                <td>@Html.ActionLink(@artist.Name, "ArtistProfile", "Home", 
+                   new { profileLink = artist.ProfileLink, name = artist.Name, pictureLink = artist.PictureLink }, new { })</td>
                 <td><img src="@artist.PictureLink" /></td>
-                <td>@artist.Scrobbles</td>
-                <td>@artist.Listeners</td>
             </tr>
         }
     </tbody>

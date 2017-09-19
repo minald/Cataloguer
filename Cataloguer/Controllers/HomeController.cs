@@ -12,10 +12,13 @@ namespace Cataloguer.Controllers
         public ActionResult Index()
         {
             List<Artist> artists = new LastFMParser().GetTopArtists();
-            //ArtistContext db = new ArtistContext();
-            //db.Artists.Add(new Artist { Name="ABC", PictureLink="QWE", Scrobbles = 2, Listeners = 1});
-            //db.SaveChanges();
             return View(artists);
+        }
+
+        public ActionResult ArtistProfile(string name, string pictureLink, string profileLink)
+        {
+            Artist artist = new LastFMParser().GetArtist(name, pictureLink, profileLink);
+            return View(artist);
         }
 
         public ActionResult Local()

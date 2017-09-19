@@ -214,6 +214,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Local.cshtml" />
+    <Content Include="Views\Home\ArtistProfile.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
