@@ -36,9 +36,11 @@
         {
             <tr>
                 <td>@album.Name</td>
-                <td><img height="200" src="@album.PictureLink"/></td>
+                <td><img height="150" src="@album.PictureLink"/></td>
                 <td>@album.Listeners</td>
             </tr>
         }
     </tbody>
 </table>
+@Html.ActionLink("More albums...", "ArtistTopAlbums", "Home",
+    new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })

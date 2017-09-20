@@ -23,12 +23,19 @@ namespace Cataloguer.Controllers
 
         public ActionResult ArtistTopTracks(string artistName, string artistPictureLink, string artistProfileLink)
         {
-            string linkToPageWithTopTracks = artistProfileLink + "/+tracks?date_preset=ALL";
-            Artist artist = new LastFMParser().GetArtistWithAllTracks(artistName, artistPictureLink, linkToPageWithTopTracks);
+            string linkToPageWithAllTracks = artistProfileLink + "/+tracks?date_preset=ALL";
+            Artist artist = new LastFMParser().GetArtistWithAllTracks(artistName, artistPictureLink, linkToPageWithAllTracks);
             return View(artist);
         }
 
-        //TODO : Parse top albums and biography
+        public ActionResult ArtistTopAlbums(string artistName, string artistPictureLink, string artistProfileLink)
+        {
+            string linkToPageWithAllAlbums = artistProfileLink + "/+albums";
+            Artist artist = new LastFMParser().GetArtistWithAllAlbums(artistName, artistPictureLink, linkToPageWithAllAlbums);
+            return View(artist);
+        }
+
+        //TODO : Parse biography
 
         public ActionResult Local()
         {

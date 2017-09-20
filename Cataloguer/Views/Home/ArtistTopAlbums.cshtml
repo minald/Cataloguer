@@ -1,0 +1,22 @@
+﻿@using Cataloguer.Models
+@model Artist
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h1 class="text-center"><img src="@Model.PictureLink" />    @Model.Name</h1>
+<h2 class="text-center">Top albums of all time</h2>
+<table class="table table-hover table-striped table-bordered">
+    <tbody>
+        @foreach (Album album in Model.Albums ?? new List<Album>())
+        {
+            <tr>
+                <td>@album.Name</td>
+                <td><img height="150" src="@album.PictureLink" /></td>
+                <td>@album.ReleaseDate</td>
+                <td>@album.RunningLenght</td>
+                <td>@album.Listeners</td>
+            </tr>
+        }
+    </tbody>
+</table>

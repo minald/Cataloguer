@@ -13,8 +13,8 @@ namespace Cataloguer.Models
             List<Artist> topArtists = new List<Artist>();
             HtmlWeb htmlWeb = new HtmlWeb();
             HtmlDocument musicPage = htmlWeb.Load("https://www.last.fm/music");
-            var untreatedArtists = musicPage.DocumentNode.SelectNodes("//*[@class='music-charts']/div/div[2]/table/tbody/tr[contains(@class, 'js-link-block')]");
-            foreach (var untreatedArtist in untreatedArtists)
+            HtmlNodeCollection untreatedArtists = musicPage.DocumentNode.SelectNodes("//*[@class='music-charts']/div/div[2]/table/tbody/tr[contains(@class, 'js-link-block')]");
+            foreach (HtmlNode untreatedArtist in untreatedArtists)
             {
                 string profileLink = "https://www.last.fm" +
                     untreatedArtist.SelectSingleNode(".//td[3]/a").Attributes["href"].Value;
@@ -48,8 +48,8 @@ namespace Cataloguer.Models
         private List<Album> GetTopAlbumsOfArtist(HtmlNode documentNode, string xpathToAlbums)
         {
             List<Album> albums = new List<Album>();
-            var untreatedAlbums = documentNode.SelectNodes(xpathToAlbums);
-            foreach(var untreatedAlbum in untreatedAlbums)
+            HtmlNodeCollection untreatedAlbums = documentNode.SelectNodes(xpathToAlbums);
+            foreach(HtmlNode untreatedAlbum in untreatedAlbums)
             {
                 string name = untreatedAlbum.SelectSingleNode(".//div/div[2]/p/a").InnerText;
                 string pictureLink = untreatedAlbum.SelectSingleNode(".//div/div/img").Attributes["src"].Value;
@@ -63,8 +63,8 @@ namespace Cataloguer.Models
         private List<Track> GetTopTracksOfArtist(HtmlNode documentNode, string xpathToTracks)
         {
             List<Track> tracks = new List<Track>();
-            var untreatedTracks = documentNode.SelectNodes(xpathToTracks);
-            foreach (var untreatedTrack in untreatedTracks)
+            HtmlNodeCollection untreatedTracks = documentNode.SelectNodes(xpathToTracks);
+            foreach (HtmlNode untreatedTrack in untreatedTracks)
             {
                 int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
                 string trackName = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
@@ -77,9 +77,9 @@ namespace Cataloguer.Models
 
         private List<string> GetTagsOfArtist(HtmlNode documentNode, string xpathToTags)
         {
-            var untreatedTags = documentNode.SelectNodes(xpathToTags);
             List<string> tags = new List<string>();
-            foreach (var untreatedTag in untreatedTags)
+            HtmlNodeCollection untreatedTags = documentNode.SelectNodes(xpathToTags);
+            foreach (HtmlNode untreatedTag in untreatedTags)
             {
                 string tag = untreatedTag.SelectSingleNode(".//a").InnerText;
                 tags.Add(tag);
@@ -87,20 +87,19 @@ namespace Cataloguer.Models
             return tags;
         }
 
-        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink, string linkToPageWithTopTracks)
+        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink, string linkToPageWithAllTracks)
         {
             List<Track> allTracks = new List<Track>();
             HtmlWeb htmlWeb = new HtmlWeb();
             for(int pageNumber = 1; pageNumber <= 10; pageNumber++)
             {
-                string linkToCurrentPageWithTopTracks = linkToPageWithTopTracks + "&page=" + pageNumber;
-                HtmlDocument currentPageWithTopTracks = htmlWeb.Load(linkToCurrentPageWithTopTracks);
+                string linkToCurrentPageWitAllTracks = linkToPageWithAllTracks + "&page=" + pageNumber;
+                HtmlDocument currentPageWithAllTracks = htmlWeb.Load(linkToCurrentPageWitAllTracks);
                 string xpathToTracks = "//*[@id='mantle_skin']/div[4]/div/div[1]/section/table/tbody/tr[contains(@class, 'js-link-block')]";
-                var untreatedTracks = currentPageWithTopTracks.DocumentNode.SelectNodes(xpathToTracks);
-                foreach (var untreatedTrack in untreatedTracks)
+                HtmlNodeCollection untreatedTracks = currentPageWithAllTracks.DocumentNode.SelectNodes(xpathToTracks);
+                foreach (HtmlNode untreatedTrack in untreatedTracks)
                 {
-                    string str = untreatedTrack.SelectSingleNode(".//td").InnerText;
-                    int trackRating = Convert.ToInt32(str);
+                    int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
                     string trackName = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
                     string trackListeners = untreatedTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
                     Track track = new Track(trackRating, trackName, trackListeners);
@@ -109,6 +108,71 @@ namespace Cataloguer.Models
             }
             Artist artist = new Artist(artistName, artistPictureLink, allTracks);
             return artist;
+        }
+
+        public Artist GetArtistWithAllAlbums(string artistName, string artistPictureLink, string linkToPageWithAllAlbums)
+        {
+            List<Album> allAlbums = new List<Album>();
+            HtmlWeb htmlWeb = new HtmlWeb();
+            HtmlDocument mainPageWithAllAlbums = htmlWeb.Load(linkToPageWithAllAlbums);
+            int pagesQuantity = CountQuantityOfPages(mainPageWithAllAlbums);
+            for (int pageNumber = 1; pageNumber <= pagesQuantity; pageNumber++)
+            {
+                string linkToCurrentPageWithAllAlbums = linkToPageWithAllAlbums + "?page=" + pageNumber;
+                HtmlDocument currentPageWithAllAlbums = htmlWeb.Load(linkToCurrentPageWithAllAlbums);
+                string xpathToAlbums = "//*[@id='artist-albums-section']/ol/li[@itemscope]";
+                HtmlNodeCollection untreatedAlbums = currentPageWithAllAlbums.DocumentNode.SelectNodes(xpathToAlbums);
+                foreach (HtmlNode untreatedAlbum in untreatedAlbums)
+                {
+                    string name = untreatedAlbum.SelectSingleNode(".//div/h3/a").InnerText;
+                    string pictureLink = untreatedAlbum.SelectSingleNode(".//div/img").Attributes["src"].Value;
+                    string listeners = untreatedAlbum.SelectSingleNode(".//div/p").InnerText;
+                    Album unfinishedAlbum = new Album(name, pictureLink, listeners);
+                    Album album = SetRunningLenghtAndReleaseDate(unfinishedAlbum, untreatedAlbum);
+                    allAlbums.Add(album);
+                }
+            }
+            Artist artist = new Artist(artistName, artistPictureLink, allAlbums);
+            return artist;
+        }
+
+        private int CountQuantityOfPages(HtmlDocument mainPageWithAllAlbums)
+        {
+            HtmlNode node = mainPageWithAllAlbums.DocumentNode.
+                SelectSingleNode("//*[@id='artist-albums-section']/nav/ul/li[contains(@class, 'pagination-page')][last()]");
+            int count = Convert.ToInt32(node.SelectSingleNode(".//a").InnerText);
+            return count;
+        }
+
+        private Album SetRunningLenghtAndReleaseDate(Album unfinishedAlbum, HtmlNode untreatedAlbum)
+        {
+            Album album = unfinishedAlbum;
+            string runningLenght = "", releaseDate = "";
+            HtmlNode runningLenghtAndReleaseDateNode = untreatedAlbum.SelectSingleNode(".//div/p[2]");
+            if (runningLenghtAndReleaseDateNode != null)
+            {
+                string runningLenghtAndReleaseDate = runningLenghtAndReleaseDateNode.InnerText;
+                int separatorIndex = runningLenghtAndReleaseDate.IndexOf("·");
+                if (separatorIndex == -1)
+                {
+                    if (runningLenghtAndReleaseDate.Contains("track"))
+                    {
+                        runningLenght = runningLenghtAndReleaseDate;
+                    }
+                    else
+                    {
+                        releaseDate = runningLenghtAndReleaseDate;
+                    }
+                }
+                else
+                {
+                    runningLenght = runningLenghtAndReleaseDate.Substring(0, separatorIndex);
+                    releaseDate = runningLenghtAndReleaseDate.Substring(separatorIndex + 1);
+                }
+            }
+            album.RunningLenght = runningLenght;
+            album.ReleaseDate = releaseDate;
+            return album;
         }
     }
 }
