@@ -216,6 +216,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Local.cshtml" />
     <Content Include="Views\Home\ArtistProfile.cshtml" />
+    <Content Include="Views\Home\ArtistTopTracks.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

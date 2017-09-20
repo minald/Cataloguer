@@ -14,7 +14,7 @@
         <code>@tag</code>
     }
 </h4>
-<h2 class="text-center">Top tracks for 7 days</h2>
+<h2 class="text-center">Top tracks of 7 days</h2>
 <table class="table table-hover table-striped table-bordered">
     <tbody>
         @foreach (Track track in Model.Tracks ?? new List<Track>())
@@ -27,6 +27,8 @@
         }
     </tbody>
 </table>
+@Html.ActionLink("More tracks...", "ArtistTopTracks", "Home",
+    new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
 <h2 class="text-center">Top albums</h2>
 <table class="table table-hover table-striped table-bordered">
     <tbody>

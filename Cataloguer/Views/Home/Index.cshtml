@@ -16,8 +16,8 @@
         @foreach (Artist artist in Model ?? new List<Artist>())
         {
             <tr>
-                <td>@Html.ActionLink(@artist.Name, "ArtistProfile", "Home", 
-                   new { profileLink = artist.ProfileLink, name = artist.Name, pictureLink = artist.PictureLink }, new { })</td>
+                <td>@Html.ActionLink(@artist.Name, "ArtistProfile", "Home",
+                   new { artistName = artist.Name, artistPictureLink = artist.PictureLink, artistProfileLink = artist.ProfileLink }, new { })</td>
                 <td><img src="@artist.PictureLink"/></td>
             </tr>
         }
