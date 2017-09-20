@@ -13,9 +13,9 @@ namespace Cataloguer.Models
 
         public string PictureLink { get; set; }
 
-        public long Scrobbles { get; set; }
+        public string Scrobbles { get; set; }
 
-        public int Listeners { get; set; }
+        public string Listeners { get; set; }
 
         public virtual Artist Artist { get; set; }
 
@@ -23,6 +23,14 @@ namespace Cataloguer.Models
 
         public Album()
         {
+            Songs = new List<Song>();
+        }
+
+        public Album(string name, string pictureLink, string listeners)
+        {
+            Name = name;
+            PictureLink = pictureLink;
+            Listeners = listeners;
             Songs = new List<Song>();
         }
     }

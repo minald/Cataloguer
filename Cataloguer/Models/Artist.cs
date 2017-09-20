@@ -43,14 +43,14 @@ namespace Cataloguer.Models
         }
 
         public Artist(string name, string pictureLink, string profileLink, 
-            string scrobbles, string listeners, List<Track> tracks, List<string> tags)
+            string scrobbles, string listeners, List<Album> albums, List<Track> tracks, List<string> tags)
         {
             Name = name;
             PictureLink = pictureLink;
             ProfileLink = profileLink;
             Scrobbles = scrobbles;
             Listeners = listeners;
-            Albums = new List<Album>();
+            Albums = albums;
             Tracks = tracks;
             Tags = tags;
         }

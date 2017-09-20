@@ -15,7 +15,7 @@
     }
 </h4>
 <h2 class="text-center">Top tracks for 7 days</h2>
-<table class="table table-hover table-striped">
+<table class="table table-hover table-striped table-bordered">
     <tbody>
         @foreach (Track track in Model.Tracks ?? new List<Track>())
         {
@@ -23,6 +23,19 @@
                 <td>@track.Rating</td>
                 <td>@track.Name</td>
                 <td>@track.Listeners</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h2 class="text-center">Top albums</h2>
+<table class="table table-hover table-striped table-bordered">
+    <tbody>
+        @foreach (Album album in Model.Albums ?? new List<Album>())
+        {
+            <tr>
+                <td>@album.Name</td>
+                <td><img height="200" src="@album.PictureLink"/></td>
+                <td>@album.Listeners</td>
             </tr>
         }
     </tbody>

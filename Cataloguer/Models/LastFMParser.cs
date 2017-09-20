@@ -33,26 +33,41 @@ namespace Cataloguer.Models
         public Artist GetArtist(string name, string pictureLink, string profileLink)
         {
             HtmlWeb htmlWeb = new HtmlWeb();
-            var profilePage = htmlWeb.Load(profileLink);
+            HtmlDocument profilePage = htmlWeb.Load(profileLink);
+            HtmlNode documentNode = profilePage.DocumentNode;
             string xpathToScrobbles = "//*[@id='content']/div[2]/header/div[3]/div/div[2]/div[2]/ul/li[1]/p/abbr";
-            string scrobbles = profilePage.DocumentNode.
-                SelectSingleNode(xpathToScrobbles).Attributes["title"].Value;
+            string scrobbles = documentNode.SelectSingleNode(xpathToScrobbles).Attributes["title"].Value;
             string xpathToListeners = "//*[@id='content']/div[2]/header/div[3]/div/div[2]/div[2]/ul/li[2]/p/abbr";
-            string listeners = profilePage.DocumentNode.
-                SelectSingleNode(xpathToListeners).Attributes["title"].Value;
-
-            string xpathToTags = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[1]/ul/li";
-            var untreatedTags = profilePage.DocumentNode.SelectNodes(xpathToTags);
-            List<string> tags = new List<string>();
-            foreach (var untreatedTag in untreatedTags)
-            {
-                string tag = untreatedTag.SelectSingleNode(".//a").InnerText;
-                tags.Add(tag);
-            }
-
+            string listeners = documentNode.SelectSingleNode(xpathToListeners).Attributes["title"].Value;
+            string xpathToAlbums = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[4]/div/ol/li";
+            List<Album> albums = GetTheBestAlbumsOfTheArtist(documentNode, xpathToAlbums);
             string xpathToTracks = "//*[@id='top-tracks-section']/div/table/tbody/tr";
-            var untreatedTracks = profilePage.DocumentNode.SelectNodes(xpathToTracks);
+            List<Track> tracks = GetTheBestTracksOfTheArtist(documentNode, xpathToTracks);
+            string xpathToTags = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[1]/ul/li";
+            List<string> tags = GetTagsOfTheArtist(documentNode, xpathToTags);
+            Artist artist = new Artist(name, pictureLink, profileLink, scrobbles, listeners, albums, tracks, tags);
+            return artist;
+        }
+
+        private List<Album> GetTheBestAlbumsOfTheArtist(HtmlNode documentNode, string xpathToAlbums)
+        {
+            List<Album> albums = new List<Album>();
+            var untreatedAlbums = documentNode.SelectNodes(xpathToAlbums);
+            foreach(var untreatedAlbum in untreatedAlbums)
+            {
+                string name = untreatedAlbum.SelectSingleNode(".//div/div[2]/p/a").InnerText;
+                string pictureLink = untreatedAlbum.SelectSingleNode(".//div/div/img").Attributes["src"].Value;
+                string listeners = untreatedAlbum.SelectSingleNode(".//div/div[2]/p[2]").InnerText;
+                Album album = new Album(name, pictureLink, listeners);
+                albums.Add(album);
+            }
+            return albums;
+        }
+
+        private List<Track> GetTheBestTracksOfTheArtist(HtmlNode documentNode, string xpathToTracks)
+        {
             List<Track> tracks = new List<Track>();
+            var untreatedTracks = documentNode.SelectNodes(xpathToTracks);
             foreach (var untreatedTrack in untreatedTracks)
             {
                 int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
@@ -61,9 +76,19 @@ namespace Cataloguer.Models
                 Track track = new Track(trackRating, trackName, trackListeners);
                 tracks.Add(track);
             }
-
-            Artist artist = new Artist(name, pictureLink, profileLink, scrobbles, listeners, tracks, tags);
-            return artist;
+            return tracks;
         }
+
+        private List<string> GetTagsOfTheArtist(HtmlNode documentNode, string xpathToTags)
+        {
+            var untreatedTags = documentNode.SelectNodes(xpathToTags);
+            List<string> tags = new List<string>();
+            foreach (var untreatedTag in untreatedTags)
+            {
+                string tag = untreatedTag.SelectSingleNode(".//a").InnerText;
+                tags.Add(tag);
+            }
+            return tags;
+        }  
     }
 }
