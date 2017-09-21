@@ -35,7 +35,13 @@ namespace Cataloguer.Controllers
             return View(artist);
         }
 
-        //TODO : Parse biography
+        public ActionResult ArtistBiography(string artistName, string artistPictureLink, string artistProfileLink)
+        {
+            string linkToBiographyPage = artistProfileLink + "/+wiki";
+            Artist artist = new LastFMParser().GetArtistWithBiography(artistName,
+                artistPictureLink, artistProfileLink, linkToBiographyPage);
+            return View(artist);
+        }
 
         public ActionResult Local()
         {

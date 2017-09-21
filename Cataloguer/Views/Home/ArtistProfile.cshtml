@@ -14,6 +14,11 @@
         <code>@tag</code>
     }
 </h4>
+<h4>
+    Biography : @Model.ShortBiography    
+    @Html.ActionLink("See full biography", "ArtistBiography", "Home",
+        new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
+</h4>
 <h2 class="text-center">Top tracks of 7 days</h2>
 <table class="table table-hover table-striped table-bordered">
     <tbody>

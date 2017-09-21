@@ -1,8 +1,6 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Cataloguer.Models
 {
@@ -35,13 +33,16 @@ namespace Cataloguer.Models
             string scrobbles = documentNode.SelectSingleNode(xpathToScrobbles).Attributes["title"].Value;
             string xpathToListeners = "//*[@id='content']/div[2]/header/div[3]/div/div[2]/div[2]/ul/li[2]/p/abbr";
             string listeners = documentNode.SelectSingleNode(xpathToListeners).Attributes["title"].Value;
+            string xpathToShortBiography = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[2]/p";
+            string shortBiography = documentNode.SelectSingleNode(xpathToShortBiography).InnerText;
             string xpathToAlbums = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[4]/div/ol/li";
             List<Album> albums = GetTopAlbumsOfArtist(documentNode, xpathToAlbums);
             string xpathToTracks = "//*[@id='top-tracks-section']/div/table/tbody/tr";
             List<Track> tracks = GetTopTracksOfArtist(documentNode, xpathToTracks);
             string xpathToTags = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[1]/ul/li";
             List<string> tags = GetTagsOfArtist(documentNode, xpathToTags);
-            Artist artist = new Artist(artistName, artistPictureLink, artistProfileLink, scrobbles, listeners, albums, tracks, tags);
+            Artist artist = new Artist(artistName, artistPictureLink, artistProfileLink,
+                scrobbles, listeners, shortBiography, albums, tracks, tags);
             return artist;
         }
 
@@ -128,7 +129,7 @@ namespace Cataloguer.Models
                     string pictureLink = untreatedAlbum.SelectSingleNode(".//div/img").Attributes["src"].Value;
                     string listeners = untreatedAlbum.SelectSingleNode(".//div/p").InnerText;
                     Album unfinishedAlbum = new Album(name, pictureLink, listeners);
-                    Album album = SetRunningLenghtAndReleaseDate(unfinishedAlbum, untreatedAlbum);
+                    Album album = InitializeRunningLenghtAndReleaseDate(unfinishedAlbum, untreatedAlbum);
                     allAlbums.Add(album);
                 }
             }
@@ -144,7 +145,7 @@ namespace Cataloguer.Models
             return count;
         }
 
-        private Album SetRunningLenghtAndReleaseDate(Album unfinishedAlbum, HtmlNode untreatedAlbum)
+        private Album InitializeRunningLenghtAndReleaseDate(Album unfinishedAlbum, HtmlNode untreatedAlbum)
         {
             Album album = unfinishedAlbum;
             string runningLenght = "", releaseDate = "";
@@ -173,6 +174,18 @@ namespace Cataloguer.Models
             album.RunningLenght = runningLenght;
             album.ReleaseDate = releaseDate;
             return album;
+        }
+
+        public Artist GetArtistWithBiography(string artistName, string artistPictureLink, 
+            string artistProfileLink, string linkToBiographyPage)
+        {
+            HtmlWeb htmlWeb = new HtmlWeb();
+            HtmlDocument biographyPage = htmlWeb.Load(linkToBiographyPage);
+            string xpathToFullBiography = "//*[@id='mantle_skin']/div[4]/div/div[1]/div[1]/div";
+            HtmlNode untreatedFullBiography = biographyPage.DocumentNode.SelectSingleNode(xpathToFullBiography);
+            string fullBiography = untreatedFullBiography.InnerText;
+            Artist artist = new Artist(artistName, artistPictureLink, artistProfileLink, fullBiography);
+            return artist;
         }
     }
 }

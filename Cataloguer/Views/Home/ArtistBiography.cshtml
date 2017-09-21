@@ -1,0 +1,8 @@
+﻿@using Cataloguer.Models
+@model Artist
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h1 class="text-center"><img src="@Model.PictureLink" />    @Model.Name</h1>
+<p>@Model.FullBiography</p>
