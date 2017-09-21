@@ -17,8 +17,8 @@ namespace Cataloguer.Models
                 string profileLink = "https://www.last.fm" +
                     untreatedArtist.SelectSingleNode(".//td[3]/a").Attributes["href"].Value;
                 string name = untreatedArtist.SelectSingleNode(".//td[3]/a").InnerText;
-                string pictureLink = untreatedArtist.SelectSingleNode(".//td[2]/img").Attributes["src"].Value; 
-                Artist artist = new Artist(name, pictureLink, profileLink);
+                string pictureLink = untreatedArtist.SelectSingleNode(".//td[2]/img").Attributes["src"].Value;
+                Artist artist = new Artist.Builder(name, profileLink).PictureLink(pictureLink).Build();
                 topArtists.Add(artist);
             }
             return topArtists;
@@ -41,8 +41,9 @@ namespace Cataloguer.Models
             List<Track> tracks = GetTopTracksOfArtist(documentNode, xpathToTracks);
             string xpathToTags = "//*[@id='mantle_skin']/div[4]/div/div[1]/section[1]/ul/li";
             List<string> tags = GetTagsOfArtist(documentNode, xpathToTags);
-            Artist artist = new Artist(artistName, artistPictureLink, artistProfileLink,
-                scrobbles, listeners, shortBiography, albums, tracks, tags);
+            Artist artist = new Artist.Builder(artistName, artistProfileLink).
+                PictureLink(artistPictureLink).Scrobbles(scrobbles).Listeners(listeners).
+                ShortBiography(shortBiography).Albums(albums).Tracks(tracks).Tags(tags).Build();
             return artist;
         }
 
@@ -55,7 +56,8 @@ namespace Cataloguer.Models
                 string name = untreatedAlbum.SelectSingleNode(".//div/div[2]/p/a").InnerText;
                 string pictureLink = untreatedAlbum.SelectSingleNode(".//div/div/img").Attributes["src"].Value;
                 string listeners = untreatedAlbum.SelectSingleNode(".//div/div[2]/p[2]").InnerText;
-                Album album = new Album(name, pictureLink, listeners);
+                Album album = new Album.Builder(name).PictureLink(pictureLink).
+                    Listeners(listeners).Build();
                 albums.Add(album);
             }
             return albums;
@@ -70,7 +72,8 @@ namespace Cataloguer.Models
                 int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
                 string trackName = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
                 string trackListeners = untreatedTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
-                Track track = new Track(trackRating, trackName, trackListeners);
+                Track track = new Track.Builder(trackName).Rating(trackRating).
+                    Listeners(trackListeners).Build();
                 tracks.Add(track);
             }
             return tracks;
@@ -88,7 +91,10 @@ namespace Cataloguer.Models
             return tags;
         }
 
-        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink, string linkToPageWithAllTracks)
+        //TODO : Delete last fourth parameter in 3 following "GetArtistWith" functions
+
+        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink,
+            string artistProfileLink, string linkToPageWithAllTracks)
         {
             List<Track> allTracks = new List<Track>();
             HtmlWeb htmlWeb = new HtmlWeb();
@@ -103,15 +109,18 @@ namespace Cataloguer.Models
                     int trackRating = Convert.ToInt32(untreatedTrack.SelectSingleNode(".//td").InnerText);
                     string trackName = untreatedTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
                     string trackListeners = untreatedTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
-                    Track track = new Track(trackRating, trackName, trackListeners);
+                    Track track = new Track.Builder(trackName).Rating(trackRating).
+                        Listeners(trackListeners).Build();
                     allTracks.Add(track);
                 }
             }
-            Artist artist = new Artist(artistName, artistPictureLink, allTracks);
+            Artist artist = new Artist.Builder(artistName, artistProfileLink).
+                PictureLink(artistPictureLink).Tracks(allTracks).Build();
             return artist;
         }
 
-        public Artist GetArtistWithAllAlbums(string artistName, string artistPictureLink, string linkToPageWithAllAlbums)
+        public Artist GetArtistWithAllAlbums(string artistName, string artistPictureLink,
+            string artistProfileLink, string linkToPageWithAllAlbums)
         {
             List<Album> allAlbums = new List<Album>();
             HtmlWeb htmlWeb = new HtmlWeb();
@@ -128,12 +137,14 @@ namespace Cataloguer.Models
                     string name = untreatedAlbum.SelectSingleNode(".//div/h3/a").InnerText;
                     string pictureLink = untreatedAlbum.SelectSingleNode(".//div/img").Attributes["src"].Value;
                     string listeners = untreatedAlbum.SelectSingleNode(".//div/p").InnerText;
-                    Album unfinishedAlbum = new Album(name, pictureLink, listeners);
+                    Album unfinishedAlbum = new Album.Builder(name).PictureLink(pictureLink).
+                        Listeners(listeners).Build();
                     Album album = InitializeRunningLenghtAndReleaseDate(unfinishedAlbum, untreatedAlbum);
                     allAlbums.Add(album);
                 }
             }
-            Artist artist = new Artist(artistName, artistPictureLink, allAlbums);
+            Artist artist = new Artist.Builder(artistName, artistProfileLink).
+                PictureLink(artistPictureLink).Albums(allAlbums).Build();
             return artist;
         }
 
@@ -184,7 +195,8 @@ namespace Cataloguer.Models
             string xpathToFullBiography = "//*[@id='mantle_skin']/div[4]/div/div[1]/div[1]/div";
             HtmlNode untreatedFullBiography = biographyPage.DocumentNode.SelectSingleNode(xpathToFullBiography);
             string fullBiography = untreatedFullBiography.InnerText;
-            Artist artist = new Artist(artistName, artistPictureLink, artistProfileLink, fullBiography);
+            Artist artist = new Artist.Builder(artistName, artistProfileLink).
+                PictureLink(artistPictureLink).FullBiography(fullBiography).Build();
             return artist;
         }
     }

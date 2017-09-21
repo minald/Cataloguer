@@ -32,7 +32,7 @@
         }
     </tbody>
 </table>
-@Html.ActionLink("More tracks...", "ArtistTopTracks", "Home",
+@Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
     new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
 <h2 class="text-center">Top albums</h2>
 <table class="table table-hover table-striped table-bordered">
@@ -47,5 +47,5 @@
         }
     </tbody>
 </table>
-@Html.ActionLink("More albums...", "ArtistTopAlbums", "Home",
+@Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
     new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })

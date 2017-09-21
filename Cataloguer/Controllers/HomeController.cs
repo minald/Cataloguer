@@ -1,8 +1,5 @@
 ﻿using Cataloguer.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace Cataloguer.Controllers
@@ -21,17 +18,19 @@ namespace Cataloguer.Controllers
             return View(artist);
         }
 
-        public ActionResult ArtistTopTracks(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistAllTracks(string artistName, string artistPictureLink, string artistProfileLink)
         {
             string linkToPageWithAllTracks = artistProfileLink + "/+tracks?date_preset=ALL";
-            Artist artist = new LastFMParser().GetArtistWithAllTracks(artistName, artistPictureLink, linkToPageWithAllTracks);
+            Artist artist = new LastFMParser().
+                GetArtistWithAllTracks(artistName, artistPictureLink, artistProfileLink, linkToPageWithAllTracks);
             return View(artist);
         }
 
-        public ActionResult ArtistTopAlbums(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistAllAlbums(string artistName, string artistPictureLink, string artistProfileLink)
         {
             string linkToPageWithAllAlbums = artistProfileLink + "/+albums";
-            Artist artist = new LastFMParser().GetArtistWithAllAlbums(artistName, artistPictureLink, linkToPageWithAllAlbums);
+            Artist artist = new LastFMParser().
+                GetArtistWithAllAlbums(artistName, artistPictureLink, artistProfileLink, linkToPageWithAllAlbums);
             return View(artist);
         }
 

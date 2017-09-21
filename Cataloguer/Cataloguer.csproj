@@ -159,7 +159,6 @@
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\ArtistContext.cs" />
     <Compile Include="Models\LastFMParser.cs" />
-    <Compile Include="Models\Song.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -216,8 +215,8 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Home\Local.cshtml" />
     <Content Include="Views\Home\ArtistProfile.cshtml" />
-    <Content Include="Views\Home\ArtistTopTracks.cshtml" />
-    <Content Include="Views\Home\ArtistTopAlbums.cshtml" />
+    <Content Include="Views\Home\ArtistAllTracks.cshtml" />
+    <Content Include="Views\Home\ArtistAllAlbums.cshtml" />
     <Content Include="Views\Home\ArtistBiography.cshtml" />
   </ItemGroup>
   <ItemGroup />

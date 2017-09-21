@@ -8,9 +8,9 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
-        public string PictureLink { get; set; }
-
         public string ProfileLink { get; set; }
+
+        public string PictureLink { get; set; }
 
         public string Scrobbles { get; set; }
 
@@ -26,64 +26,100 @@ namespace Cataloguer.Models
 
         public virtual List<string> Tags { get; set; }
 
-        public Artist()
+        public class Builder
         {
-            Albums = new List<Album>();
-            Tracks = new List<Track>();
-            Tags = new List<string>();
+            public string _name { get; set; }
+
+            public string _profileLink { get; set; }
+
+            public string _pictureLink { get; set; }
+
+            public string _scrobbles { get; set; }
+
+            public string _listeners { get; set; }
+
+            public string _shortBiography { get; set; }
+
+            public string _fullBiography { get; set; }
+
+            public List<Album> _albums { get; set; }
+
+            public List<Track> _tracks { get; set; }
+
+            public List<string> _tags { get; set; }
+
+            public Builder(string name, string profileLink)
+            {
+                _name = name;
+                _profileLink = profileLink;
+            }
+
+            public Builder PictureLink(string pictureLink)
+            {
+                _pictureLink = pictureLink;
+                return this;
+            }
+
+            public Builder Scrobbles(string scrobbles)
+            {
+                _scrobbles = scrobbles;
+                return this;
+            }
+
+            public Builder Listeners(string listeners)
+            {
+                _listeners = listeners;
+                return this;
+            }
+
+            public Builder ShortBiography(string shortBiography)
+            {
+                _shortBiography = shortBiography;
+                return this;
+            }
+
+            public Builder FullBiography(string fullBiography)
+            {
+                _fullBiography = fullBiography;
+                return this;
+            }
+
+            public Builder Albums(List<Album> albums)
+            {
+                _albums = albums;
+                return this;
+            }
+
+            public Builder Tracks(List<Track> tracks)
+            {
+                _tracks = tracks;
+                return this;
+            }
+
+            public Builder Tags(List<string> tags)
+            {
+                _tags = tags;
+                return this;
+            }
+
+            public Artist Build()
+            {
+                return new Artist(this);
+            }
         }
 
-        public Artist(string name, string pictureLink, string profileLink)
+        public Artist(Builder builder)
         {
-            Name = name;
-            PictureLink = pictureLink;
-            ProfileLink = profileLink;
-            Albums = new List<Album>();
-            Tracks = new List<Track>();
-            Tags = new List<string>();
-        }
-
-        public Artist(string name, string pictureLink, string profileLink, string fullBiography)
-        {
-            Name = name;
-            PictureLink = pictureLink;
-            ProfileLink = profileLink;
-            FullBiography = fullBiography;
-            Albums = new List<Album>();
-            Tracks = new List<Track>();
-            Tags = new List<string>();
-        }
-
-        public Artist(string name, string pictureLink, List<Album> albums)
-        {
-            Name = name;
-            PictureLink = pictureLink;
-            Albums = albums;
-            Tracks = new List<Track>();
-            Tags = new List<string>();
-        }
-
-        public Artist(string name, string pictureLink, List<Track> tracks)
-        {
-            Name = name;
-            PictureLink = pictureLink;
-            Albums = new List<Album>();
-            Tracks = tracks;
-            Tags = new List<string>();
-        } 
-
-        public Artist(string name, string pictureLink, string profileLink, string scrobbles,
-             string listeners, string shortBiography, List<Album> albums, List<Track> tracks, List<string> tags)
-        {
-            Name = name;
-            PictureLink = pictureLink;
-            ProfileLink = profileLink;
-            Scrobbles = scrobbles;
-            Listeners = listeners;
-            ShortBiography = shortBiography;
-            Albums = albums;
-            Tracks = tracks;
-            Tags = tags;
+            Name = builder._name;
+            ProfileLink = builder._profileLink;
+            PictureLink = builder._pictureLink;
+            Scrobbles = builder._scrobbles;
+            Listeners = builder._listeners;
+            ShortBiography = builder._shortBiography;
+            FullBiography = builder._fullBiography;
+            Albums = builder._albums;
+            Tracks = builder._tracks;
+            Tags = builder._tags;
         }
     }
 }

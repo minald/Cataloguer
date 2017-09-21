@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 
 namespace Cataloguer.Models
 {
@@ -10,6 +7,8 @@ namespace Cataloguer.Models
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public string PageLink { get; set; }
 
         public string PictureLink { get; set; }
 
@@ -23,33 +22,112 @@ namespace Cataloguer.Models
 
         public string Listeners { get; set; }
 
-        public virtual Artist Artist { get; set; }
-
-        public virtual List<Song> Songs { get; set; }
+        public virtual List<Track> Tracks { get; set; }
 
         public virtual List<string> Tags { get; set; }
 
-        public Album()
+        //For binding in databases
+        public virtual Artist Artist { get; set; }
+
+        public class Builder
         {
-            Songs = new List<Song>();
+            public string _name { get; set; }
+
+            public string _pageLink { get; set; }
+
+            public string _pictureLink { get; set; }
+
+            public string _releaseDate { get; set; }
+
+            public string _runningLenght { get; set; }
+
+            public string _runningTime { get; set; }
+
+            public string _scrobbles { get; set; }
+
+            public string _listeners { get; set; }
+
+            public List<Track> _tracks { get; set; }
+
+            public List<string> _tags { get; set; }
+
+            public Builder(string name)
+            {
+                _name = name;
+            }
+
+            public Builder PageLink(string pageLink)
+            {
+                _pageLink = pageLink;
+                return this;
+            }
+
+            public Builder PictureLink(string pictureLink)
+            {
+                _pictureLink = pictureLink;
+                return this;
+            }
+
+            public Builder ReleaseDate(string releaseDate)
+            {
+                _releaseDate = releaseDate;
+                return this;
+            }
+
+            public Builder RunningLenght(string runningLenght)
+            {
+                _runningLenght = runningLenght;
+                return this;
+            }
+
+            public Builder RunningTime(string runningTime)
+            {
+                _runningTime = runningTime;
+                return this;
+            }
+
+            public Builder Scrobbles(string scrobbles)
+            {
+                _scrobbles = scrobbles;
+                return this;
+            }
+
+            public Builder Listeners(string listeners)
+            {
+                _listeners = listeners;
+                return this;
+            }
+
+            public Builder Tracks(List<Track> tracks)
+            {
+                _tracks = tracks;
+                return this;
+            }
+
+            public Builder Tags(List<string> tags)
+            {
+                _tags = tags;
+                return this;
+            }
+
+            public Album Build()
+            {
+                return new Album(this);
+            }
         }
 
-        public Album(string name, string pictureLink, string listeners)
+        public Album(Builder builder)
         {
-            Name = name;
-            PictureLink = pictureLink;
-            Listeners = listeners;
-            Songs = new List<Song>();
-        }
-
-        public Album(string name, string pictureLink, string releaseDate, string runningLenght, string listeners)
-        {
-            Name = name;
-            PictureLink = pictureLink;
-            ReleaseDate = releaseDate;
-            RunningLenght = runningLenght;
-            Listeners = listeners;
-            Songs = new List<Song>();
+            Name = builder._name;
+            PageLink = builder._pageLink;
+            PictureLink = builder._pictureLink;
+            ReleaseDate = builder._releaseDate;
+            RunningLenght = builder._runningLenght;
+            RunningTime = builder._runningTime;
+            Scrobbles = builder._scrobbles;
+            Listeners = builder._listeners;
+            Tracks = builder._tracks;
+            Tags = builder._tags;
         }
     }
 }
