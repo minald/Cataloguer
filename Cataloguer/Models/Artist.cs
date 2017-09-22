@@ -108,6 +108,11 @@ namespace Cataloguer.Models
             }
         }
 
+        public Artist(string name)
+        {
+            Name = name;
+        }
+ 
         public Artist(Builder builder)
         {
             Name = builder._name;

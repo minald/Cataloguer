@@ -1,6 +1,9 @@
 ﻿using Cataloguer.Models;
-using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Net;
+using System.IO;
+using System.Text;
+using System.Xml;
 
 namespace Cataloguer.Controllers
 {
@@ -8,8 +11,17 @@ namespace Cataloguer.Controllers
     {
         public ActionResult Index()
         {
-            List<Artist> artists = new LastFMParser().GetTopArtists();
-            return View(artists);
+            string ApiKey = "f39425750fc23d743fbf853d9585a46c";
+            //string url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartist&api_key=" + ApiKey;
+            HttpWebRequest tokenRequest = (HttpWebRequest)WebRequest.
+                    Create("http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=" 
+                + ApiKey/* + "&format=json"*/);
+            HttpWebResponse tokenResponse = (HttpWebResponse)tokenRequest.GetResponse();
+            string tokenResult = new StreamReader(tokenResponse.GetResponseStream(), Encoding.UTF8).ReadToEnd();
+            XmlDocument document = new XmlDocument();
+            Artist artist = new Artist(tokenResult);
+            //List<Artist> artists = new LastFMParser().GetTopArtists();
+            return View(artist/*artists*/);
         }
 
         public ActionResult ArtistProfile(string artistName, string artistPictureLink, string artistProfileLink)
