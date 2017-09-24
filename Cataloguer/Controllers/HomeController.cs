@@ -18,6 +18,13 @@ namespace Cataloguer.Controllers
             return View(artist);
         }
 
+        public ActionResult ArtistBiography(string artistName, string artistPictureLink, string artistProfileLink)
+        {
+            Artist artist = new LastFMParser().
+                GetArtistWithBiography(artistName, artistProfileLink, artistPictureLink);
+            return View(artist);
+        }
+
         public ActionResult ArtistAllTracks(string artistName, string artistPictureLink, string artistProfileLink)
         {
             Artist artist = new LastFMParser().
@@ -32,11 +39,10 @@ namespace Cataloguer.Controllers
             return View(artist);
         }
 
-        public ActionResult ArtistBiography(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult Album(string albumName, string artistName)
         {
-            Artist artist = new LastFMParser().
-                GetArtistWithBiography(artistName, artistProfileLink, artistPictureLink);
-            return View(artist);
+            Album album = new LastFMParser().GetAlbum(albumName, artistName);
+            return View(album);
         }
 
         public ActionResult Local()

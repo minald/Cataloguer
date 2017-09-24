@@ -14,9 +14,7 @@ namespace Cataloguer.Models
 
         public string ReleaseDate { get; set; }
 
-        public string RunningLenght { get; set; }
-
-        public string RunningTime { get; set; }
+        public string Duration { get; set; }
 
         public string Scrobbles { get; set; }
 

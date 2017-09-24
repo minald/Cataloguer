@@ -218,6 +218,7 @@
     <Content Include="Views\Home\ArtistAllTracks.cshtml" />
     <Content Include="Views\Home\ArtistAllAlbums.cshtml" />
     <Content Include="Views\Home\ArtistBiography.cshtml" />
+    <Content Include="Views\Home\Album.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

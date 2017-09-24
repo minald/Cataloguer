@@ -11,7 +11,7 @@
         @foreach (Album album in Model.Albums ?? new List<Album>())
         {
             <tr>
-                <td>@album.Name</td>
+                <td>@Html.ActionLink(album.Name, "Album", "Home", new { albumName = album.Name, artistName = Model.Name }, new { })</td>
                 <td><img height="150" src="@album.PictureLink" /></td>
                 <td>@album.Scrobbles</td>
             </tr>

@@ -10,6 +10,8 @@
 
         public int Rank { get; set; }
 
+        public string Duration { get; set; }
+
         public string Listeners { get; set; }
 
         public string Scrobbles { get; set; }
