@@ -14,20 +14,30 @@
         <code>@tag</code>
     }
 </h4>
-<h4>
-    Biography : @Model.ShortBiography    
+<p>
+    <h4>Biography :</h4>
+    @Model.ShortBiography
     @Html.ActionLink("See full biography", "ArtistBiography", "Home",
         new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
-</h4>
-<h2 class="text-center">Top tracks of 7 days</h2>
+</p>
+<h2 class="text-center">Top tracks</h2>
 <table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Listeners</th>
+            <th>Scrobbles</th>
+        </tr>
+    </thead>
     <tbody>
         @foreach (Track track in Model.Tracks ?? new List<Track>())
         {
             <tr>
-                <td>@track.Rating</td>
+                <td>@track.Rank</td>
                 <td>@track.Name</td>
                 <td>@track.Listeners</td>
+                <td>@track.Scrobbles</td>
             </tr>
         }
     </tbody>
@@ -42,7 +52,7 @@
             <tr>
                 <td>@album.Name</td>
                 <td><img height="150" src="@album.PictureLink"/></td>
-                <td>@album.Listeners</td>
+                <td>@album.Scrobbles</td>
             </tr>
         }
     </tbody>

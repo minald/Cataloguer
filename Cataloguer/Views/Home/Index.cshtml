@@ -1,6 +1,27 @@
-﻿@model Cataloguer.Models.Artist
+﻿@using Cataloguer.Models
+@model List<Artist>
 @{
     ViewBag.Title = "Top artists";
 }
 
-<p>@Model.Name</p>
+<h1 class="text-center">Top artists from Last.fm</h1>
+<table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Image</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Artist artist in Model ?? new List<Artist>())
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(@artist.Name, "ArtistProfile", "Home",
+                   new { artistName = artist.Name, artistPictureLink = artist.PictureLink, artistProfileLink = artist.ProfileLink }, new { })
+                </td>
+            <td><img src="@artist.PictureLink" /></td>
+        </tr>
+        }
+    </tbody>
+</table>

@@ -1,218 +1,184 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Xml;
 
 namespace Cataloguer.Models
 {
     public class LastFMParser
     {
+        public const string ApiKey = "f39425750fc23d743fbf853d9585a46c";
+
         public List<Artist> GetTopArtists()
         {
-            string linkToMusicPage = "https://www.last.fm/music";
-            HtmlNode musicPageNode = GetPageNodeFrom(linkToMusicPage);
-            HtmlNodeCollection nodesWithArtists = musicPageNode.SelectNodes(XPath.MusicPage.Artists);
-            List<Artist> topArtists = ParseTopArtistsFrom(nodesWithArtists);
-            return topArtists;
-        }
-
-        private List<Artist> ParseTopArtistsFrom(HtmlNodeCollection nodesWithArtists)
-        {
-            List<Artist> topArtists = new List<Artist>();
-            foreach (HtmlNode nodeWithArtist in nodesWithArtists)
+            string url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=" + ApiKey;
+            XmlDocument document = GetXmlDocumentFrom(url);
+            List<Artist> artists = new List<Artist>();
+            foreach (XmlNode node in document.SelectNodes("//artist"))
             {
-                string name = nodeWithArtist.SelectSingleNode(".//td[3]/a").InnerText;
-                string relativeProfileLink = nodeWithArtist.SelectSingleNode(".//td[3]/a").Attributes["href"].Value;
-                string profileLink = "https://www.last.fm" + relativeProfileLink;
-                string pictureLink = nodeWithArtist.SelectSingleNode(".//td[2]/img").Attributes["src"].Value;
-                Artist artist = new Artist.Builder(name, profileLink).PictureLink(pictureLink).Build();
-                topArtists.Add(artist);
+                string name = node.SelectSingleNode("name").InnerText;
+                string pictureLink = node.SelectSingleNode("image[@size='large']").InnerText;
+                string profileLink = node.SelectSingleNode("url").InnerText;
+                Artist artist = new Artist
+                {
+                    Name = name,
+                    PictureLink = pictureLink,
+                    ProfileLink = profileLink
+                };
+                artists.Add(artist);
             }
-            return topArtists;
+            return artists;
         }
 
         public Artist GetArtist(string artistName, string artistProfileLink, string artistPictureLink)
         {
-            HtmlNode artistProfileNode = GetPageNodeFrom(artistProfileLink);
-            string scrobbles = artistProfileNode.SelectSingleNode(XPath.ArtistProfilePage.Scrobbles).Attributes["title"].Value;
-            string listeners = artistProfileNode.SelectSingleNode(XPath.ArtistProfilePage.Listeners).Attributes["title"].Value;
-            List<string> tags = GetTagsOfArtist(artistProfileNode);
-            string shortBiography = artistProfileNode.SelectSingleNode(XPath.ArtistProfilePage.ShortBiography).InnerText;
-            List<Track> tracks = GetTopTracksOfArtist(artistProfileNode);
-            List<Album> albums = GetTopAlbumsOfArtist(artistProfileNode);
-            Artist artist = new Artist.Builder(artistName, artistProfileLink).
-                PictureLink(artistPictureLink).Scrobbles(scrobbles).Listeners(listeners).
-                Tags(tags).ShortBiography(shortBiography).Tracks(tracks).Albums(albums).Build();
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artistName + "&api_key=" + ApiKey;
+            XmlDocument artistInfoDocument = GetXmlDocumentFrom(url);
+            XmlNode artistInfoMainNode = artistInfoDocument.SelectSingleNode("//artist");
+            string listeners = artistInfoMainNode.SelectSingleNode("//stats/listeners").InnerText;
+            string scrobbles = artistInfoMainNode.SelectSingleNode("//stats/playcount").InnerText;
+            List<string> tags = GetTopTagsOfArtistFrom(artistInfoMainNode);
+            string shortBiography = GetShortBiographyOfArtisFrom(artistInfoMainNode);
+            List<Track> tracks = GetTracksOfArtist(10, artistName);
+            List<Album> albums = GetAlbumsOfArtist(5, artistName);
+            Artist artist = new Artist
+            {
+                Name = artistName,
+                ProfileLink = artistProfileLink,
+                PictureLink = artistPictureLink,
+                Scrobbles = scrobbles,
+                Listeners = listeners,
+                Tags = tags,
+                ShortBiography = shortBiography,
+                Tracks = tracks,
+                Albums = albums
+            };
             return artist;
         }
 
-        private List<Album> GetTopAlbumsOfArtist(HtmlNode artistProfileNode)
+        public Artist GetArtistWithAllTracks(string artistName, string artistProfileLink, string artistPictureLink)
         {
-            HtmlNodeCollection nodesWithAlbums = artistProfileNode.SelectNodes(XPath.ArtistProfilePage.Albums);
-            List<Album> albums = ParseTopAlbumsFrom(nodesWithAlbums);
-            return albums;
-        }
-
-        private List<Album> ParseTopAlbumsFrom(HtmlNodeCollection nodesWithAlbums)
-        {
-            List<Album> albums = new List<Album>();
-            foreach (HtmlNode nodeWithAlbum in nodesWithAlbums)
+            List<Track> allTracks = GetTracksOfArtist(50, artistName);
+            Artist artist = new Artist
             {
-                string name = nodeWithAlbum.SelectSingleNode(".//div/div[2]/p/a").InnerText;
-                string pictureLink = nodeWithAlbum.SelectSingleNode(".//div/div/img").Attributes["src"].Value;
-                string listeners = nodeWithAlbum.SelectSingleNode(".//div/div[2]/p[2]").InnerText;
-                Album album = new Album.Builder(name).PictureLink(pictureLink).
-                    Listeners(listeners).Build();
-                albums.Add(album);
-            }
-            return albums;
+                Name = artistName,
+                ProfileLink = artistProfileLink,
+                PictureLink = artistPictureLink,
+                Tracks = allTracks
+            };
+            return artist;
         }
 
-        private List<Track> GetTopTracksOfArtist(HtmlNode artistProfileNode)
+        private List<Track> GetTracksOfArtist(int numberOfTracks, string name)
         {
-            HtmlNodeCollection nodesWithTracks = artistProfileNode.SelectNodes(XPath.ArtistProfilePage.Tracks);
-            List<Track> tracks = ParseTopTracksFrom(nodesWithTracks);
-            return tracks;
-        }
-
-        private List<Track> ParseTopTracksFrom(HtmlNodeCollection nodesWithTracks)
-        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist="
+                + name + "&limit=" + numberOfTracks + "&api_key=" + ApiKey;
+            XmlDocument artistTopTracksDocument = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithTopTracks = artistTopTracksDocument.SelectNodes("//track");
             List<Track> tracks = new List<Track>();
-            foreach (HtmlNode nodeWithTrack in nodesWithTracks)
+            foreach (XmlNode nodeWithTopTrack in nodesWithTopTracks)
             {
-                int trackRating = Convert.ToInt32(nodeWithTrack.SelectSingleNode(".//td").InnerText);
-                string trackName = nodeWithTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
-                string trackListeners = nodeWithTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
-                Track track = new Track.Builder(trackName).Rating(trackRating).
-                    Listeners(trackListeners).Build();
+                int rank = Convert.ToInt32(nodeWithTopTrack.Attributes["rank"].Value);
+                string trackName = nodeWithTopTrack.SelectSingleNode(".//name").InnerText;
+                string listeners = nodeWithTopTrack.SelectSingleNode(".//listeners").InnerText;
+                string scrobbles = nodeWithTopTrack.SelectSingleNode(".//playcount").InnerText;
+                Track track = new Track
+                {
+                    Rank = rank,
+                    Name = trackName,
+                    Listeners = listeners,
+                    Scrobbles = scrobbles
+                };
                 tracks.Add(track);
             }
             return tracks;
         }
 
-        private List<string> GetTagsOfArtist(HtmlNode artistProfileNode)
+        public Artist GetArtistWithAllAlbums(string artistName, string artistProfileLink, string artistPictureLink)
         {
-            HtmlNodeCollection nodesWithTags = artistProfileNode.SelectNodes(XPath.ArtistProfilePage.Tags);
-            List<string> tags = ParseTagsFrom(nodesWithTags);
-            return tags;
+            List<Album> allAlbums = GetAlbumsOfArtist(50, artistName);
+            Artist artist = new Artist
+            {
+                Name = artistName,
+                ProfileLink = artistProfileLink,
+                PictureLink = artistPictureLink,
+                Albums = allAlbums
+            };
+            return artist;
         }
 
-        private List<string> ParseTagsFrom(HtmlNodeCollection nodesWithTags)
+        private List<Album> GetAlbumsOfArtist(int numberOfAlbums, string name)
         {
-            List<string> tags = new List<string>();
-            foreach (HtmlNode nodeWithTag in nodesWithTags)
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist="
+                + name + "&limit=" + numberOfAlbums + "&api_key=" + ApiKey;
+            XmlDocument artistTopAlbumsDocument = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithTopAlbums = artistTopAlbumsDocument.SelectNodes("//album");
+            List<Album> albums = new List<Album>();
+            foreach (XmlNode nodeWithTopAlbum in nodesWithTopAlbums)
             {
-                string tag = nodeWithTag.SelectSingleNode(".//a").InnerText;
+                string albumName = nodeWithTopAlbum.SelectSingleNode(".//name").InnerText;
+                string scrobbles = nodeWithTopAlbum.SelectSingleNode(".//playcount").InnerText;
+                string pageLink = nodeWithTopAlbum.SelectSingleNode(".//url").InnerText;
+                string pictureLink = nodeWithTopAlbum.SelectSingleNode(".//image[@size='large']").InnerText;
+                Album album = new Album
+                {
+                    Name = albumName,
+                    Scrobbles = scrobbles,
+                    PageLink = pageLink,
+                    PictureLink = pictureLink
+                };
+                albums.Add(album);
+            }
+            return albums;
+        }
+
+        private List<string> GetTopTagsOfArtistFrom(XmlNode artistInfoMainNode)
+        {
+            XmlNodeList nodesWithTags = artistInfoMainNode.SelectNodes("//tags/tag");
+            List<string> tags = new List<string>();
+            foreach (XmlNode nodeWithTag in nodesWithTags)
+            {
+                string tag = nodeWithTag.SelectSingleNode(".//name").InnerText;
                 tags.Add(tag);
             }
             return tags;
         }
 
-        public Artist GetArtistWithAllTracks(string artistName, string artistProfileLink, string artistPictureLink)
+        private string GetShortBiographyOfArtisFrom(XmlNode artistInfoMainNode)
         {
-            string linkToPageWithAllTracks = artistProfileLink + "/+tracks?date_preset=ALL";
-            List<Track> allTracks = new List<Track>();
-            for(int pageNumber = 1; pageNumber <= 10; pageNumber++)
-            {
-                string linkToCurrentPageWitAllTracks = linkToPageWithAllTracks + "&page=" + pageNumber;
-                HtmlNode currentPageWithAllTracksNode = GetPageNodeFrom(linkToCurrentPageWitAllTracks);
-                HtmlNodeCollection nodesWithTracks = currentPageWithAllTracksNode.SelectNodes(XPath.TracksPage.Tracks);
-                foreach (HtmlNode nodeWithTrack in nodesWithTracks)
-                {
-                    int trackRating = Convert.ToInt32(nodeWithTrack.SelectSingleNode(".//td").InnerText);
-                    string trackName = nodeWithTrack.SelectSingleNode(".//td[4]/span/a").InnerText;
-                    string trackListeners = nodeWithTrack.SelectSingleNode(".//td[7]/span/span/span").InnerText;
-                    Track track = new Track.Builder(trackName).Rating(trackRating).
-                        Listeners(trackListeners).Build();
-                    allTracks.Add(track);
-                }
-            }
-            Artist artist = new Artist.Builder(artistName, artistProfileLink).
-                PictureLink(artistPictureLink).Tracks(allTracks).Build();
-            return artist;
-        }
-
-        public Artist GetArtistWithAllAlbums(string artistName, string artistProfileLink, string artistPictureLink)
-        {
-            List<Album> allAlbums = new List<Album>();
-            string linkToPageWithAllAlbums = artistProfileLink + "/+albums";
-            HtmlNode mainPageWithAllAlbumsNode = GetPageNodeFrom(linkToPageWithAllAlbums);
-            int pagesQuantity = CountNumberOfPagesWithAlbumsFrom(mainPageWithAllAlbumsNode);
-            for (int pageNumber = 1; pageNumber <= pagesQuantity; pageNumber++)
-            {
-                string linkToCurrentPageWithAllAlbums = linkToPageWithAllAlbums + "?page=" + pageNumber;
-                HtmlNode currentPageWithAllAlbumsNode = GetPageNodeFrom(linkToCurrentPageWithAllAlbums);
-                HtmlNodeCollection nodesWithAlbums = currentPageWithAllAlbumsNode.SelectNodes(XPath.AlbumsPage.Albums);
-                foreach (HtmlNode nodeWithAlbum in nodesWithAlbums)
-                {
-                    string name = nodeWithAlbum.SelectSingleNode(".//div/h3/a").InnerText;
-                    string pictureLink = nodeWithAlbum.SelectSingleNode(".//div/img").Attributes["src"].Value;
-                    string listeners = nodeWithAlbum.SelectSingleNode(".//div/p").InnerText;
-                    Album unfinishedAlbum = new Album.Builder(name).PictureLink(pictureLink).
-                        Listeners(listeners).Build();
-                    Album album = InitializeRunningLenghtAndReleaseDate(unfinishedAlbum, nodeWithAlbum);
-                    allAlbums.Add(album);
-                }
-            }
-            Artist artist = new Artist.Builder(artistName, artistProfileLink).
-                PictureLink(artistPictureLink).Albums(allAlbums).Build();
-            return artist;
-        }
-
-        private int CountNumberOfPagesWithAlbumsFrom(HtmlNode mainPageWithAllAlbumsNode)
-        {
-            HtmlNode lastPageLinkNode = mainPageWithAllAlbumsNode.SelectSingleNode(XPath.AlbumsPage.LastPageLink);
-            int numberOfPages = Convert.ToInt32(lastPageLinkNode.InnerText);
-            return numberOfPages;
-        }
-
-        private Album InitializeRunningLenghtAndReleaseDate(Album unfinishedAlbum, HtmlNode nodeWithAlbum)
-        {
-            Album album = unfinishedAlbum;
-            string runningLenght = "", releaseDate = "";
-            HtmlNode runningLenghtAndReleaseDateNode = nodeWithAlbum.SelectSingleNode(".//div/p[2]");
-            if (runningLenghtAndReleaseDateNode != null)
-            {
-                string runningLenghtAndReleaseDate = runningLenghtAndReleaseDateNode.InnerText;
-                int separatorIndex = runningLenghtAndReleaseDate.IndexOf("·");
-                if (separatorIndex == -1)
-                {
-                    if (runningLenghtAndReleaseDate.Contains("track"))
-                    {
-                        runningLenght = runningLenghtAndReleaseDate;
-                    }
-                    else
-                    {
-                        releaseDate = runningLenghtAndReleaseDate;
-                    }
-                }
-                else
-                {
-                    runningLenght = runningLenghtAndReleaseDate.Substring(0, separatorIndex);
-                    releaseDate = runningLenghtAndReleaseDate.Substring(separatorIndex + 1);
-                }
-            }
-            album.RunningLenght = runningLenght;
-            album.ReleaseDate = releaseDate;
-            return album;
+            string shortBiography = artistInfoMainNode.SelectSingleNode("//bio/summary").InnerText;
+            int indexOfUnnecessaryLink = shortBiography.IndexOf("<a href=");
+            shortBiography = shortBiography.Substring(0, indexOfUnnecessaryLink);
+            return shortBiography;
         }
 
         public Artist GetArtistWithBiography(string artistName, string artistProfileLink, string artistPictureLink)
         {
-            string linkToBiographyPage = artistProfileLink + "/+wiki";
-            HtmlNode biographyPageNode = GetPageNodeFrom(linkToBiographyPage);
-            HtmlNode nodeWithFullBiography = biographyPageNode.SelectSingleNode(XPath.BiographyPage.FullBiography);
-            string fullBiography = nodeWithFullBiography.InnerText;
-            Artist artist = new Artist.Builder(artistName, artistProfileLink).
-                PictureLink(artistPictureLink).FullBiography(fullBiography).Build();
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artistName + "&api_key=" + ApiKey;
+            XmlDocument artistInfoDocument = GetXmlDocumentFrom(url);
+            XmlNode artistFullBiographyNode = artistInfoDocument.SelectSingleNode("//artist/bio/content");
+            string fullBiography = artistFullBiographyNode.InnerText;
+            Artist artist = new Artist
+            {
+                Name = artistName,
+                ProfileLink = artistProfileLink,
+                PictureLink = artistPictureLink,
+                FullBiography = fullBiography
+            };
             return artist;
         }
 
-        private HtmlNode GetPageNodeFrom(string pageLink)
+        private XmlDocument GetXmlDocumentFrom(string url)
         {
-            HtmlWeb htmlWeb = new HtmlWeb();
-            HtmlDocument page = htmlWeb.Load(pageLink);
-            HtmlNode node = page.DocumentNode;
-            return node;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            string result = new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEnd();
+            XmlDocument document = new XmlDocument();
+            document.LoadXml(result);
+            return document;
         }
     }
 }
