@@ -4,22 +4,22 @@
     ViewBag.Title = Model.Name;
 }
 
-<h1 class="text-center"><img src="@Model.PictureLink"/>    @Model.Name</h1>
-<h4>Scrobbles : @Model.Scrobbles</h4>
-<h4>Listeners : @Model.Listeners</h4>
-<h4>
-    Tags :
-    @foreach (string tag in Model.Tags)
-    {
-        <code>@tag</code>
-    }
-</h4>
-<p>
-    <h4>Biography :</h4>
-    @Model.ShortBiography
-    @Html.ActionLink("See full biography", "ArtistBiography", "Home",
-        new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
-</p>
+<div class="row">
+    <div class="col-sm-4 col-md-4 col-lg-4"><img width="100%" class="img-thumbnail" src="@Model.PictureLink" /></div>
+    <div class="col-sm-8 col-md-8 col-lg-8">
+        <h1 class="text-center">@Model.Name</h1>
+        <h5>
+            @foreach (string tag in Model.Tags)
+            {
+                <code>@tag</code>
+            }
+        </h5>
+        <h4>Scrobbles : @Model.Scrobbles</h4>
+        <h4>Listeners : @Model.Listeners</h4>
+        <p>@Model.ShortBiography @Html.ActionLink("See full biography", "ArtistBiography", "Home",
+            new { artistName = Model.Name }, new { })</p>
+    </div>
+</div>
 <h2 class="text-center">Top tracks</h2>
 <table class="table table-hover table-striped table-bordered">
     <thead>
@@ -43,19 +43,22 @@
     </tbody>
 </table>
 @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
-    new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
+    new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
 <h2 class="text-center">Top albums</h2>
-<table class="table table-hover table-striped table-bordered">
-    <tbody>
-        @foreach (Album album in Model.Albums ?? new List<Album>())
-        {
-            <tr>
-                <td>@Html.ActionLink(album.Name, "Album", "Home", new { albumName = album.Name, artistName = Model.Name }, new { })</td>
-                <td><img height="150" src="@album.PictureLink"/></td>
-                <td>@album.Scrobbles</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="flex-container">
+    @foreach (Album album in Model.Albums ?? new List<Album>())
+    {
+        <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel-heading">
+                <p style="white-space: nowrap">
+                    @Html.ActionLink(album.Name, "Album", "Home",
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                </p>
+            </div>
+            <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+            <div class="panel-footer"><span class="glyphicon glyphicon-headphones"></span>    @album.Scrobbles</div>
+        </div>
+    }
+</div>
 @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
-    new { artistName = Model.Name, artistPictureLink = Model.PictureLink, artistProfileLink = Model.ProfileLink }, new { })
+    new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })

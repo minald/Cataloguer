@@ -12,30 +12,29 @@ namespace Cataloguer.Controllers
             return View(artists);
         }
 
-        public ActionResult ArtistProfile(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistProfile(string artistName)
         {
-            Artist artist = new LastFMParser().GetArtist(artistName, artistProfileLink, artistPictureLink);
+            Artist artist = new LastFMParser().GetArtist(artistName);
             return View(artist);
         }
 
-        public ActionResult ArtistBiography(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistBiography(string artistName)
         {
-            Artist artist = new LastFMParser().
-                GetArtistWithBiography(artistName, artistProfileLink, artistPictureLink);
+            Artist artist = new LastFMParser().GetArtistWithBiography(artistName);
             return View(artist);
         }
 
-        public ActionResult ArtistAllTracks(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistAllTracks(string artistName, string artistPictureLink)
         {
             Artist artist = new LastFMParser().
-                GetArtistWithAllTracks(artistName, artistProfileLink, artistPictureLink);
+                GetArtistWithAllTracks(artistName, artistPictureLink);
             return View(artist);
         }
 
-        public ActionResult ArtistAllAlbums(string artistName, string artistPictureLink, string artistProfileLink)
+        public ActionResult ArtistAllAlbums(string artistName, string artistPictureLink)
         {
             Artist artist = new LastFMParser().
-                GetArtistWithAllAlbums(artistName, artistProfileLink, artistPictureLink);
+                GetArtistWithAllAlbums(artistName, artistPictureLink);
             return View(artist);
         }
 

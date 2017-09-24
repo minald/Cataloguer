@@ -8,8 +8,6 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
-        public string PageLink { get; set; }
-
         public string PictureLink { get; set; }
 
         public string ReleaseDate { get; set; }
@@ -24,9 +22,29 @@ namespace Cataloguer.Models
 
         public virtual List<string> Tags { get; set; }
 
-        //For binding in databases
         public virtual Artist Artist { get; set; }
 
         public Album() {}
+
+        public void SetScrobbles(string scrobbles)
+        {
+            Scrobbles = NormalizeNumber(scrobbles);
+        }
+
+        public void SetListeners(string listeners)
+        {
+            Listeners = NormalizeNumber(listeners);
+        }
+
+        private string NormalizeNumber(string number)
+        {
+            int digits = number.Length;
+            if (digits <= 3) return number;
+            else number = number.Insert(digits - 3, " ");
+            if (digits <= 6) return number;
+            else number = number.Insert(digits - 6, " ");
+            if (digits <= 9) return number;
+            else return number.Insert(digits - 9, " ");
+        }
     }
 }

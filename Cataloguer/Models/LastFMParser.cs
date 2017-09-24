@@ -22,40 +22,37 @@ namespace Cataloguer.Models
                 {
                     Name = node.SelectSingleNode("name").InnerText,
                     PictureLink = node.SelectSingleNode("image[@size='large']").InnerText,
-                    ProfileLink = node.SelectSingleNode("url").InnerText
                 };
                 artists.Add(artist);
             }
             return artists;
         }
 
-        public Artist GetArtist(string artistName, string artistProfileLink, string artistPictureLink)
+        public Artist GetArtist(string name)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artistName + "&api_key=" + ApiKey;
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
             XmlDocument artistInfoDocument = GetXmlDocumentFrom(url);
             XmlNode artistInfoMainNode = artistInfoDocument.SelectSingleNode("//artist");
             string non_normalizedShortBiography = artistInfoMainNode.SelectSingleNode("//bio/summary").InnerText;
             Artist artist = new Artist
             {
-                Name = artistName,
-                ProfileLink = artistProfileLink,
-                PictureLink = artistPictureLink,
-                Listeners = artistInfoMainNode.SelectSingleNode(".//stats/listeners").InnerText,
-                Scrobbles = artistInfoMainNode.SelectSingleNode(".//stats/playcount").InnerText,
+                Name = name,
+                PictureLink = artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText,
                 Tags = GetTopTagsFrom(artistInfoMainNode),
-                ShortBiography = NormalizeBiography(non_normalizedShortBiography),
-                Tracks = GetTracksOfArtist(10, artistName),
-                Albums = GetAlbumsOfArtist(5, artistName)
+                Tracks = GetTracksOfArtist(10, name),
+                Albums = GetAlbumsOfArtist(10, name)
             };
+            artist.SetScrobbles(artistInfoMainNode.SelectSingleNode(".//stats/playcount").InnerText);
+            artist.SetListeners(artistInfoMainNode.SelectSingleNode(".//stats/listeners").InnerText);
+            artist.SetShortBiography(non_normalizedShortBiography);
             return artist;
         }
 
-        public Artist GetArtistWithAllTracks(string artistName, string artistProfileLink, string artistPictureLink)
+        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink)
         {
             Artist artist = new Artist
             {
                 Name = artistName,
-                ProfileLink = artistProfileLink,
                 PictureLink = artistPictureLink,
                 Tracks = GetTracksOfArtist(50, artistName)
             };
@@ -74,21 +71,20 @@ namespace Cataloguer.Models
                 Track track = new Track
                 {
                     Rank = Convert.ToInt32(nodeWithTrack.Attributes["rank"].Value),
-                    Name = nodeWithTrack.SelectSingleNode(".//name").InnerText,
-                    Listeners = nodeWithTrack.SelectSingleNode(".//listeners").InnerText,
-                    Scrobbles = nodeWithTrack.SelectSingleNode(".//playcount").InnerText
+                    Name = nodeWithTrack.SelectSingleNode(".//name").InnerText
                 };
+                track.SetScrobbles(nodeWithTrack.SelectSingleNode(".//playcount").InnerText);
+                track.SetListeners(nodeWithTrack.SelectSingleNode(".//listeners").InnerText);
                 tracks.Add(track);
             }
             return tracks;
         }
 
-        public Artist GetArtistWithAllAlbums(string artistName, string artistProfileLink, string artistPictureLink)
+        public Artist GetArtistWithAllAlbums(string artistName, string artistPictureLink)
         {
             Artist artist = new Artist
             {
                 Name = artistName,
-                ProfileLink = artistProfileLink,
                 PictureLink = artistPictureLink,
                 Albums = GetAlbumsOfArtist(50, artistName)
             };
@@ -107,35 +103,26 @@ namespace Cataloguer.Models
                 Album album = new Album
                 {
                     Name = nodeWithTopAlbum.SelectSingleNode(".//name").InnerText,
-                    Scrobbles = nodeWithTopAlbum.SelectSingleNode(".//playcount").InnerText,
-                    PageLink = nodeWithTopAlbum.SelectSingleNode(".//url").InnerText,
                     PictureLink = nodeWithTopAlbum.SelectSingleNode(".//image[@size='large']").InnerText
                 };
+                album.SetScrobbles(nodeWithTopAlbum.SelectSingleNode(".//playcount").InnerText);
                 albums.Add(album);
             }
             return albums;
         }  
 
-        public Artist GetArtistWithBiography(string artistName, string artistProfileLink, string artistPictureLink)
+        public Artist GetArtistWithBiography(string name)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + artistName + "&api_key=" + ApiKey;
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
             XmlDocument artistInfoDocument = GetXmlDocumentFrom(url);
             string non_normalizedFullBiography = artistInfoDocument.SelectSingleNode("//artist/bio/content").InnerText;
             Artist artist = new Artist
             {
-                Name = artistName,
-                ProfileLink = artistProfileLink,
-                PictureLink = artistPictureLink,
-                FullBiography = NormalizeBiography(non_normalizedFullBiography)
+                Name = name,
+                PictureLink = artistInfoDocument.SelectSingleNode("//artist/image[@size='large']").InnerText
             };
+            artist.SetFullBiography(non_normalizedFullBiography);
             return artist;
-        }
-
-        private string NormalizeBiography(string non_normalizedBiography)
-        {
-            int indexOfUnnecessaryLink = non_normalizedBiography.IndexOf("<a href=");
-            string normalizedBiography = non_normalizedBiography.Substring(0, indexOfUnnecessaryLink);
-            return normalizedBiography;
         }
 
         public Album GetAlbum(string albumName, string artistName)
@@ -146,8 +133,7 @@ namespace Cataloguer.Models
             XmlNode albumInfoMainNode = albumInfoDocument.SelectSingleNode("//album");
             Artist artist = new Artist
             {
-                Name = albumInfoMainNode.SelectSingleNode(".//tracks/track/artist/name").InnerText,
-                ProfileLink = albumInfoMainNode.SelectSingleNode(".//tracks/track/artist/url").InnerText
+                Name = albumInfoMainNode.SelectSingleNode(".//artist").InnerText,
             };
             XmlNodeList nodesWithTracks = albumInfoMainNode.SelectNodes(".//tracks/track");
             List<Track> tracks = new List<Track>();
@@ -156,23 +142,21 @@ namespace Cataloguer.Models
                 Track track = new Track
                 {
                     Rank = Convert.ToInt32(nodeWithTrack.Attributes["rank"].Value),
-                    Name = nodeWithTrack.SelectSingleNode(".//name").InnerText,
-                    Duration = nodeWithTrack.SelectSingleNode(".//duration").InnerText + " seconds",
-                    PageLink = nodeWithTrack.SelectSingleNode(".//url").InnerText
+                    Name = nodeWithTrack.SelectSingleNode(".//name").InnerText
                 };
+                track.SetDuration(nodeWithTrack.SelectSingleNode(".//duration").InnerText);
                 tracks.Add(track);
             }
             Album album = new Album
             {
                 Name = albumInfoMainNode.SelectSingleNode(".//name").InnerText,
-                PageLink = albumInfoMainNode.SelectSingleNode(".//url").InnerText,
                 PictureLink = albumInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText,
-                Listeners = albumInfoMainNode.SelectSingleNode(".//listeners").InnerText,
-                Scrobbles = albumInfoMainNode.SelectSingleNode(".//playcount").InnerText,
                 Tags = GetTopTagsFrom(albumInfoMainNode),
                 Artist = artist,
                 Tracks = tracks
             };
+            album.SetScrobbles(albumInfoMainNode.SelectSingleNode(".//playcount").InnerText);
+            album.SetListeners(albumInfoMainNode.SelectSingleNode(".//listeners").InnerText);
             return album;
         }
 

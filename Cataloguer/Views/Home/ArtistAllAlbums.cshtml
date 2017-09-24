@@ -4,17 +4,23 @@
     ViewBag.Title = Model.Name;
 }
 
-<h1 class="text-center"><img src="@Model.PictureLink" />    @Model.Name</h1>
+<h1 class="text-center">
+    <img src="@Model.PictureLink" />    @Html.ActionLink(Model.Name, "ArtistProfile", "Home",
+        new { artistName = Model.Name }, new { })
+</h1>
 <h2 class="text-center">Top albums of all time</h2>
-<table class="table table-hover table-striped table-bordered">
-    <tbody>
-        @foreach (Album album in Model.Albums ?? new List<Album>())
-        {
-            <tr>
-                <td>@Html.ActionLink(album.Name, "Album", "Home", new { albumName = album.Name, artistName = Model.Name }, new { })</td>
-                <td><img height="150" src="@album.PictureLink" /></td>
-                <td>@album.Scrobbles</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="flex-container">
+    @foreach (Album album in Model.Albums ?? new List<Album>())
+    {
+        <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel-heading">
+                <p style="white-space: nowrap">
+                    @Html.ActionLink(album.Name, "Album", "Home", 
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                </p>
+            </div>
+            <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+            <div class="panel-footer"><span class="glyphicon glyphicon-headphones"></span>    @album.Scrobbles</div>
+        </div>
+    }
+</div>

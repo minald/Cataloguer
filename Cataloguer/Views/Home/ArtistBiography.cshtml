@@ -3,6 +3,10 @@
 @{
     ViewBag.Title = Model.Name;
 }
+<div style="float: left; margin: 30px">
+    <h1 class="text-center">@Html.ActionLink(Model.Name, "ArtistProfile", "Home",
+        new { artistName = Model.Name }, new { })</h1>
+    <img class="center-block" height="300px" src="@Model.PictureLink" />
+</div>
 
-<h1 class="text-center"><img src="@Model.PictureLink" />    @Model.Name</h1>
-<p>@Model.FullBiography</p>
+<h4>@Model.FullBiography</h4>
