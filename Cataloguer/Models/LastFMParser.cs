@@ -15,14 +15,15 @@ namespace Cataloguer.Models
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=" + ApiKey;
             XmlDocument document = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithArtists = document.SelectNodes("//artist");
             List<Artist> artists = new List<Artist>();
-            foreach (XmlNode node in document.SelectNodes("//artist"))
+            foreach (XmlNode artistNode in nodesWithArtists)
             {
                 Artist artist = new Artist
                 {
-                    Name = node.SelectSingleNode("name").InnerText,
-                    PictureLink = node.SelectSingleNode("image[@size='large']").InnerText,
+                    Name = artistNode.SelectSingleNode("name").InnerText
                 };
+                artist.SetPictureLink(artistNode.SelectSingleNode("image[@size='large']").InnerText);
                 artists.Add(artist);
             }
             return artists;
@@ -37,11 +38,11 @@ namespace Cataloguer.Models
             Artist artist = new Artist
             {
                 Name = name,
-                PictureLink = artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText,
                 Tags = GetTopTagsFrom(artistInfoMainNode),
                 Tracks = GetTracksOfArtist(10, name),
                 Albums = GetAlbumsOfArtist(10, name)
             };
+            artist.SetPictureLink(artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
             artist.SetScrobbles(artistInfoMainNode.SelectSingleNode(".//stats/playcount").InnerText);
             artist.SetListeners(artistInfoMainNode.SelectSingleNode(".//stats/listeners").InnerText);
             artist.SetShortBiography(non_normalizedShortBiography);
@@ -53,9 +54,9 @@ namespace Cataloguer.Models
             Artist artist = new Artist
             {
                 Name = artistName,
-                PictureLink = artistPictureLink,
                 Tracks = GetTracksOfArtist(50, artistName)
             };
+            artist.SetPictureLink(artistPictureLink);
             return artist;
         }
 
@@ -85,9 +86,9 @@ namespace Cataloguer.Models
             Artist artist = new Artist
             {
                 Name = artistName,
-                PictureLink = artistPictureLink,
                 Albums = GetAlbumsOfArtist(50, artistName)
             };
+            artist.SetPictureLink(artistPictureLink);
             return artist;
         }
 
@@ -102,9 +103,9 @@ namespace Cataloguer.Models
             {
                 Album album = new Album
                 {
-                    Name = nodeWithTopAlbum.SelectSingleNode(".//name").InnerText,
-                    PictureLink = nodeWithTopAlbum.SelectSingleNode(".//image[@size='large']").InnerText
+                    Name = nodeWithTopAlbum.SelectSingleNode(".//name").InnerText
                 };
+                album.SetPictureLink(nodeWithTopAlbum.SelectSingleNode(".//image[@size='large']").InnerText);
                 album.SetScrobbles(nodeWithTopAlbum.SelectSingleNode(".//playcount").InnerText);
                 albums.Add(album);
             }
@@ -118,9 +119,9 @@ namespace Cataloguer.Models
             string non_normalizedFullBiography = artistInfoDocument.SelectSingleNode("//artist/bio/content").InnerText;
             Artist artist = new Artist
             {
-                Name = name,
-                PictureLink = artistInfoDocument.SelectSingleNode("//artist/image[@size='large']").InnerText
+                Name = name
             };
+            artist.SetPictureLink(artistInfoDocument.SelectSingleNode("//artist/image[@size='large']").InnerText);
             artist.SetFullBiography(non_normalizedFullBiography);
             return artist;
         }
@@ -150,11 +151,11 @@ namespace Cataloguer.Models
             Album album = new Album
             {
                 Name = albumInfoMainNode.SelectSingleNode(".//name").InnerText,
-                PictureLink = albumInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText,
                 Tags = GetTopTagsFrom(albumInfoMainNode),
                 Artist = artist,
                 Tracks = tracks
             };
+            album.SetPictureLink(albumInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
             album.SetScrobbles(albumInfoMainNode.SelectSingleNode(".//playcount").InnerText);
             album.SetListeners(albumInfoMainNode.SelectSingleNode(".//listeners").InnerText);
             return album;
@@ -172,13 +173,81 @@ namespace Cataloguer.Models
             return tags;
         }
 
+        public List<Artist> SearchArtists(string value)
+        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + value + "&api_key=" + ApiKey;
+            XmlDocument document = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithArtists = document.SelectNodes("//artistmatches/artist");
+            List<Artist> artists = new List<Artist>();
+            foreach (XmlNode artistNode in nodesWithArtists)
+            {
+                Artist artist = new Artist
+                {
+                    Name = artistNode.SelectSingleNode(".//name").InnerText
+                };
+                artist.SetPictureLink(artistNode.SelectSingleNode(".//image[@size='large']").InnerText);
+                artists.Add(artist);
+            }
+            return artists;
+        }
+
+        public List<Album> SearchAlbums(string value)
+        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + value + "&api_key=" + ApiKey;
+            XmlDocument document = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithAlbums = document.SelectNodes("//albummatches/album");
+            List<Album> albums = new List<Album>();
+            foreach (XmlNode albumNode in nodesWithAlbums)
+            {
+                Album album = new Album
+                {
+                    Name = albumNode.SelectSingleNode(".//name").InnerText,
+                    Artist = new Artist
+                    {
+                        Name = albumNode.SelectSingleNode(".//artist").InnerText
+                    }
+                };
+                album.SetPictureLink(albumNode.SelectSingleNode(".//image[@size='large']").InnerText);
+                albums.Add(album);
+            }
+            return albums;
+        }
+
+        public List<Track> SearchTracks(string value)
+        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + value + "&api_key=" + ApiKey;
+            XmlDocument document = GetXmlDocumentFrom(url);
+            XmlNodeList nodesWithTracks = document.SelectNodes("//trackmatches/track");
+            List<Track> tracks = new List<Track>();
+            foreach(XmlNode trackNode in nodesWithTracks)
+            {
+                Track track = new Track
+                {
+                    Name = trackNode.SelectSingleNode(".//name").InnerText,
+                    Listeners = trackNode.SelectSingleNode(".//listeners").InnerText,
+                    Artist = new Artist
+                    {
+                        Name = trackNode.SelectSingleNode(".//artist").InnerText
+                    }
+                };
+                tracks.Add(track);
+            }
+            return tracks;
+        }
+
         private XmlDocument GetXmlDocumentFrom(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             string result = new StreamReader(response.GetResponseStream(), Encoding.UTF8).ReadToEnd();
             XmlDocument document = new XmlDocument();
-            document.LoadXml(result);
+            using (var stringReader = new StringReader(result))
+            {
+                using (var xmlTextReader = new XmlTextReader(stringReader) { Namespaces = false })
+                {
+                    document.Load(xmlTextReader);
+                }
+            }
             return document;
         }
     }

@@ -159,6 +159,7 @@
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\ArtistContext.cs" />
     <Compile Include="Models\LastFMParser.cs" />
+    <Compile Include="Models\SearchingResults.cs" />
     <Compile Include="Models\Track.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -219,6 +220,7 @@
     <Content Include="Views\Home\ArtistAllAlbums.cshtml" />
     <Content Include="Views\Home\ArtistBiography.cshtml" />
     <Content Include="Views\Home\Album.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

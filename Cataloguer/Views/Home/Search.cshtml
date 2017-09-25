@@ -1,0 +1,86 @@
+﻿@using Cataloguer.Models
+@model SearchingResults
+@{
+    ViewBag.Title = ViewBag.SearchingValue;
+}
+
+<h1 class="text-center">@ViewBag.SearchingValue</h1>
+@if (Model.Artists.Count == 0)
+{
+    <h2 class="text-center">There are no artists with this name</h2>
+}
+else
+{
+    <h2 class="text-center">Artists</h2>
+    <div class="flex-container">
+        @foreach (Artist artist in Model.Artists ?? new List<Artist>())
+        {
+            <div class="panel panel-default" style="flex-basis: 23%">
+                <div class="panel-heading">
+                    <p class="text-center" style="white-space: nowrap">
+                        @Html.ActionLink(artist.Name, "ArtistProfile", "Home",
+                        new { artistName = artist.Name }, new { })
+                    </p>
+                </div>
+                <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+            </div>
+        }
+    </div>
+}
+@if (Model.Albums.Count == 0)
+{
+    <h2 class="text-center">There are no albums with this name</h2>
+}
+else
+{
+    <h2 class="text-center">Albums</h2>
+    <div class="flex-container">
+        @foreach (Album album in Model.Albums ?? new List<Album>())
+        {
+            <div class="panel panel-default" style="flex-basis: 23%">
+                <div class="panel-heading">
+                    <p style="white-space: nowrap" class="text-center">
+                        @Html.ActionLink(album.Name, "Album", "Home",
+                        new { albumName = album.Name, artistName = album.Artist.Name }, new { })
+                    </p>
+                </div>
+                <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+                <div class="panel-footer">
+                    <span class="glyphicon glyphicon-user"></span>    @Html.ActionLink(album.Artist.Name, "ArtistProfile",
+                    "Home", new { artistName = album.Artist.Name }, new { })
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@if (Model.Tracks.Count == 0)
+{
+    <h2 class="text-center">There are no tracks with this name</h2>
+}
+else
+{
+    <h2 class="text-center">Tracks</h2>
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Artist</th>
+                <th>Listeners</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            {
+                <tr>
+                    <td>@track.Name</td>
+                    <td>
+                        @Html.ActionLink(track.Artist.Name, "ArtistProfile", "Home",
+                    new { artistName = track.Artist.Name }, new { })
+                </td>
+                <td>@track.Listeners</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}

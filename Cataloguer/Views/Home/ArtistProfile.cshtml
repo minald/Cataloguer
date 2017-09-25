@@ -16,8 +16,12 @@
         </h5>
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>
-        <p>@Model.ShortBiography @Html.ActionLink("See full biography", "ArtistBiography", "Home",
-            new { artistName = Model.Name }, new { })</p>
+        @if (Model.ShortBiography != " ")
+        {
+            <p>@Model.ShortBiography</p>
+            <p>@Html.ActionLink("See full biography", "ArtistBiography", "Home", 
+                    new { artistName = Model.Name }, new { })</p>
+        }  
     </div>
 </div>
 <h2 class="text-center">Top tracks</h2>
@@ -42,15 +46,18 @@
         }
     </tbody>
 </table>
-@Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
-    new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+@if (Model.Tracks.Count > 10)
+{
+    @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
+        new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+}
 <h2 class="text-center">Top albums</h2>
 <div class="flex-container">
     @foreach (Album album in Model.Albums ?? new List<Album>())
     {
         <div class="panel panel-default" style="flex-basis: 23%">
             <div class="panel-heading">
-                <p style="white-space: nowrap">
+                <p style="white-space: nowrap" class="text-center">
                     @Html.ActionLink(album.Name, "Album", "Home",
                         new { albumName = album.Name, artistName = Model.Name }, new { })
                 </p>
@@ -60,5 +67,8 @@
         </div>
     }
 </div>
-@Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
-    new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+@if (Model.Albums.Count > 10)
+{
+    @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
+        new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+}

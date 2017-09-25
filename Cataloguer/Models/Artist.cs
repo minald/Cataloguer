@@ -26,6 +26,15 @@ namespace Cataloguer.Models
 
         public Artist() {}
 
+        public void SetPictureLink(string pictureLink)
+        {
+            string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f";
+            if (pictureLink != "")
+                PictureLink = pictureLink;
+            else
+                PictureLink = defaultPictureLink;
+        }
+
         public void SetScrobbles(string scrobbles)
         {
             Scrobbles = NormalizeNumber(scrobbles);
@@ -60,8 +69,9 @@ namespace Cataloguer.Models
         private string NormalizeBiography(string non_normalizedBiography)
         {
             int indexOfUnnecessaryLink = non_normalizedBiography.IndexOf("<a href=");
-            string normalizedBiography = non_normalizedBiography.Substring(0, indexOfUnnecessaryLink);
-            return normalizedBiography;
+            if(indexOfUnnecessaryLink != -1)
+                return non_normalizedBiography.Substring(0, indexOfUnnecessaryLink);
+            return non_normalizedBiography;
         }
     }
 }

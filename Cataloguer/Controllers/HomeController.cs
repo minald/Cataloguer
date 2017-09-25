@@ -44,6 +44,19 @@ namespace Cataloguer.Controllers
             return View(album);
         }
 
+        [HttpGet]
+        public ActionResult Search(string value)
+        {
+            SearchingResults results = new SearchingResults
+            {
+                Artists = new LastFMParser().SearchArtists(value),
+                Albums = new LastFMParser().SearchAlbums(value),
+                Tracks = new LastFMParser().SearchTracks(value)
+            };
+            ViewBag.SearchingValue = value;
+            return View(results);
+        }
+
         public ActionResult Local()
         {
             return View();
