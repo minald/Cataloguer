@@ -21,6 +21,7 @@ else
         <thead>
             <tr>
                 <th>Name</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -28,6 +29,9 @@ else
             {
                 <tr>
                     <td>@track.Name</td>
+                    <td>
+                        <audio controls src="~/Content/Music/@track.Scrobbles"></audio>
+                    </td>
                 </tr>
             }
         </tbody>

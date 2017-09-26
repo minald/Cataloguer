@@ -8,6 +8,8 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
+        //public string LinkToAudio { get; set; }
+
         public int Rank { get; set; }
 
         public string Duration { get; set; }

@@ -10,7 +10,6 @@ namespace Cataloguer.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "Cataloguer.Models.ArtistContext";
         }
 
         protected override void Seed(Cataloguer.Models.ArtistContext context)

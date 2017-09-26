@@ -193,3 +193,4 @@ C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.CoreCompileInputs.cache
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.pdb
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csprojResolveAssemblyReference.cache

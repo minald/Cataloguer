@@ -11,7 +11,7 @@ namespace LocalParser
 
         public static void Main()
         {
-            string mainDirectoryName = @"D:\Music\";
+            string mainDirectoryName = @"C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\Content\Music\";
             string[] directoriesWithArtists = Directory.GetDirectories(mainDirectoryName);
             foreach (string artistDirectory in directoriesWithArtists)
             {
@@ -52,6 +52,7 @@ namespace LocalParser
                             if (!TrackExists(trackName, albumName, artistName))
                             {
                                 Track track = new Track(trackName);
+                                track.Scrobbles = trackDirectory.Substring(67);
                                 database.Artists.Where(a => a.Name == artistName).First().
                                     Albums.Where(a => a.Name == albumName).First().Tracks.Add(track);
                             }
@@ -68,6 +69,7 @@ namespace LocalParser
                         if (!TrackExists(trackName, artistName))
                         {
                             Track track = new Track(trackName);
+                            track.Scrobbles = trackDirectory.Substring(67);
                             database.Artists.Where(a => a.Name == artistName).First().Tracks.Add(track);
                         }
                     }
