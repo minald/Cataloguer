@@ -1,0 +1,35 @@
+﻿@using Cataloguer.Models
+@model Album
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-3"><img width="100%" class="img-thumbnail" src="@Model.PictureLink" /></div>
+    <div class="col-sm-9 col-md-9 col-lg-9">
+        <h1 class="text-center">@Model.Name</h1>
+    </div>
+</div>
+@if (Model.Tracks.Count == 0)
+{
+    <h3 class="text-center">There are no tracks in this album</h3>
+}
+else
+{
+    <h2 class="text-center">Tracklist</h2>
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            {
+                <tr>
+                    <td>@track.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

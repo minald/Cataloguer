@@ -22,6 +22,11 @@ namespace Cataloguer.Models
 
         public Track() {}
 
+        public Track(String name)
+        {
+            Name = name;
+        }
+
         public void SetDuration(string seconds)
         {
             int allSeconds = Convert.ToInt32(seconds);

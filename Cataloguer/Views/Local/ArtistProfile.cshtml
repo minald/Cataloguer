@@ -1,0 +1,55 @@
+﻿@using Cataloguer.Models
+@model Artist
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="row">
+    <div class="col-sm-3 col-md-3 col-lg-3"><img width="100%" class="img-thumbnail" src="@Model.PictureLink" /></div>
+    <div class="col-sm-9 col-md-9 col-lg-9">
+        <h1 class="text-center">@Model.Name</h1>
+    </div>
+</div>
+<h2 class="text-center">Tracks</h2>
+<table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Listeners</th>
+            <th>Scrobbles</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Track track in Model.Tracks ?? new List<Track>())
+        {
+            <tr>
+                <td>@track.Rank</td>
+                <td>@track.Name</td>
+                <td>@track.Listeners</td>
+                <td>@track.Scrobbles</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<h2 class="text-center">Albums</h2>
+<div class="flex-container">
+    @foreach (Album album in Model.Albums ?? new List<Album>())
+    {
+        <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel-heading">
+                <p style="white-space: nowrap" class="text-center">
+                    @Html.ActionLink(album.Name, "Album", "Local",
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                </p>
+            </div>
+            <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+            <div class="panel-footer">
+                <p style="white-space: nowrap" class="text-center">
+                    @Html.ActionLink(album.Name + " on Last.fm", "Album", "Home",
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                </p>
+            </div>
+        </div>
+    }
+</div>

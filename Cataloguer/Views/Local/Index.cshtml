@@ -1,7 +1,27 @@
-﻿
+﻿@using Cataloguer.Models
+@model List<Artist>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My artists";
 }
 
-<h2>Index</h2>
-
+<h1 class="text-center">My artists</h1>
+<div class="flex-container">
+    @foreach (Artist artist in Model ?? new List<Artist>())
+    {
+        <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel-heading">
+                <p class="text-center" style="white-space: nowrap">
+                    @Html.ActionLink(artist.Name, "ArtistProfile", "Local",
+                        new { artistName = artist.Name }, new { })
+                </p>
+            </div>
+            <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+            <div class="panel-footer">
+                <p class="text-center" style="white-space: nowrap">
+                    @Html.ActionLink(artist.Name + " on Last.fm", "ArtistProfile", "Home",
+                        new { artistName = artist.Name }, new { })
+                </p>
+            </div>
+        </div>
+    }
+</div>
