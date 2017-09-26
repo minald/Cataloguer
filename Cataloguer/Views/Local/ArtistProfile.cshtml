@@ -10,46 +10,58 @@
         <h1 class="text-center">@Model.Name</h1>
     </div>
 </div>
-<h2 class="text-center">Tracks</h2>
-<table class="table table-hover table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Listeners</th>
-            <th>Scrobbles</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Track track in Model.Tracks ?? new List<Track>())
-        {
+@if (Model.Tracks.Count == 0)
+{
+    <h2 class="text-center">There are no tracks of this artist</h2>
+}
+else
+{
+    <h2 class="text-center">Tracks</h2>
+    <table class="table table-hover table-striped table-bordered">
+        <thead>
             <tr>
-                <td>@track.Rank</td>
-                <td>@track.Name</td>
-                <td>@track.Listeners</td>
-                <td>@track.Scrobbles</td>
+                <th>Name</th>
+                <th></th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            {
+                <tr>
+                    <td>@track.Name</td>
+                    <td>
+                        <audio controls src="~/Content/Music/@track.Scrobbles"></audio>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (Model.Albums.Count == 0)
+{
+    <h2 class="text-center">There are no albums of this artist</h2>
+}
+else
+{
+    <h2 class="text-center">Albums</h2>
+    <div class="flex-container">
+        @foreach (Album album in Model.Albums ?? new List<Album>())
+        {
+            <div class="panel panel-default" style="flex-basis: 23%">
+                <div class="panel-heading">
+                    <p style="white-space: nowrap" class="text-center">
+                        @Html.ActionLink(album.Name, "Album", "Local",
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                    </p>
+                </div>
+                <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+                <div class="panel-footer">
+                    <p style="white-space: nowrap" class="text-center">
+                        @Html.ActionLink(album.Name + " on Last.fm", "Album", "Home",
+                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                    </p>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
-<h2 class="text-center">Albums</h2>
-<div class="flex-container">
-    @foreach (Album album in Model.Albums ?? new List<Album>())
-    {
-        <div class="panel panel-default" style="flex-basis: 23%">
-            <div class="panel-heading">
-                <p style="white-space: nowrap" class="text-center">
-                    @Html.ActionLink(album.Name, "Album", "Local",
-                        new { albumName = album.Name, artistName = Model.Name }, new { })
-                </p>
-            </div>
-            <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
-            <div class="panel-footer">
-                <p style="white-space: nowrap" class="text-center">
-                    @Html.ActionLink(album.Name + " on Last.fm", "Album", "Home",
-                        new { albumName = album.Name, artistName = Model.Name }, new { })
-                </p>
-            </div>
-        </div>
-    }
-</div>
+    </div>
+}
