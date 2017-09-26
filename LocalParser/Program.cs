@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using Cataloguer.Models;
+
 
 namespace LocalParser
 {
@@ -11,8 +9,25 @@ namespace LocalParser
     {
         public static void Main()
         {
-            Console.WriteLine("It is working!");
-            Console.ReadLine();
+            ArtistContext database = new ArtistContext();
+            Artist artist1 = new Artist
+            {
+                Name = "qwerty"
+            };
+            database.Artists.Add(artist1);
+            database.SaveChanges();
+
+            string mainDirectoryName = @"D:\Music\";
+            string[] artists = Directory.GetDirectories(mainDirectoryName);
+            foreach (string artist in artists)
+            {
+                Console.WriteLine(artist);
+                string[] folders = Directory.GetDirectories(artist);
+                foreach (string folder in folders)
+                {
+                    Console.WriteLine(folder);
+                }
+            }
         }
     }
 }

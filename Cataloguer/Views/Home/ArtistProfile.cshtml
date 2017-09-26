@@ -46,7 +46,7 @@
         }
     </tbody>
 </table>
-@if (Model.Tracks.Count > 10)
+@if (Model.Tracks.Count > 9)
 {
     @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
         new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
@@ -67,7 +67,7 @@
         </div>
     }
 </div>
-@if (Model.Albums.Count > 10)
+@if (Model.Albums.Count > 9)
 {
     @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
         new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })

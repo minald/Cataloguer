@@ -72,3 +72,10 @@ C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\System.Web.Razor
 C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\System.Web.WebPages.Razor.xml
 C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\System.Web.WebPages.xml
 C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\System.Web.WebPages.Deployment.xml
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\WebGrease.dll
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\Newtonsoft.Json.dll
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\Antlr3.Runtime.dll
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\Newtonsoft.Json.xml
+C:\Users\a.minald\source\repos\Cataloguer\LocalParser\bin\Debug\Antlr3.Runtime.pdb
