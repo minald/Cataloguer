@@ -191,3 +191,6 @@ C:\Users\User\Documents\Visual Studio 2017\Projects\Cataloguer\Cataloguer\bin\Mi
 C:\Users\User\Documents\Visual Studio 2017\Projects\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csprojResolveAssemblyReference.cache
 C:\Users\User\Documents\Visual Studio 2017\Projects\Cataloguer\Cataloguer\obj\Debug\Cataloguer.dll
 C:\Users\User\Documents\Visual Studio 2017\Projects\Cataloguer\Cataloguer\obj\Debug\Cataloguer.pdb
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.InitialCreate.resources
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.GenerateResource.Cache
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.AddMigration.resources

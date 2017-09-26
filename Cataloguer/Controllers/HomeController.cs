@@ -56,10 +56,5 @@ namespace Cataloguer.Controllers
             ViewBag.SearchingValue = value;
             return View(results);
         }
-
-        public ActionResult Local()
-        {
-            return View();
-        }
     }
 }

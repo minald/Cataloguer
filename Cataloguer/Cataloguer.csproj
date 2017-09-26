@@ -152,9 +152,19 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocalController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201709150852191_InitialCreate.cs" />
+    <Compile Include="Migrations\201709150852191_InitialCreate.Designer.cs">
+      <DependentUpon>201709150852191_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201709260928322_AddMigration.cs" />
+    <Compile Include="Migrations\201709260928322_AddMigration.Designer.cs">
+      <DependentUpon>201709260928322_AddMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
     <Compile Include="Models\ArtistContext.cs" />
@@ -214,18 +224,25 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Home\Local.cshtml" />
     <Content Include="Views\Home\ArtistProfile.cshtml" />
     <Content Include="Views\Home\ArtistAllTracks.cshtml" />
     <Content Include="Views\Home\ArtistAllAlbums.cshtml" />
     <Content Include="Views\Home\ArtistBiography.cshtml" />
     <Content Include="Views\Home\Album.cshtml" />
     <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Local\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201709150852191_InitialCreate.resx">
+      <DependentUpon>201709150852191_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201709260928322_AddMigration.resx">
+      <DependentUpon>201709260928322_AddMigration.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
