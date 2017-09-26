@@ -174,9 +174,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\SongsCatalog.mdf" />
-    <Content Include="App_Data\SongsCatalog_log.ldf">
-      <DependentUpon>SongsCatalog.mdf</DependentUpon>
+    <Content Include="App_Data\MusicCatalog.mdf" />
+    <Content Include="App_Data\MusicCatalog_log.ldf">
+      <DependentUpon>MusicCatalog.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
