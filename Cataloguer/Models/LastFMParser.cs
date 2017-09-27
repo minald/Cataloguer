@@ -11,9 +11,10 @@ namespace Cataloguer.Models
     {
         public const string ApiKey = "f39425750fc23d743fbf853d9585a46c";
 
-        public List<Artist> GetTopArtists()
+        public List<Artist> GetTopArtists(string page, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=" + ApiKey;
+            string url = "http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists" +
+                 "&page=" + page + "&limit=" + limit + "&api_key=" + ApiKey;
             XmlDocument document = GetXmlDocumentFrom(url);
             XmlNodeList nodesWithArtists = document.SelectNodes("//artist");
             List<Artist> artists = new List<Artist>();

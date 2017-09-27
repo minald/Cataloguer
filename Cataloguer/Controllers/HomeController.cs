@@ -1,4 +1,5 @@
 ﻿using Cataloguer.Models;
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -8,8 +9,20 @@ namespace Cataloguer.Controllers
     {
         public ActionResult Index()
         {
-            List<Artist> artists = new LastFMParser().GetTopArtists();
+            Session["currentPage"] = 1;
+            int artistsPerPage = 12;
+            List<Artist> artists = new LastFMParser().
+                GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
             return View(artists);
+        }
+
+        public ActionResult Artists()
+        {
+            Session["currentPage"] = Convert.ToInt32(Session["currentPage"]) + 1;
+            int artistsPerPage = 12;
+            List<Artist> artists = new LastFMParser().
+                GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
+            return PartialView(artists);
         }
 
         public ActionResult ArtistProfile(string artistName)
