@@ -149,7 +149,6 @@ C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Cataloguer.pdb
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Antlr3.Runtime.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\EntityFramework.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\EntityFramework.SqlServer.dll
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\HtmlAgilityPack.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.Agent.Intercept.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.DependencyCollector.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.PerfCounterCollector.dll
@@ -170,8 +169,6 @@ C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\System.Web.WebPages.Raz
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\WebGrease.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\EntityFramework.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\EntityFramework.SqlServer.xml
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\HtmlAgilityPack.pdb
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\HtmlAgilityPack.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\System.Web.Helpers.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\System.Web.Mvc.xml
