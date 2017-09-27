@@ -62,9 +62,9 @@ namespace Cataloguer.Controllers
         {
             SearchingResults results = new SearchingResults
             {
-                Artists = new LastFMParser().SearchArtists(value),
-                Albums = new LastFMParser().SearchAlbums(value),
-                Tracks = new LastFMParser().SearchTracks(value)
+                Artists = new LastFMParser().SearchArtists(value, 10),
+                Albums = new LastFMParser().SearchAlbums(value, 30),
+                Tracks = new LastFMParser().SearchTracks(value, 50)
             };
             ViewBag.SearchingValue = value;
             return View(results);

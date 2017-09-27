@@ -26,6 +26,11 @@ namespace Cataloguer.Models
 
         public Artist() {}
 
+        public Artist(string name)
+        {
+            Name = name;
+        }
+
         public void SetPictureLink(string pictureLink)
         {
             string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f";
