@@ -29,6 +29,8 @@ namespace Cataloguer.Models
         public Album(string name)
         {
             Name = name;
+            Tracks = new List<Track>();
+            Tags = new List<string>();
         }
 
         public void SetPictureLink(string pictureLink)

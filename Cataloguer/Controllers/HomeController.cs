@@ -7,10 +7,11 @@ namespace Cataloguer.Controllers
 {
     public class HomeController : Controller
     {
+        public int artistsPerPage = 12;
+
         public ActionResult Index()
         {
             Session["currentPage"] = 1;
-            int artistsPerPage = 12;
             List<Artist> artists = new LastFMParser().
                 GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
             return View(artists);
@@ -19,7 +20,6 @@ namespace Cataloguer.Controllers
         public ActionResult Artists()
         {
             Session["currentPage"] = Convert.ToInt32(Session["currentPage"]) + 1;
-            int artistsPerPage = 12;
             List<Artist> artists = new LastFMParser().
                 GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
             return PartialView(artists);

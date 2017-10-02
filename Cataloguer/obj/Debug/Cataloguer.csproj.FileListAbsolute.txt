@@ -184,10 +184,10 @@ C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.Dependency
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.ServerTelemetryChannel.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.WindowsServer.xml
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\bin\Microsoft.AI.Web.xml
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.InitialCreate.resources
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.AddMigration.resources
-C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.GenerateResource.Cache
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.CoreCompileInputs.cache
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.dll
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.pdb
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csprojResolveAssemblyReference.cache
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.initial.resources
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.GenerateResource.Cache
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.addLinkToAudioField.resources

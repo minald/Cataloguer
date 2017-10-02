@@ -153,13 +153,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709150852191_InitialCreate.cs" />
-    <Compile Include="Migrations\201709150852191_InitialCreate.Designer.cs">
-      <DependentUpon>201709150852191_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201710020835332_initial.cs" />
+    <Compile Include="Migrations\201710020835332_initial.Designer.cs">
+      <DependentUpon>201710020835332_initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201709260928322_AddMigration.cs" />
-    <Compile Include="Migrations\201709260928322_AddMigration.Designer.cs">
-      <DependentUpon>201709260928322_AddMigration.cs</DependentUpon>
+    <Compile Include="Migrations\201710020837261_addLinkToAudioField.cs" />
+    <Compile Include="Migrations\201710020837261_addLinkToAudioField.Designer.cs">
+      <DependentUpon>201710020837261_addLinkToAudioField.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Album.cs" />
@@ -240,11 +240,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201709150852191_InitialCreate.resx">
-      <DependentUpon>201709150852191_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710020835332_initial.resx">
+      <DependentUpon>201710020835332_initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201709260928322_AddMigration.resx">
-      <DependentUpon>201709260928322_AddMigration.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201710020837261_addLinkToAudioField.resx">
+      <DependentUpon>201710020837261_addLinkToAudioField.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

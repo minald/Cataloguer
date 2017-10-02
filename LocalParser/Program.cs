@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 using Cataloguer.Models;
 
@@ -9,27 +8,14 @@ namespace LocalParser
     {
         public static ArtistContext database = new ArtistContext();
 
-        public static string mainDirectoryName = 
+        public static string mainDirectory = 
             @"C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\Content\Music\";
 
         public static void Main()
         {
-            string[] directoriesWithArtists = Directory.GetDirectories(mainDirectoryName);
-            foreach (string artistDirectory in directoriesWithArtists)
+            foreach (string artistDirectory in Directory.GetDirectories(mainDirectory))
             {
-                string artistName = artistDirectory.Substring(mainDirectoryName.Length);
-                if (!ArtistExists(artistName))
-                {
-                    Artist artist = new Artist
-                    {
-                        Name = artistName,
-                        Albums = new List<Album>(),
-                        Tracks = new List<Track>()
-                    };
-                    artist.SetPictureLink("");
-                    database.Artists.Add(artist);
-                    database.SaveChanges();
-                }
+                AddArtist(artistDirectory);
                 if (Directory.Exists(artistDirectory + @"\Albums"))
                 {
                     ParseAlbums(artistDirectory);
@@ -42,101 +28,102 @@ namespace LocalParser
             database.SaveChanges();
         }
 
+        private static void AddArtist(string artistDirectory)
+        {
+            string artistName = new DirectoryInfo(artistDirectory).Name;
+            if (!ArtistExists(artistName))
+            {
+                Artist artist = new Artist(artistName);
+                artist.SetPictureLink("");
+                database.Artists.Add(artist);
+                database.SaveChanges();
+            }
+        }
+
         private static void ParseAlbums(string artistDirectory)
         {
-            string artistName = artistDirectory.Substring(mainDirectoryName.Length);
-            string[] directoriesWithAlbums = Directory.GetDirectories(artistDirectory + @"\Albums");
-            foreach (string albumDirectory in directoriesWithAlbums)
+            string artistName = new DirectoryInfo(artistDirectory).Name;
+            foreach (string albumDirectory in Directory.GetDirectories(artistDirectory + @"\Albums"))
             {
-                int indexOfLastSlash = albumDirectory.LastIndexOf(@"\") + 1;
-                string albumName = albumDirectory.Substring(indexOfLastSlash);
-                if (!AlbumExists(albumName, artistName))
+                string albumName = new DirectoryInfo(albumDirectory).Name;
+                AddAlbumToArtist(albumName, artistName);
+                foreach (string trackDirectory in Directory.GetFiles(albumDirectory))
                 {
-                    Album album = new Album
-                    {
-                        Name = albumName,
-                        Tracks = new List<Track>()
-                    };
-                    album.SetPictureLink("");
-                    database.Artists.Where(a => a.Name == artistName).First().Albums.Add(album);
-                    database.SaveChanges();
+                    AddTrackToAlbumOfArtist(trackDirectory, albumName, artistName);
                 }
-                string[] directoriesWithTracks = Directory.GetFiles(albumDirectory);
-                foreach (string trackDirectory in directoriesWithTracks)
-                {
-                    string trackName = EjectTrackNameFrom(trackDirectory);
-                    if (!TrackExists(trackName, albumName, artistName))
-                    {
-                        Track track = new Track(trackName);
-                        track.Scrobbles = trackDirectory.Substring(67);
-                        database.Artists.Where(a => a.Name == artistName).First().
-                            Albums.Where(a => a.Name == albumName).First().Tracks.Add(track);
-                    }
-                }
+            }
+        }
+
+        private static void AddAlbumToArtist(string albumName, string artistName)
+        {
+            if (!AlbumExists(albumName, artistName))
+            {
+                Album album = new Album(albumName);
+                album.SetPictureLink("");
+                database.Artists.First(a => a.Name == artistName).Albums.Add(album);
+                database.SaveChanges();
+            }
+        }
+
+        private static void AddTrackToAlbumOfArtist(string trackDirectory, string albumName, string artistName)
+        {
+            string trackName = Path.GetFileNameWithoutExtension(trackDirectory);
+            if (!TrackExists(trackName, albumName, artistName))
+            {
+                Track track = new Track(trackName);
+                track.LinkToAudio = trackDirectory.Substring(mainDirectory.Length);
+                database.Artists.First(a => a.Name == artistName).
+                    Albums.First(a => a.Name == albumName).Tracks.Add(track);
             }
         }
 
         private static void ParseTracks(string artistDirectory)
         {
-            string artistName = artistDirectory.Substring(mainDirectoryName.Length);
+            string artistName = new DirectoryInfo(artistDirectory).Name;
             string[] directoriesWithTracks = Directory.GetFiles(artistDirectory + @"\Tracks");
             foreach (string trackDirectory in directoriesWithTracks)
             {
-                string trackName = EjectTrackNameFrom(trackDirectory);
-                if (!TrackExists(trackName, artistName))
-                {
-                    Track track = new Track(trackName);
-                    track.Scrobbles = trackDirectory.Substring(67);
-                    database.Artists.Where(a => a.Name == artistName).First().Tracks.Add(track);
-                }
+                AddTrackToArtist(trackDirectory, artistName);
+            }
+        }
+
+        private static void AddTrackToArtist(string trackDirectory, string artistName)
+        {
+            string trackName = Path.GetFileNameWithoutExtension(trackDirectory);
+            if (!TrackExists(trackName, artistName))
+            {
+                Track track = new Track(trackName);
+                track.LinkToAudio = trackDirectory.Substring(mainDirectory.Length);
+                database.Artists.First(a => a.Name == artistName).Tracks.Add(track);
             }
         }
 
         private static bool ArtistExists(string name)
         {
-            IQueryable<Artist> artists = database.Artists;
-            IQueryable<Artist> artistsWithSuitableName = artists.Where(a => a.Name == name);
-            if (artistsWithSuitableName.Count() == 0)
-                return false;
-            return true;
+            if (database.Artists.Any(a => a.Name == name))
+                return true;
+            return false;
         }
 
         private static bool AlbumExists(string albumName, string artistName)
         {
-            IQueryable<Album> albums = database.Albums;
-            IQueryable<Album> albumsWithSuitableName = albums.Where(a => a.Name == albumName).
-                Where(a => a.Artist.Name == artistName);
-            if (albumsWithSuitableName.Count() == 0)
-                return false;
-            return true;
+            if (database.Albums.Any(a => a.Name == albumName && a.Artist.Name == artistName))
+                return true;
+            return false;
         }
 
         private static bool TrackExists(string trackName, string artistName)
         {
-            IQueryable<Track> tracks = database.Tracks;
-            IQueryable<Track> tracksWithSuitableNameAndArtist = tracks.Where(t => t.Name == trackName).
-                Where(t => t.Artist.Name == artistName);
-            if (tracksWithSuitableNameAndArtist.Count() == 0)
-                return false;
-            return true;
+            if (database.Tracks.Any(t => t.Name == trackName && t.Artist.Name == artistName))
+                return true;
+            return false;
         }
 
         private static bool TrackExists(string trackName, string albumName, string artistName)
         {
-            IQueryable<Track> tracks = database.Tracks;
-            IQueryable<Track> tracksWithSuitableNameAndAlbumAndArtist = tracks.Where(t => t.Name == trackName).
-                Where(t => t.Album.Name == albumName).Where(t => t.Album.Artist.Name == artistName);
-            if (tracksWithSuitableNameAndAlbumAndArtist.Count() == 0)
-                return false;
-            return true;
-        }
-
-        private static string EjectTrackNameFrom(string trackDirectory)
-        {
-            int indexOfLastSlash = trackDirectory.LastIndexOf(@"\") + 1;
-            string trackName = trackDirectory.Substring(indexOfLastSlash);
-            trackName = trackName.Substring(0, trackName.Length - 4);
-            return trackName;
+            if (database.Tracks.Any(t => t.Name == trackName && t.Album.Name == albumName && t.Album.Artist.Name == artistName))
+                return true;
+            return false;
         }
     }
 }

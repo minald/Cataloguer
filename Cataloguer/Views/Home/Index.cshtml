@@ -5,25 +5,24 @@
 }
 
 <h1 class="text-center">Top artists from Last.fm</h1>
-<div id="results">
-    <div class="flex-container">
-        @foreach (Artist artist in Model ?? new List<Artist>())
-        {
-            <div class="panel panel-default" style="flex-basis: 23%">
-                <div class="panel-heading">
-                    <p class="text-center" style="white-space: nowrap">
-                        @Html.ActionLink(artist.Name, "ArtistProfile", "Home",
-                new { artistName = artist.Name }, new { })
-                    </p>
-                </div>
-                <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+<div id="results"class="flex-container">
+    @foreach (Artist artist in Model ?? new List<Artist>())
+    {
+        <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel-heading">
+                <p class="text-center" style="white-space: nowrap">
+                    @Html.ActionLink(artist.Name, "ArtistProfile", "Home",
+            new { artistName = artist.Name }, new { })
+                </p>
             </div>
-        }
-    </div>
+            <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+        </div>
+    }
 </div>
-<button class="btn btn-default center-block" id="more" onclick="myFunction()">More</button>
+<button class="btn btn-default center-block" id="more" onclick="loadNewElements()">More</button>
 <script>
-    function myFunction() {
+    function loadNewElements() {
         $('#results').load("http://localhost:49293/Home/Artists");
+        //$('#results').append("http://localhost:49293/Home/Artists");
     }
 </script>
