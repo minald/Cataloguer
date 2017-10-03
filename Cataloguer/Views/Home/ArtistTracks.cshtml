@@ -1,0 +1,11 @@
+﻿@using Cataloguer.Models
+@model List<Track>
+
+@foreach (Track track in Model)
+{
+    <tr>
+        <td>@track.Rank</td>
+        <td>@track.Name</td>
+        <td>@track.Listeners</td>
+    </tr>
+}

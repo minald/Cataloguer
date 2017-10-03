@@ -1,16 +1,14 @@
 ﻿@using Cataloguer.Models
 @model List<Artist>
 
-<div class="flex-container">
-    @foreach (Artist artist in Model ?? new List<Artist>())
-    {
-        <div class="panel panel-default" style="flex-basis: 23%">
-            <div class="panel-heading">
-                <p class="text-center" style="white-space: nowrap">
-                    @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
-                </p>
-            </div>
-            <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+@foreach (Artist artist in Model)
+{
+    <div class="panel panel-default" style="flex-basis: 23%">
+        <div class="panel-heading">
+            <p class="text-center" style="white-space: nowrap">
+                @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
+            </p>
         </div>
-    }
-</div>
+        <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+    </div>
+}
