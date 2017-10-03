@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using Cataloguer.Models;
+using System;
 
 namespace LocalParser
 {
@@ -8,11 +9,15 @@ namespace LocalParser
     {
         public static ArtistContext database = new ArtistContext();
 
-        public static string mainDirectory = 
-            @"C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\Content\Music\";
+        public static string mainDirectory = @"D:\Music\";
 
         public static void Main()
         {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string relative = @"..\..\..\Cataloguer\App_Data\";
+            string absolute = Path.GetFullPath(Path.Combine(baseDirectory, relative));
+            AppDomain.CurrentDomain.SetData("DataDirectory", absolute);
+
             foreach (string artistDirectory in Directory.GetDirectories(mainDirectory))
             {
                 AddArtist(artistDirectory);
@@ -71,7 +76,7 @@ namespace LocalParser
             if (!TrackExists(trackName, albumName, artistName))
             {
                 Track track = new Track(trackName);
-                track.LinkToAudio = trackDirectory.Substring(mainDirectory.Length);
+                track.LinkToAudio = trackDirectory;
                 database.Artists.First(a => a.Name == artistName).
                     Albums.First(a => a.Name == albumName).Tracks.Add(track);
             }
@@ -93,7 +98,7 @@ namespace LocalParser
             if (!TrackExists(trackName, artistName))
             {
                 Track track = new Track(trackName);
-                track.LinkToAudio = trackDirectory.Substring(mainDirectory.Length);
+                track.LinkToAudio = trackDirectory;
                 database.Artists.First(a => a.Name == artistName).Tracks.Add(track);
             }
         }
