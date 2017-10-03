@@ -5,8 +5,8 @@
 }
 
 <h1 class="text-center">
-    <img src="@Model.PictureLink" />    @Html.ActionLink(Model.Name, "ArtistProfile", "Home",
-        new { artistName = Model.Name }, new { })
+    <img class="img-thumbnail" src="@Model.PictureLink" />    @Html.ActionLink(Model.Name, "ArtistProfile", "Home",
+                                                             new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
 <table class="table table-hover table-striped table-bordered">

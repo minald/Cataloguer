@@ -13,7 +13,7 @@ namespace Cataloguer.Models
 
         public string CounrtyForSearch = "belarus";
 
-        public List<Artist> GetTopArtists(string page, int limit)
+        public List<Artist> GetTopArtists(int page, int limit)
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists" +
                  "&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit + "&api_key=" + ApiKey;
@@ -46,14 +46,14 @@ namespace Cataloguer.Models
             return artist;
         }
 
-        public Artist GetArtistWithAllTracks(string artistName, string artistPictureLink)
+        public Artist GetArtistWithAllTracks(string artistName)
         {
             Artist artist = new Artist
             {
                 Name = artistName,
                 Tracks = GetTracksOfArtist(artistName, 50)
             };
-            artist.SetPictureLink(artistPictureLink);
+            artist.SetPictureLink(GetPictureLinkOfArtist(artistName));
             return artist;
         }
 
@@ -76,15 +76,21 @@ namespace Cataloguer.Models
             return tracks;
         }
 
-        public Artist GetArtistWithAllAlbums(string artistName, string artistPictureLink)
+        public Artist GetArtistWithAllAlbums(string artistName)
         {
             Artist artist = new Artist
             {
                 Name = artistName,
                 Albums = GetAlbumsOfArtist(artistName, 50)
             };
-            artist.SetPictureLink(artistPictureLink);
+            artist.SetPictureLink(GetPictureLinkOfArtist(artistName));
             return artist;
+        }
+
+        private string GetPictureLinkOfArtist(string name)
+        {
+            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
+            return GetXmlDocumentFrom(url).SelectSingleNode("//artist/image[@size='large']").InnerText;
         }
 
         private List<Album> GetAlbumsOfArtist(string name, int limit)

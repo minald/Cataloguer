@@ -19,8 +19,7 @@
         @if (Model.ShortBiography != " ")
         {
             <p>@Model.ShortBiography</p>
-            <p>@Html.ActionLink("See full biography", "ArtistBiography", "Home", 
-                    new { artistName = Model.Name }, new { })</p>
+            <p>@Html.ActionLink("See more...", "ArtistBiography", "Home", new { name = Model.Name }, new { })</p>
         }  
     </div>
 </div>
@@ -48,8 +47,7 @@
 </table>
 @if (Model.Tracks.Count > 9)
 {
-    @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home",
-        new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+    @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home", new { name = Model.Name }, new { })
 }
 <h2 class="text-center">Top albums</h2>
 <div class="flex-container">
@@ -69,6 +67,5 @@
 </div>
 @if (Model.Albums.Count > 9)
 {
-    @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home",
-        new { artistName = Model.Name, artistPictureLink = Model.PictureLink }, new { })
+    @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home", new { name = Model.Name }, new { })
 }

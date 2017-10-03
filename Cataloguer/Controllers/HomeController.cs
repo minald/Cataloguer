@@ -1,5 +1,4 @@
 ﻿using Cataloguer.Models;
-using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 
@@ -11,43 +10,37 @@ namespace Cataloguer.Controllers
 
         public ActionResult Index()
         {
-            Session["currentPage"] = 1;
-            List<Artist> artists = new LastFMParser().
-                GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
+            List<Artist> artists = new LastFMParser().GetTopArtists(1, artistsPerPage);
             return View(artists);
         }
 
-        public ActionResult Artists()
+        public ActionResult TopArtists(int page)
         {
-            Session["currentPage"] = Convert.ToInt32(Session["currentPage"]) + 1;
-            List<Artist> artists = new LastFMParser().
-                GetTopArtists(Session["currentPage"].ToString(), artistsPerPage);
+            List<Artist> artists = new LastFMParser().GetTopArtists(page, artistsPerPage);
             return PartialView(artists);
         }
 
-        public ActionResult ArtistProfile(string artistName)
+        public ActionResult ArtistProfile(string name)
         {
-            Artist artist = new LastFMParser().GetArtist(artistName);
+            Artist artist = new LastFMParser().GetArtist(name);
             return View(artist);
         }
 
-        public ActionResult ArtistBiography(string artistName)
+        public ActionResult ArtistBiography(string name)
         {
-            Artist artist = new LastFMParser().GetArtistWithBiography(artistName);
+            Artist artist = new LastFMParser().GetArtistWithBiography(name);
             return View(artist);
         }
 
-        public ActionResult ArtistAllTracks(string artistName, string artistPictureLink)
+        public ActionResult ArtistAllTracks(string name)
         {
-            Artist artist = new LastFMParser().
-                GetArtistWithAllTracks(artistName, artistPictureLink);
+            Artist artist = new LastFMParser().GetArtistWithAllTracks(name);
             return View(artist);
         }
 
-        public ActionResult ArtistAllAlbums(string artistName, string artistPictureLink)
+        public ActionResult ArtistAllAlbums(string name)
         {
-            Artist artist = new LastFMParser().
-                GetArtistWithAllAlbums(artistName, artistPictureLink);
+            Artist artist = new LastFMParser().GetArtistWithAllAlbums(name);
             return View(artist);
         }
 

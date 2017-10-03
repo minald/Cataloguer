@@ -11,8 +11,7 @@
         <div class="panel panel-default" style="flex-basis: 23%">
             <div class="panel-heading">
                 <p class="text-center" style="white-space: nowrap">
-                    @Html.ActionLink(artist.Name, "ArtistProfile", "Home",
-            new { artistName = artist.Name }, new { })
+                    @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
                 </p>
             </div>
             <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
@@ -22,23 +21,25 @@
 <img id="loading" style="display: none; height: 100px" class="center-block" src="~/Content/loading.gif" />
 <script>
     $(this).on('scroll', scrolling);
+    var page = 2;
     function scrolling() {
         if ($(this).scrollTop() >= ($('#results').height() - $(this).height() - 100)){
             $(this).unbind('scroll');
-            loader();
+            $.ajax({
+                beforeSend: function () {
+                    $('#loading').css('display', 'block');
+                },
+                url: '/Home/TopArtists',
+                data: {
+                    page: page
+                },
+                success: function (data) {
+                    $('#loading').css('display', 'none');
+                    $('#results').append(data);
+                    $(window).on('scroll', scrolling);
+                    page++;
+                }
+            });
         }
-    }
-    function loader() {
-        $.ajax({
-            url: '/Home/Artists',
-            beforeSend: function () {
-                $('#loading').css('display', 'block');
-            },
-            success: function (data) {
-                $('#loading').css('display', 'none');
-                $('#results').append(data);
-                $(window).on('scroll', scrolling);
-            }
-        });
     }
 </script>

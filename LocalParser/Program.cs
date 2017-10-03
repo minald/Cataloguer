@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Cataloguer.Models;
-using System;
 
 namespace LocalParser
 {
