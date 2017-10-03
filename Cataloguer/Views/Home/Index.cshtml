@@ -5,7 +5,7 @@
 }
 
 <h1 class="text-center">Top artists from Last.fm</h1>
-<div id="results"class="flex-container">
+<div id="results" class="flex-container">
     @foreach (Artist artist in Model ?? new List<Artist>())
     {
         <div class="panel panel-default" style="flex-basis: 23%">
@@ -19,10 +19,26 @@
         </div>
     }
 </div>
-<button class="btn btn-default center-block" id="more" onclick="loadNewElements()">More</button>
+<img id="loading" style="display: none; height: 100px" class="center-block" src="~/Content/loading.gif" />
 <script>
-    function loadNewElements() {
-        $('#results').load("http://localhost:49293/Home/Artists");
-        //$('#results').append("http://localhost:49293/Home/Artists");
+    $(this).on('scroll', scrolling);
+    function scrolling() {
+        if ($(this).scrollTop() >= ($('#results').height() - $(this).height() - 100)){
+            $(this).unbind('scroll');
+            loader();
+        }
+    }
+    function loader() {
+        $.ajax({
+            url: '/Home/Artists',
+            beforeSend: function () {
+                $('#loading').css('display', 'block');
+            },
+            success: function (data) {
+                $('#loading').css('display', 'none');
+                $('#results').append(data);
+                $(window).on('scroll', scrolling);
+            }
+        });
     }
 </script>

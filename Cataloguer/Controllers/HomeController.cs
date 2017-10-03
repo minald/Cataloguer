@@ -7,7 +7,7 @@ namespace Cataloguer.Controllers
 {
     public class HomeController : Controller
     {
-        public int artistsPerPage = 12;
+        public int artistsPerPage = 48;
 
         public ActionResult Index()
         {
