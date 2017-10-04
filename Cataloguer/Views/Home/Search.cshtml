@@ -60,6 +60,25 @@ else
 else
 {
     <h2 class="text-center">Tracks</h2>
+    <div class="flex-container">
+        @foreach (Track track in Model.Tracks)
+        {
+            <div class="panel panel-default" style="flex-basis: 23%">
+                <div class="panel-heading">
+                    <p style="white-space: nowrap" class="text-center">
+                        @Html.ActionLink(track.Name, "Track", "Home",
+                        new { trackName = track.Name, artistName = track.Artist.Name }, new { })
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <img class="center-block" src="@track.GetPictureLink()" />
+                </div>
+                <div class="panel-footer">
+                    <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
+                </div>
+            </div>
+        }
+    </div>
     <table class="table table-hover table-striped table-bordered">
         <thead>
             <tr>

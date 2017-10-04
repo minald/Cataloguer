@@ -6,24 +6,10 @@
 
 <h1 class="text-center">@Model.Name</h1>
 <div class="row">
-    @if (Model.Album != null)
-    {
-        <div class="col-sm-4 col-md-4 col-lg-4">
-            <h2 class="text-center">Album</h2>
-            <div class="panel panel-default" style="flex-basis: 23%">
-                <div class="panel-heading">
-                    <p style="white-space: nowrap" class="text-center">
-                        @Html.ActionLink(Model.Album.Name, "Album", "Home",
-                        new { albumName = Model.Album.Name, artistName = Model.Artist.Name }, new { })
-                    </p>
-                </div>
-                <div class="panel-body">
-                    <img class="center-block" src="@Model.Album.GetPictureLink()" />
-                </div>
-            </div>
-        </div>
-    }
-    <div class="col-sm-8 col-md-8 col-lg-8">
+    <div class="col-sm-3 col-md-3 col-lg-3">
+        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+    </div>
+    <div class="col-sm-6 col-md-6 col-lg-6">
         <h1></h1>
         <h5>
             @foreach (string tag in Model.Tags)
@@ -38,4 +24,21 @@
         <h4>Listeners : @Model.GetListeners()</h4>
         <p>@Model.GetInfo()</p>
     </div>
+    @if (Model.Album != null)
+    {
+        <div class="col-sm-3 col-md-3 col-lg-3">
+            <h2 class="text-center">Album</h2>
+            <div class="panel panel-default" style="flex-basis: 23%">
+                <div class="panel-heading">
+                    <p style="white-space: nowrap" class="text-center">
+                        @Html.ActionLink(Model.Album.Name, "Album", "Home",
+                        new { albumName = Model.Album.Name, artistName = Model.Artist.Name }, new { })
+                    </p>
+                </div>
+                <div class="panel-body">
+                    <img class="center-block" src="@Model.Album.GetPictureLink()" />
+                </div>
+            </div>
+        </div>
+    }
 </div>

@@ -22,36 +22,38 @@
         {
             <tr>
                 <td>@track.Rank</td>
-                <td>@Html.ActionLink(track.Name, "Track", "Home",
-                   new { trackName = track.Name, artistName = Model.Name }, new { })</td>
-                <td>@track.GetListeners()</td>
-            </tr>
+                <td>
+                    @Html.ActionLink(track.Name, "Track", "Home",
+                new { trackName = track.Name, artistName = Model.Name }, new { })
+            </td>
+            <td>@track.GetListeners()</td>
+        </tr>
         }
     </tbody>
 </table>
 <img id="loading" style="display: none; height: 100px" class="center-block" src="~/Content/loading.gif" />
 <script>
-    $(this).on('scroll', scrolling);
-    var page = 2;
-    function scrolling() {
-        if ($(this).scrollTop() >= ($('table').height() - $(this).height() - 100)){
-            $(this).unbind('scroll');
-            $.ajax({
-                beforeSend: function () {
-                    $('#loading').css('display', 'block');
-                },
-                url: '/Home/ArtistTracks',
-                data: {
-                    name: '@Model.Name',
-                    page: page
-                },
-                success: function (data) {
-                    $('#loading').css('display', 'none');
-                    $('#results').append(data);
-                    $(window).on('scroll', scrolling);
-                    page++;
-                }
-            });
-        }
+$(this).on('scroll', scrolling);
+var page = 2;
+function scrolling() {
+    if ($(this).scrollTop() >= ($('table').height() - $(this).height() - 100)){
+        $(this).unbind('scroll');
+        $.ajax({
+            beforeSend: function () {
+                $('#loading').css('display', 'block');
+            },
+            url: '/Home/ArtistTracks',
+            data: {
+                name: '@Model.Name',
+                page: page
+            },
+            success: function (data) {
+                $('#loading').css('display', 'none');
+                $('#results').append(data);
+                $(window).on('scroll', scrolling);
+                page++;
+            }
+        });
     }
+}
 </script>

@@ -9,6 +9,8 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
+        private string PictureLink { get; set; }
+
         public string LinkToAudio { get; set; }
 
         public int Rank { get; set; }
@@ -31,6 +33,20 @@ namespace Cataloguer.Models
         {
             Name = name;
             Tags = new List<string>();
+        }
+
+        public void SetPictureLink(string pictureLink)
+        {
+            string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/174s/4128a6eb29f94943c9d206c08e625904";
+            if (pictureLink != "")
+                PictureLink = pictureLink;
+            else
+                PictureLink = defaultPictureLink;
+        }
+
+        public string GetPictureLink()
+        {
+            return PictureLink;
         }
 
         public void SetDurationInMilliseconds(string milliseconds)

@@ -58,16 +58,17 @@ namespace Cataloguer.Models
         {
             string url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=" + name +
                 "&page=" + page + "&limit=" + limit + "&api_key=" + ApiKey;
-            List<Track> tracks = new List<Track>();
             XmlDocument artistTracksDocument = GetXmlDocumentFrom(url);
             Artist artist = new Artist(artistTracksDocument.SelectSingleNode("//toptracks").
                     Attributes["artist"].Value);
+            List<Track> tracks = new List<Track>();
             foreach (XmlNode nodeWithTrack in artistTracksDocument.SelectNodes("//track"))
             {
                 Track track = new Track(nodeWithTrack.SelectSingleNode(".//name").InnerText)
                 {
                     Rank = Convert.ToInt32(nodeWithTrack.Attributes["rank"].Value)
                 };
+                track.SetPictureLink(nodeWithTrack.SelectSingleNode(".//image[@size='large']").InnerText);
                 track.SetScrobbles(nodeWithTrack.SelectSingleNode(".//playcount").InnerText);
                 track.SetListeners(nodeWithTrack.SelectSingleNode(".//listeners").InnerText);
                 track.Artist = artist;
@@ -162,6 +163,7 @@ namespace Cataloguer.Models
                 Album = album,
                 Tags = GetTopTagsFrom(trackInfoMainNode.SelectNodes(".//toptags/tag"))
             };
+            track.SetPictureLink(trackInfoMainNode.SelectSingleNode(".//album/image[@size='large']")?.InnerText ?? "");
             track.SetDurationInMilliseconds(trackInfoMainNode.SelectSingleNode(".//duration").InnerText);
             track.SetListeners(trackInfoMainNode.SelectSingleNode(".//listeners").InnerText);
             track.SetScrobbles(trackInfoMainNode.SelectSingleNode(".//playcount").InnerText);
@@ -235,6 +237,7 @@ namespace Cataloguer.Models
                 {
                     Artist = new Artist(trackNode.SelectSingleNode(".//artist").InnerText)
                 };
+                track.SetPictureLink(trackNode.SelectSingleNode(".//image[@size='large']").InnerText);
                 track.SetListeners(trackNode.SelectSingleNode(".//listeners").InnerText);
                 tracks.Add(track);
             }
