@@ -5,7 +5,8 @@
 {
     <tr>
         <td>@track.Rank</td>
-        <td>@track.Name</td>
-        <td>@track.Listeners</td>
+        <td>@Html.ActionLink(track.Name, "Track", "Home",
+           new { trackName = track.Name, artistName = track.Artist.Name }, new { })</td>
+        <td>@track.GetListeners()</td>
     </tr>
 }

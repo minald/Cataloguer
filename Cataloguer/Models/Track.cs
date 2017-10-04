@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Cataloguer.Models
 {
@@ -12,21 +13,36 @@ namespace Cataloguer.Models
 
         public int Rank { get; set; }
 
-        public string Duration { get; set; }
+        private string Duration { get; set; }
 
-        public string Scrobbles { get; set; }
+        private string Scrobbles { get; set; }
 
-        public string Listeners { get; set; }
+        private string Listeners { get; set; }
+
+        private string Info { get; set; }
+
+        public virtual List<string> Tags { get; set; }
 
         public virtual Album Album { get; set; }
 
         public virtual Artist Artist { get; set; }
 
-        public Track() {}
-
         public Track(String name)
         {
             Name = name;
+            Tags = new List<string>();
+        }
+
+        public void SetDurationInMilliseconds(string milliseconds)
+        {
+            if(milliseconds.Length < 4)
+            {
+                Duration = "0 : 00";
+            }
+            else
+            {
+                SetDuration(milliseconds.Substring(0, milliseconds.Length - 3));
+            }
         }
 
         public void SetDuration(string seconds)
@@ -38,14 +54,29 @@ namespace Cataloguer.Models
             else Duration = newMinutes + " : " + newSeconds;
         }
 
+        public string GetDuration()
+        {
+            return Duration;
+        }
+
         public void SetScrobbles(string scrobbles)
         {
             Scrobbles = NormalizeNumber(scrobbles);
         }
 
+        public string GetScrobbles()
+        {
+            return Scrobbles;
+        }
+
         public void SetListeners(string listeners)
         {
             Listeners = NormalizeNumber(listeners);
+        }
+
+        public string GetListeners()
+        {
+            return Listeners;
         }
 
         private string NormalizeNumber(string number)
@@ -57,6 +88,24 @@ namespace Cataloguer.Models
             else number = number.Insert(digits - 6, " ");
             if (digits <= 9) return number;
             else return number.Insert(digits - 9, " ");
+        }
+
+        public void SetInfo(string info)
+        {
+            Info = NormalizeInfo(info);
+        }
+
+        public string GetInfo()
+        {
+            return Info;
+        }
+
+        private string NormalizeInfo(string non_normalizedInfo)
+        {
+            int indexOfUnnecessaryLink = non_normalizedInfo.IndexOf("<a href=");
+            if (indexOfUnnecessaryLink != -1)
+                return non_normalizedInfo.Substring(0, indexOfUnnecessaryLink);
+            return non_normalizedInfo;
         }
     }
 }

@@ -5,12 +5,12 @@
 }
 
 <h1 class="text-center">
-    <img class="img-thumbnail" src="@Model.PictureLink" />    @Html.ActionLink(Model.Name, "ArtistProfile", "Home",
-                                                             new { name = Model.Name }, new { })
+    <img class="img-thumbnail" src="@Model.GetPictureLink()" />    @Html.ActionLink(Model.Name,
+                                   "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top albums of all time</h2>
 <div class="flex-container">
-    @foreach (Album album in Model.Albums ?? new List<Album>())
+    @foreach (Album album in Model.Albums)
     {
         <div class="panel panel-default" style="flex-basis: 23%">
             <div class="panel-heading">
@@ -19,8 +19,10 @@
                         new { albumName = album.Name, artistName = Model.Name }, new { })
                 </p>
             </div>
-            <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
-            <div class="panel-footer"><span class="glyphicon glyphicon-headphones"></span>    @album.Scrobbles</div>
+            <div class="panel-body"><img class="center-block" src="@album.GetPictureLink()" /></div>
+            <div class="panel-footer">
+                <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
+            </div>
         </div>
     }
 </div>

@@ -6,7 +6,7 @@
 
 <h1 class="text-center">Top artists from Last.fm</h1>
 <div id="results" class="flex-container">
-    @foreach (Artist artist in Model ?? new List<Artist>())
+    @foreach (Artist artist in Model)
     {
         <div class="panel panel-default" style="flex-basis: 23%">
             <div class="panel-heading">
@@ -14,7 +14,7 @@
                     @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
                 </p>
             </div>
-            <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+            <div class="panel-body"><img class="center-block" src="@artist.GetPictureLink()" /></div>
         </div>
     }
 </div>

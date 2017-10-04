@@ -13,7 +13,7 @@ else
 {
     <h2 class="text-center">Artists</h2>
     <div class="flex-container">
-        @foreach (Artist artist in Model.Artists ?? new List<Artist>())
+        @foreach (Artist artist in Model.Artists)
         {
             <div class="panel panel-default" style="flex-basis: 23%">
                 <div class="panel-heading">
@@ -21,7 +21,7 @@ else
                         @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
                     </p>
                 </div>
-                <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+                <div class="panel-body"><img class="center-block" src="@artist.GetPictureLink()" /></div>
             </div>
         }
     </div>
@@ -34,7 +34,7 @@ else
 {
     <h2 class="text-center">Albums</h2>
     <div class="flex-container">
-        @foreach (Album album in Model.Albums ?? new List<Album>())
+        @foreach (Album album in Model.Albums)
         {
             <div class="panel panel-default" style="flex-basis: 23%">
                 <div class="panel-heading">
@@ -43,7 +43,7 @@ else
                        new { albumName = album.Name, artistName = album.Artist.Name }, new { })
                     </p>
                 </div>
-                <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+                <div class="panel-body"><img class="center-block" src="@album.GetPictureLink()" /></div>
                 <div class="panel-footer">
                     <span class="glyphicon glyphicon-user"></span>    @Html.ActionLink(album.Artist.Name, 
                         "ArtistProfile", "Home", new { name = album.Artist.Name }, new { })
@@ -69,15 +69,14 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            @foreach (Track track in Model.Tracks)
             {
                 <tr>
-                    <td>@track.Name</td>
-                    <td>
-                        @Html.ActionLink(track.Artist.Name, "ArtistProfile", "Home", 
-                       new { name = track.Artist.Name }, new { })
-                </td>
-                <td>@track.Listeners</td>
+                    <td>@Html.ActionLink(track.Name, "Track", "Home",
+                       new { trackName = track.Name, artistName = track.Artist.Name }, new { })</td>
+                    <td>@Html.ActionLink(track.Artist.Name, "ArtistProfile", "Home", 
+                       new { name = track.Artist.Name }, new { })</td>
+                <td>@track.GetListeners()</td>
             </tr>
             }
         </tbody>

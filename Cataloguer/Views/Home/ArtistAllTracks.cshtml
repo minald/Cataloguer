@@ -5,8 +5,8 @@
 }
 
 <h1 class="text-center">
-    <img class="img-thumbnail" src="@Model.PictureLink" />    @Html.ActionLink(Model.Name, "ArtistProfile", "Home",
-                                                             new { name = Model.Name }, new { })
+    <img class="img-thumbnail" src="@Model.GetPictureLink()" />    @Html.ActionLink(Model.Name,
+                                   "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
 <table class="table table-hover table-striped table-bordered">
@@ -18,12 +18,13 @@
         </tr>
     </thead>
     <tbody id="results">
-        @foreach (Track track in Model.Tracks ?? new List<Track>())
+        @foreach (Track track in Model.Tracks)
         {
             <tr>
                 <td>@track.Rank</td>
-                <td>@track.Name</td>
-                <td>@track.Listeners</td>
+                <td>@Html.ActionLink(track.Name, "Track", "Home",
+                   new { trackName = track.Name, artistName = Model.Name }, new { })</td>
+                <td>@track.GetListeners()</td>
             </tr>
         }
     </tbody>

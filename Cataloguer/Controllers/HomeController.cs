@@ -60,6 +60,12 @@ namespace Cataloguer.Controllers
             return View(album);
         }
 
+        public ActionResult Track(string trackName, string artistName)
+        {
+            Track track = parser.GetTrack(trackName, artistName);
+            return View(track);
+        }
+
         [HttpGet]
         public ActionResult Search(string value)
         {

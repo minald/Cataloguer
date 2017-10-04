@@ -6,7 +6,7 @@
 <div style="float: left; margin: 30px">
     <h1 class="text-center">@Html.ActionLink(Model.Name, "ArtistProfile", "Home", 
                            new { name = Model.Name }, new { })</h1>
-    <img class="img-thumbnail center-block" height="300px" src="@Model.PictureLink" />
+    <img class="img-thumbnail center-block" height="300px" src="@Model.GetPictureLink()" />
 </div>
 
-<h4>@Model.FullBiography</h4>
+<h4>@Model.GetFullBiography()</h4>

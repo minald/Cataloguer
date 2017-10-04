@@ -8,23 +8,21 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
-        public string PictureLink { get; set; }
+        private string PictureLink { get; set; }
 
-        public string Scrobbles { get; set; }
+        private string Scrobbles { get; set; }
 
-        public string Listeners { get; set; }
+        private string Listeners { get; set; }
 
-        public string ShortBiography { get; set; }
+        private string ShortBiography { get; set; }
 
-        public string FullBiography { get; set; }
+        private string FullBiography { get; set; }
 
         public virtual List<Album> Albums { get; set; }
 
         public virtual List<Track> Tracks { get; set; }
 
         public virtual List<string> Tags { get; set; }
-
-        public Artist() {}
 
         public Artist(string name)
         {
@@ -43,14 +41,29 @@ namespace Cataloguer.Models
                 PictureLink = defaultPictureLink;
         }
 
+        public string GetPictureLink()
+        {
+            return PictureLink;
+        }
+
         public void SetScrobbles(string scrobbles)
         {
             Scrobbles = NormalizeNumber(scrobbles);
         }
 
+        public string GetScrobbles()
+        {
+            return Scrobbles;
+        }
+
         public void SetListeners(string listeners)
         {
             Listeners = NormalizeNumber(listeners);
+        }
+
+        public string GetListeners()
+        {
+            return Listeners;
         }
 
         private string NormalizeNumber(string number)
@@ -69,9 +82,19 @@ namespace Cataloguer.Models
             ShortBiography = NormalizeBiography(shortBiography);
         }
 
+        public string GetShortBiography()
+        {
+            return ShortBiography;
+        }
+
         public void SetFullBiography(string fullBiography)
         {
             FullBiography = NormalizeBiography(fullBiography);
+        }
+
+        public string GetFullBiography()
+        {
+            return FullBiography;
         }
 
         private string NormalizeBiography(string non_normalizedBiography)
