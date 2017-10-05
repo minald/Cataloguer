@@ -13,9 +13,9 @@ namespace Cataloguer.Controllers
             return View(database.Artists.ToList());
         }
 
-        public ActionResult ArtistProfile(string artistName)
+        public ActionResult ArtistProfile(string name)
         {
-            return View(database.Artists.First(a => a.Name == artistName));
+            return View(database.Artists.First(a => a.Name == name));
         }
 
         public ActionResult Album(string albumName, string artistName)

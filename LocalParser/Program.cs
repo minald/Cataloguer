@@ -81,6 +81,7 @@ namespace LocalParser
             {
                 Track track = new Track(trackName);
                 track.LinkToAudio = trackDirectory;
+                track.SetPictureLink("");
                 database.Artists.First(a => a.Name == artistName).
                     Albums.First(a => a.Name == albumName).Tracks.Add(track);
             }
@@ -103,6 +104,7 @@ namespace LocalParser
             {
                 Track track = new Track(trackName);
                 track.LinkToAudio = trackDirectory;
+                track.SetPictureLink("");
                 database.Artists.First(a => a.Name == artistName).Tracks.Add(track);
             }
         }

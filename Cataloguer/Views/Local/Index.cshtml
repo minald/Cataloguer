@@ -12,7 +12,7 @@
             <div class="panel-heading">
                 <p class="text-center">
                     @Html.ActionLink(artist.Name, "ArtistProfile", "Local",
-                        new { artistName = artist.Name }, new { })
+                        new { name = artist.Name }, new { })
                 </p>
             </div>
             <div class="panel-body">
@@ -21,7 +21,7 @@
             <div class="panel-footer">
                 <p class="text-center">
                     @Html.ActionLink(artist.Name + " on Last.fm", "ArtistProfile", "Home",
-                        new { artistName = artist.Name }, new { })
+                        new { name = artist.Name }, new { })
                 </p>
             </div>
         </div>

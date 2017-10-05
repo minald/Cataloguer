@@ -5,19 +5,19 @@
 }
 
 <h1 class="text-center">@ViewBag.SearchingValue</h1>
-@if (Model.Artists.Count == 0)
-{
-    <h2 class="text-center">There are no artists with this name</h2>
-}
-else
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="text-center">Artists</h2>
-        </div>
-        <div class="panel-body">
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Last.fm artists</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LastFMArtists.Count == 0)
+        {
+            <h4 class="text-center">There are no artists in last.fm with this name</h4>
+        }
+        else
+        {
             <div id="artists" class="flex-container">
-                @foreach (Artist artist in Model.Artists)
+                @foreach (Artist artist in Model.LastFMArtists)
                 {
                     <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
                         <div class="panel-heading">
@@ -30,22 +30,22 @@ else
                 }
             </div>
             <button id="addArtists" class="btn btn-primary center-block">More</button>
-        </div>
+        }
     </div>
-}
-@if (Model.Albums.Count == 0)
-{
-    <h2 class="text-center">There are no albums with this name</h2>
-}
-else
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="text-center">Albums</h2>
-        </div>
-        <div class="panel-body">
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Last.fm albums</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LastFMAlbums.Count == 0)
+        {
+            <h4 class="text-center">There are no albums in last.fm with this name</h4>
+        }
+        else
+        {
             <div id="albums" class="flex-container">
-                @foreach (Album album in Model.Albums)
+                @foreach (Album album in Model.LastFMAlbums)
                 {
                     <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
                         <div class="panel-heading">
@@ -63,22 +63,22 @@ else
                 }
             </div>
             <button id="addAlbums" class="btn btn-primary center-block">More</button>
-        </div>
+        }
     </div>
-}
-@if (Model.Tracks.Count == 0)
-{
-    <h2 class="text-center">There are no tracks with this name</h2>
-}
-else
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <h2 class="text-center">Tracks</h2>
-        </div>
-        <div class="panel-body">
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Tracks</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LastFMTracks.Count == 0)
+        {
+            <h4 class="text-center">There are no tracks in last.fm with this name</h4>
+        }
+        else
+        {
             <div id="tracks" class="flex-container">
-                @foreach (Track track in Model.Tracks)
+                @foreach (Track track in Model.LastFMTracks)
                 {
                     <a class="panel panel-success" href="/Home/Track?trackName=@track.Name&artistName=@track.Artist.Name">
                         <div class="panel-heading">
@@ -94,9 +94,95 @@ else
                 }
             </div>
             <button id="addTracks" class="btn btn-primary center-block">More</button>
-        </div>
+        }
     </div>
-}
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Local artists</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LocalArtists.Count == 0)
+        {
+            <h4 class="text-center">There are no artists in local database with this name</h4>
+        }
+        else
+        {
+            <div class="flex-container">
+                @foreach (Artist artist in Model.LocalArtists)
+                {
+                    <a class="panel panel-info" href="/Local/ArtistProfile?name=@artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@artist.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
+                        </div>
+                    </a>
+                }
+            </div>
+        } 
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Local albums</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LocalAlbums.Count == 0)
+        {
+            <h4 class="text-center">There are no albums in local database with this name</h4>
+        }
+        else
+        {
+            <div class="flex-container">
+                @foreach (Album album in Model.LocalAlbums)
+                {
+                    <a class="panel panel-info" href="/Local/Album?albumName=@album.Name&artistName=@album.Artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@album.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
+                        </div>
+                        <div class="panel-footer">
+                            <p>
+                                <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
+                            </p>
+                        </div>
+                    </a>
+                 }
+            </div>
+        }
+    </div>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h2 class="text-center">Local tracks</h2>
+    </div>
+    <div class="panel-body">
+        @if (Model.LocalTracks.Count == 0)
+        {
+            <h4 class="text-center">There are no tracks in local database with this name</h4>
+        }
+        else
+        {
+            <div class="flex-container">
+                @foreach (Track track in Model.LocalTracks)
+                {
+                    <a class="panel panel-info" href="/Local/ArtistProfile?name=@track.Artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@track.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@track.GetPictureLink()" />
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+    </div>
+</div>
 <script>
     var artistPage = 2;
     $('#addArtists').click(function () {
