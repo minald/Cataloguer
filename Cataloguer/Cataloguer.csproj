@@ -242,6 +242,9 @@
     <Content Include="Views\Home\ArtistTracks.cshtml" />
     <Content Include="Views\Home\Track.cshtml" />
     <Content Include="Views\Home\ArtistAlbums.cshtml" />
+    <Content Include="Views\Home\SearchTracks.cshtml" />
+    <Content Include="Views\Home\SearchArtists.cshtml" />
+    <Content Include="Views\Home\SearchAlbums.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

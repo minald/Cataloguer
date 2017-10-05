@@ -11,19 +11,26 @@
 }
 else
 {
-    <h2 class="text-center">Artists</h2>
-    <div class="flex-container">
-        @foreach (Artist artist in Model.Artists)
-        {
-            <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
-                <div class="panel-heading">
-                    <p class="text-center">@artist.Name</p>
-                </div>
-                <div class="panel-body">
-                    <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
-                </div>
-            </a>
-        }
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="text-center">Artists</h2>
+        </div>
+        <div class="panel-body">
+            <div id="artists" class="flex-container">
+                @foreach (Artist artist in Model.Artists)
+                {
+                    <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@artist.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
+                        </div>
+                    </a>
+                }
+            </div>
+            <button id="addArtists" class="btn btn-primary center-block">More</button>
+        </div>
     </div>
 }
 @if (Model.Albums.Count == 0)
@@ -32,22 +39,31 @@ else
 }
 else
 {
-    <h2 class="text-center">Albums</h2>
-    <div class="flex-container">
-        @foreach (Album album in Model.Albums)
-        {
-            <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
-                <div class="panel-heading">
-                    <p class="text-center">@album.Name</p>
-                </div>
-                <div class="panel-body">
-                    <img class="img-rounded center-block" src="@album.GetPictureLink()" />
-                </div>
-                <div class="panel-footer">
-                    <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
-                </div>
-            </a>
-        }
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="text-center">Albums</h2>
+        </div>
+        <div class="panel-body">
+            <div id="albums" class="flex-container">
+                @foreach (Album album in Model.Albums)
+                {
+                    <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@album.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
+                        </div>
+                        <div class="panel-footer">
+                            <p>
+                                <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
+                            </p>
+                        </div>
+                    </a>
+                }
+            </div>
+            <button id="addAlbums" class="btn btn-primary center-block">More</button>
+        </div>
     </div>
 }
 @if (Model.Tracks.Count == 0)
@@ -56,21 +72,72 @@ else
 }
 else
 {
-    <h2 class="text-center">Tracks</h2>
-    <div class="flex-container">
-        @foreach (Track track in Model.Tracks)
-        {
-            <a class="panel panel-success" href="/Home/Track?trackName=@track.Name&artistName=@track.Artist.Name">
-                <div class="panel-heading">
-                    <p class="text-center">@track.Name</p>
-                </div>
-                <div class="panel-body">
-                    <img class="img-rounded center-block" src="@track.GetPictureLink()" />
-                </div>
-                <div class="panel-footer">
-                    <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
-                </div>
-            </a>
-        }
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h2 class="text-center">Tracks</h2>
+        </div>
+        <div class="panel-body">
+            <div id="tracks" class="flex-container">
+                @foreach (Track track in Model.Tracks)
+                {
+                    <a class="panel panel-success" href="/Home/Track?trackName=@track.Name&artistName=@track.Artist.Name">
+                        <div class="panel-heading">
+                            <p class="text-center">@track.Name</p>
+                        </div>
+                        <div class="panel-body">
+                            <img class="img-rounded center-block" src="@track.GetPictureLink()" />
+                        </div>
+                        <div class="panel-footer">
+                            <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
+                        </div>
+                    </a>
+                }
+            </div>
+            <button id="addTracks" class="btn btn-primary center-block">More</button>
+        </div>
     </div>
 }
+<script>
+    var artistPage = 2;
+    $('#addArtists').click(function () {
+        $.ajax({
+            url: '/Home/SearchArtists',
+            data: {
+                value: '@ViewBag.SearchingValue',
+                page: artistPage
+            },
+            success: function (data) {
+                $('#artists').append(data);
+                artistPage++;
+            }
+        });
+    });
+    var albumsPage = 2;
+    $('#addAlbums').click(function () {
+        $.ajax({
+            url: '/Home/SearchAlbums',
+            data: {
+                value: '@ViewBag.SearchingValue',
+                page: albumsPage
+            },
+            success: function (data) {
+                $('#albums').append(data);
+                albumsPage++;
+            }
+        });
+    });
+    var tracksPage = 2;
+    $('#addTracks').click(function () {
+        $.ajax({
+            url: '/Home/SearchTracks',
+            data: {
+                value: '@ViewBag.SearchingValue',
+                page: tracksPage
+            },
+            success: function (data) {
+                $('#tracks').append(data);
+                tracksPage++;
+            }
+        });
+    });
+</script>

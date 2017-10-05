@@ -79,12 +79,30 @@ namespace Cataloguer.Controllers
         {
             SearchingResults results = new SearchingResults
             {
-                Artists = parser.SearchArtists(value, 8),
-                Albums = parser.SearchAlbums(value, 8),
-                Tracks = parser.SearchTracks(value, 8)
+                Artists = parser.SearchArtists(value, 1, 8),
+                Albums = parser.SearchAlbums(value, 1, 8),
+                Tracks = parser.SearchTracks(value, 1, 8)
             };
             ViewBag.SearchingValue = value;
             return View(results);
+        }
+
+        public ActionResult SearchArtists(string value, int page)
+        {
+            List<Artist> artists = parser.SearchArtists(value, page, 8);
+            return PartialView(artists);
+        }
+
+        public ActionResult SearchAlbums(string value, int page)
+        {
+            List<Album> albums = parser.SearchAlbums(value, page, 8);
+            return PartialView(albums);
+        }
+
+        public ActionResult SearchTracks(string value, int page)
+        {
+            List<Track> tracks = parser.SearchTracks(value, page, 8);
+            return PartialView(tracks);
         }
     }
 }
