@@ -9,7 +9,7 @@
                                    "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top albums of all time</h2>
-<div class="flex-container">
+<div id="results" class="flex-container">
     @foreach (Album album in Model.Albums)
     {
         <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@Model.Name">
@@ -25,3 +25,29 @@
         </a>
     }
 </div>
+<img id="loading" class="center-block" src="~/Content/loading.gif"/>
+<script>
+    $(this).on('scroll', scrolling);
+    var page = 2;
+    function scrolling() {
+        if ($(this).scrollTop() >= ($('#results').height() - $(this).height() - 100)){
+            $(this).unbind('scroll');
+            $.ajax({
+                beforeSend: function () {
+                    $('#loading').css('display', 'block');
+                },
+                url: '/Home/ArtistAlbums',
+                data: {
+                    name: '@Model.Name',
+                    page: page
+                },
+                success: function (data) {
+                    $('#loading').css('display', 'none');
+                    $('#results').append(data);
+                    $(window).on('scroll', scrolling);
+                    page++;
+                }
+            });
+        }
+    }
+</script>

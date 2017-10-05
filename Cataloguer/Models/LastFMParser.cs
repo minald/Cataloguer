@@ -11,12 +11,14 @@ namespace Cataloguer.Models
     {
         public const string ApiKey = "f39425750fc23d743fbf853d9585a46c";
 
+        public const string commonUrl = "http://ws.audioscrobbler.com/2.0/?api_key=f39425750fc23d743fbf853d9585a46c&";
+
         public string CounrtyForSearch = "belarus";
 
         public List<Artist> GetTopArtists(int page, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists" +
-                 "&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=geo.gettopartists" + 
+                "&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit;
             List<Artist> artists = new List<Artist>();
             foreach (XmlNode artistNode in GetXmlDocumentFrom(url).SelectNodes("//artist"))
             {
@@ -29,11 +31,11 @@ namespace Cataloguer.Models
 
         public Artist GetArtist(string name)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=artist.getinfo&artist=" + name;
             XmlNode artistInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//artist");
             Artist artist = new Artist(name)
             {
-                Albums = GetAlbumsOfArtist(name, 8),
+                Albums = GetAlbumsOfArtist(name, 1, 8),
                 Tracks = GetTracksOfArtist(name, 1, 10),
                 Tags = GetTopTagsFrom(artistInfoMainNode.SelectNodes("//tags/tag"))
             };
@@ -56,8 +58,8 @@ namespace Cataloguer.Models
 
         public List<Track> GetTracksOfArtist(string name, int page, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&artist=" + name +
-                "&page=" + page + "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=artist.gettoptracks&artist=" + name +
+                "&page=" + page + "&limit=" + limit;
             XmlDocument artistTracksDocument = GetXmlDocumentFrom(url);
             Artist artist = new Artist(artistTracksDocument.SelectSingleNode("//toptracks").
                     Attributes["artist"].Value);
@@ -81,36 +83,40 @@ namespace Cataloguer.Models
         {
             Artist artist = new Artist(name)
             {
-                Albums = GetAlbumsOfArtist(name, 48)
+                Albums = GetAlbumsOfArtist(name, 1, 48)
             };
             artist.SetPictureLink(GetPictureLinkOfArtist(name));
             return artist;
         }
 
-        private string GetPictureLinkOfArtist(string name)
+        public List<Album> GetAlbumsOfArtist(string name, int page, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
-            return GetXmlDocumentFrom(url).SelectSingleNode("//artist/image[@size='large']").InnerText;
-        }
-
-        private List<Album> GetAlbumsOfArtist(string name, int limit)
-        {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&artist=" + name + 
-                "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=artist.gettopalbums&artist=" + name +
+                "&page=" + page + "&limit=" + limit;
+            XmlDocument artistAlbumsDocument = GetXmlDocumentFrom(url);
+            Artist artist = new Artist(artistAlbumsDocument.SelectSingleNode("//topalbums").
+                    Attributes["artist"].Value);
             List<Album> albums = new List<Album>();
-            foreach (XmlNode nodeWithTopAlbum in GetXmlDocumentFrom(url).SelectNodes("//album"))
+            foreach (XmlNode nodeWithTopAlbum in artistAlbumsDocument.SelectNodes("//album"))
             {
                 Album album = new Album(nodeWithTopAlbum.SelectSingleNode(".//name").InnerText);
                 album.SetPictureLink(nodeWithTopAlbum.SelectSingleNode(".//image[@size='large']").InnerText);
                 album.SetScrobbles(nodeWithTopAlbum.SelectSingleNode(".//playcount").InnerText);
+                album.Artist = artist;
                 albums.Add(album);
             }
             return albums;
-        }  
+        }
+
+        private string GetPictureLinkOfArtist(string name)
+        {
+            string url = commonUrl + "method=artist.getinfo&artist=" + name;
+            return GetXmlDocumentFrom(url).SelectSingleNode("//artist/image[@size='large']").InnerText;
+        }
 
         public Artist GetArtistWithBiography(string name)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=" + name + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=artist.getinfo&artist=" + name;
             XmlNode artistInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//artist");
             Artist artist = new Artist(name);
             artist.SetPictureLink(artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
@@ -120,8 +126,7 @@ namespace Cataloguer.Models
 
         public Album GetAlbum(string albumName, string artistName)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=" + artistName + 
-                "&album=" + albumName + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=album.getinfo&artist=" + artistName + "&album=" + albumName;
             XmlNode albumInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//album");
             Album album = new Album(albumInfoMainNode.SelectSingleNode(".//name").InnerText)
             {
@@ -152,8 +157,7 @@ namespace Cataloguer.Models
 
         public Track GetTrack(string trackName, string artistName)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=track.getInfo&artist=" + artistName +
-                "&track=" + trackName + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=track.getInfo&artist=" + artistName + "&track=" + trackName;
             XmlNode trackInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//track");
             Artist artist = new Artist(trackInfoMainNode.SelectSingleNode(".//artist/name").InnerText);
             Album album = GetAlbumOfTrackFrom(trackInfoMainNode, artist);
@@ -197,8 +201,7 @@ namespace Cataloguer.Models
 
         public List<Artist> SearchArtists(string value, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=artist.search&artist=" + value +
-                "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=artist.search&artist=" + value + "&limit=" + limit;
             List<Artist> artists = new List<Artist>();
             foreach (XmlNode artistNode in GetXmlDocumentFrom(url).SelectNodes("//artistmatches/artist"))
             {
@@ -211,8 +214,7 @@ namespace Cataloguer.Models
 
         public List<Album> SearchAlbums(string value, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=album.search&album=" + value +
-                "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=album.search&album=" + value + "&limit=" + limit;
             List<Album> albums = new List<Album>();
             foreach (XmlNode albumNode in GetXmlDocumentFrom(url).SelectNodes("//albummatches/album"))
             {
@@ -228,8 +230,7 @@ namespace Cataloguer.Models
 
         public List<Track> SearchTracks(string value, int limit)
         {
-            string url = "http://ws.audioscrobbler.com/2.0/?method=track.search&track=" + value +
-                "&limit=" + limit + "&api_key=" + ApiKey;
+            string url = commonUrl + "method=track.search&track=" + value + "&limit=" + limit;
             List<Track> tracks = new List<Track>();
             foreach(XmlNode trackNode in GetXmlDocumentFrom(url).SelectNodes("//trackmatches/track"))
             {

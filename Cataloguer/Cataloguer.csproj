@@ -241,6 +241,7 @@
     <Content Include="Views\Home\TopArtists.cshtml" />
     <Content Include="Views\Home\ArtistTracks.cshtml" />
     <Content Include="Views\Home\Track.cshtml" />
+    <Content Include="Views\Home\ArtistAlbums.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -15,13 +15,13 @@ namespace Cataloguer.Controllers
 
         public ActionResult ArtistProfile(string artistName)
         {
-            return View(database.Artists.Where(a => a.Name == artistName).First());
+            return View(database.Artists.First(a => a.Name == artistName));
         }
 
         public ActionResult Album(string albumName, string artistName)
         {
-            return View(database.Artists.Where(a => a.Name == artistName).First().
-                Albums.Where(a => a.Name == albumName).First());
+            return View(database.Artists.First(a => a.Name == artistName).
+                Albums.First(a => a.Name == albumName));
         }
     }
 }

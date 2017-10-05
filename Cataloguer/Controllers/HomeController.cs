@@ -10,6 +10,8 @@ namespace Cataloguer.Controllers
 
         public int artistsPerPage = 48;
 
+        public int albumsPerPage = 48;
+
         public int tracksPerPage = 50;
 
         public ActionResult Index()
@@ -52,6 +54,12 @@ namespace Cataloguer.Controllers
         {
             Artist artist = parser.GetArtistWithAllAlbums(name);
             return View(artist);
+        }
+
+        public ActionResult ArtistAlbums(string name, int page)
+        {
+            List<Album> albums = parser.GetAlbumsOfArtist(name, page, albumsPerPage);
+            return PartialView(albums);
         }
 
         public ActionResult Album(string albumName, string artistName)

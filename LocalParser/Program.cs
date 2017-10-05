@@ -13,11 +13,7 @@ namespace LocalParser
 
         public static void Main()
         {
-            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string relative = @"..\..\..\Cataloguer\App_Data\";
-            string absolute = Path.GetFullPath(Path.Combine(baseDirectory, relative));
-            AppDomain.CurrentDomain.SetData("DataDirectory", absolute);
-
+            SetDataDirectory();
             foreach (string artistDirectory in Directory.GetDirectories(mainDirectory))
             {
                 AddArtist(artistDirectory);
@@ -31,6 +27,14 @@ namespace LocalParser
                 }
             }
             database.SaveChanges();
+        }
+
+        private static void SetDataDirectory()
+        {
+            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string relative = @"..\..\..\Cataloguer\App_Data\";
+            string absolute = Path.GetFullPath(Path.Combine(baseDirectory, relative));
+            AppDomain.CurrentDomain.SetData("DataDirectory", absolute);
         }
 
         private static void AddArtist(string artistDirectory)
