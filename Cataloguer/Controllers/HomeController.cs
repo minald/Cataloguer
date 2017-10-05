@@ -71,9 +71,9 @@ namespace Cataloguer.Controllers
         {
             SearchingResults results = new SearchingResults
             {
-                Artists = parser.SearchArtists(value, 10),
-                Albums = parser.SearchAlbums(value, 30),
-                Tracks = parser.SearchTracks(value, 50)
+                Artists = parser.SearchArtists(value, 8),
+                Albums = parser.SearchAlbums(value, 8),
+                Tracks = parser.SearchTracks(value, 8)
             };
             ViewBag.SearchingValue = value;
             return View(results);

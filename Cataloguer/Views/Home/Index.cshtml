@@ -8,9 +8,9 @@
 <div id="results" class="flex-container">
     @foreach (Artist artist in Model)
     {
-        <div class="panel panel-default" style="flex-basis: 23%">
+        <div class="panel panel-success">
             <div class="panel-heading">
-                <p class="text-center" style="white-space: nowrap">
+                <p class="text-center">
                     @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
                 </p>
             </div>
@@ -18,7 +18,7 @@
         </div>
     }
 </div>
-<img id="loading" style="display: none; height: 100px" class="center-block" src="~/Content/loading.gif" />
+<img id="loading" class="center-block" src="~/Content/loading.gif" />
 <script>
     $(this).on('scroll', scrolling);
     var page = 2;

@@ -5,7 +5,9 @@
 }
 
 <div class="row">
-    <div class="col-sm-3 col-md-3 col-lg-3"><img width="100%" class="img-thumbnail" src="@Model.PictureLink" /></div>
+    <div class="col-sm-3 col-md-3 col-lg-3">
+        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+    </div>
     <div class="col-sm-9 col-md-9 col-lg-9">
         <h1 class="text-center">@Model.Name</h1>
     </div>
@@ -25,7 +27,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            @foreach (Track track in Model.Tracks)
             {
                 <tr>
                     <td>@track.Name</td>
@@ -45,20 +47,22 @@ else
 {
     <h2 class="text-center">Albums</h2>
     <div class="flex-container">
-        @foreach (Album album in Model.Albums ?? new List<Album>())
+        @foreach (Album album in Model.Albums)
         {
-            <div class="panel panel-default" style="flex-basis: 23%">
+            <div class="panel panel-info">
                 <div class="panel-heading">
-                    <p style="white-space: nowrap" class="text-center">
+                    <p class="text-center">
                         @Html.ActionLink(album.Name, "Album", "Local",
                         new { albumName = album.Name, artistName = Model.Name }, new { })
                     </p>
                 </div>
-                <div class="panel-body"><img class="center-block" src="@album.PictureLink" /></div>
+                <div class="panel-body">
+                    <img class="center-block" src="@album.GetPictureLink()" />
+                </div>
                 <div class="panel-footer">
-                    <p style="white-space: nowrap" class="text-center">
+                    <p class="text-center">
                         @Html.ActionLink(album.Name + " on Last.fm", "Album", "Home",
-                        new { albumName = album.Name, artistName = Model.Name }, new { })
+                       new { albumName = album.Name, artistName = Model.Name }, new { })
                     </p>
                 </div>
             </div>

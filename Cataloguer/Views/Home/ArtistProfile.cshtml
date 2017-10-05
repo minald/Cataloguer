@@ -5,7 +5,9 @@
 }
 
 <div class="row">
-    <div class="col-sm-4 col-md-4 col-lg-4"><img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" /></div>
+    <div class="col-sm-4 col-md-4 col-lg-4">
+        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+    </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
         <h5>
@@ -54,12 +56,10 @@
 <div class="flex-container">
     @foreach (Album album in Model.Albums)
     {
-        <div class="panel panel-default" style="flex-basis: 23%">
+        <div class="panel panel-success">
             <div class="panel-heading">
-                <p style="white-space: nowrap" class="text-center">
-                    @Html.ActionLink(album.Name, "Album", "Home",
-                        new { albumName = album.Name, artistName = Model.Name }, new { })
-                </p>
+                <p class="text-center">@Html.ActionLink(album.Name, "Album", "Home", 
+                   new { albumName = album.Name, artistName = Model.Name }, new { })</p>
             </div>
             <div class="panel-body">
                 <img class="center-block" src="@album.GetPictureLink()" />

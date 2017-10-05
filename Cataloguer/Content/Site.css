@@ -27,5 +27,21 @@ textarea {
 .flex-container {
     display: flex;
     justify-content: space-around;
-    flex-wrap: wrap
+    flex-wrap: wrap;
+}
+
+.flex-container > div {
+    flex-basis: 23%;
+    max-width: 260px;
+}
+
+.flex-container p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#loading {
+    display: none;
+    height: 100px;
 }

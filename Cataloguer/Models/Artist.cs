@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
@@ -8,14 +9,19 @@ namespace Cataloguer.Models
 
         public string Name { get; set; }
 
+        [Column]
         private string PictureLink { get; set; }
 
+        [Column]
         private string Scrobbles { get; set; }
 
+        [Column]
         private string Listeners { get; set; }
 
+        [Column]
         private string ShortBiography { get; set; }
 
+        [Column]
         private string FullBiography { get; set; }
 
         public virtual List<Album> Albums { get; set; }
@@ -23,6 +29,8 @@ namespace Cataloguer.Models
         public virtual List<Track> Tracks { get; set; }
 
         public virtual List<string> Tags { get; set; }
+
+        public Artist() { }
 
         public Artist(string name)
         {

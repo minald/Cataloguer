@@ -161,6 +161,10 @@
     <Compile Include="Migrations\201710020837261_addLinkToAudioField.Designer.cs">
       <DependentUpon>201710020837261_addLinkToAudioField.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201710050933089_addPrivateFields.cs" />
+    <Compile Include="Migrations\201710050933089_addPrivateFields.Designer.cs">
+      <DependentUpon>201710050933089_addPrivateFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
@@ -247,6 +251,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201710020837261_addLinkToAudioField.resx">
       <DependentUpon>201710020837261_addLinkToAudioField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201710050933089_addPrivateFields.resx">
+      <DependentUpon>201710050933089_addPrivateFields.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

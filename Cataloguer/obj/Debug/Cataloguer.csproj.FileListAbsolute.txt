@@ -191,3 +191,4 @@ C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.initial.resources
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.csproj.GenerateResource.Cache
 C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.addLinkToAudioField.resources
+C:\Users\a.minald\source\repos\Cataloguer\Cataloguer\obj\Debug\Cataloguer.Migrations.addPrivateFields.resources

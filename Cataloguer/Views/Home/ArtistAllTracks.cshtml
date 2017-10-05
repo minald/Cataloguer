@@ -22,16 +22,14 @@
         {
             <tr>
                 <td>@track.Rank</td>
-                <td>
-                    @Html.ActionLink(track.Name, "Track", "Home",
-                new { trackName = track.Name, artistName = Model.Name }, new { })
-            </td>
+                <td>@Html.ActionLink(track.Name, "Track", "Home", 
+                   new { trackName = track.Name, artistName = Model.Name }, new { })</td>
             <td>@track.GetListeners()</td>
         </tr>
         }
     </tbody>
 </table>
-<img id="loading" style="display: none; height: 100px" class="center-block" src="~/Content/loading.gif" />
+<img id="loading" class="center-block" src="~/Content/loading.gif" />
 <script>
 $(this).on('scroll', scrolling);
 var page = 2;

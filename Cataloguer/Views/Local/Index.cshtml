@@ -6,18 +6,20 @@
 
 <h1 class="text-center">My artists</h1>
 <div class="flex-container">
-    @foreach (Artist artist in Model ?? new List<Artist>())
+    @foreach (Artist artist in Model)
     {
-        <div class="panel panel-default" style="flex-basis: 23%">
+        <div class="panel panel-info">
             <div class="panel-heading">
-                <p class="text-center" style="white-space: nowrap">
+                <p class="text-center">
                     @Html.ActionLink(artist.Name, "ArtistProfile", "Local",
                         new { artistName = artist.Name }, new { })
                 </p>
             </div>
-            <div class="panel-body"><img class="center-block" src="@artist.PictureLink" /></div>
+            <div class="panel-body">
+                <img class="center-block" src="@artist.GetPictureLink()" />
+            </div>
             <div class="panel-footer">
-                <p class="text-center" style="white-space: nowrap">
+                <p class="text-center">
                     @Html.ActionLink(artist.Name + " on Last.fm", "ArtistProfile", "Home",
                         new { artistName = artist.Name }, new { })
                 </p>

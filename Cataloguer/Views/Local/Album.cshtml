@@ -5,7 +5,9 @@
 }
 
 <div class="row">
-    <div class="col-sm-3 col-md-3 col-lg-3"><img width="100%" class="img-thumbnail" src="@Model.PictureLink" /></div>
+    <div class="col-sm-3 col-md-3 col-lg-3">
+        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+    </div>
     <div class="col-sm-9 col-md-9 col-lg-9">
         <h1 class="text-center">@Model.Name</h1>
         <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Local",
@@ -27,7 +29,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (Track track in Model.Tracks ?? new List<Track>())
+            @foreach (Track track in Model.Tracks)
             {
                 <tr>
                     <td>@track.Name</td>
