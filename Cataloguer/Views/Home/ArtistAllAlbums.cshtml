@@ -12,17 +12,16 @@
 <div class="flex-container">
     @foreach (Album album in Model.Albums)
     {
-        <div class="panel panel-default">
+        <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@Model.Name">
             <div class="panel-heading">
-                <p class="text-center">@Html.ActionLink(album.Name, "Album", "Home", 
-                   new { albumName = album.Name, artistName = Model.Name }, new { })</p>
+                <p class="text-center">@album.Name</p>
             </div>
             <div class="panel-body">
-                <img class="center-block" src="@album.GetPictureLink()" />
+                <img class="img-rounded center-block" src="@album.GetPictureLink()" />
             </div>
             <div class="panel-footer">
                 <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
             </div>
-        </div>
+        </a>
     }
 </div>

@@ -3,14 +3,12 @@
 
 @foreach (Artist artist in Model)
 {
-    <div class="panel panel-success">
+    <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
         <div class="panel-heading">
-            <p class="text-center">
-                @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
-            </p>
+            <p class="text-center">@artist.Name</p>
         </div>
         <div class="panel-body">
             <img class="center-block" src="@artist.GetPictureLink()" />
         </div>
-    </div>
+    </a>
 }

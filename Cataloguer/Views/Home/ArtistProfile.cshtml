@@ -56,21 +56,22 @@
 <div class="flex-container">
     @foreach (Album album in Model.Albums)
     {
-        <div class="panel panel-success">
-            <div class="panel-heading">
-                <p class="text-center">@Html.ActionLink(album.Name, "Album", "Home", 
-                   new { albumName = album.Name, artistName = Model.Name }, new { })</p>
+        <a href="/Home/Album?albumName=@album.Name&artistName=@Model.Name">
+            <div class="panel panel-success">
+                <div class="panel-heading">
+                    <p class="text-center">@album.Name</p>
+                </div>
+                <div class="panel-body">
+                    <img class="img-rounded center-block" src="@album.GetPictureLink()" />
+                </div>
+                <div class="panel-footer">
+                    <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
+                </div>
             </div>
-            <div class="panel-body">
-                <img class="center-block" src="@album.GetPictureLink()" />
-            </div>
-            <div class="panel-footer">
-                <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
-            </div>
-        </div>
+        </a>
     }
 </div>
-@if (Model.Albums.Count > 9)
+@if (Model.Albums.Count > 7)
 {
     @Html.ActionLink("More albums...", "ArtistAllAlbums", "Home", new { name = Model.Name }, new { })
 }

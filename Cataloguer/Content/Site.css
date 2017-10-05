@@ -30,7 +30,7 @@ textarea {
     flex-wrap: wrap;
 }
 
-.flex-container > div {
+.flex-container > a {
     flex-basis: 23%;
     max-width: 260px;
 }

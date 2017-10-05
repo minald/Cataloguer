@@ -33,7 +33,7 @@ namespace Cataloguer.Models
             XmlNode artistInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//artist");
             Artist artist = new Artist(name)
             {
-                Albums = GetAlbumsOfArtist(name, 10),
+                Albums = GetAlbumsOfArtist(name, 8),
                 Tracks = GetTracksOfArtist(name, 1, 10),
                 Tags = GetTopTagsFrom(artistInfoMainNode.SelectNodes("//tags/tag"))
             };
@@ -81,7 +81,7 @@ namespace Cataloguer.Models
         {
             Artist artist = new Artist(name)
             {
-                Albums = GetAlbumsOfArtist(name, 50)
+                Albums = GetAlbumsOfArtist(name, 48)
             };
             artist.SetPictureLink(GetPictureLinkOfArtist(name));
             return artist;

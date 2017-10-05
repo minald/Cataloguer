@@ -15,16 +15,14 @@ else
     <div class="flex-container">
         @foreach (Artist artist in Model.Artists)
         {
-            <div class="panel panel-success">
+            <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
                 <div class="panel-heading">
-                    <p class="text-center">
-                        @Html.ActionLink(artist.Name, "ArtistProfile", "Home", new { name = artist.Name }, new { })
-                    </p>
+                    <p class="text-center">@artist.Name</p>
                 </div>
                 <div class="panel-body">
-                    <img class="center-block" src="@artist.GetPictureLink()" />
+                    <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
                 </div>
-            </div>
+            </a>
         }
     </div>
 }
@@ -38,21 +36,17 @@ else
     <div class="flex-container">
         @foreach (Album album in Model.Albums)
         {
-            <div class="panel panel-success">
+            <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
                 <div class="panel-heading">
-                    <p class="text-center">
-                        @Html.ActionLink(album.Name, "Album", "Home", 
-                       new { albumName = album.Name, artistName = album.Artist.Name }, new { })
-                    </p>
+                    <p class="text-center">@album.Name</p>
                 </div>
                 <div class="panel-body">
-                    <img class="center-block" src="@album.GetPictureLink()" />
+                    <img class="img-rounded center-block" src="@album.GetPictureLink()" />
                 </div>
                 <div class="panel-footer">
-                    <span class="glyphicon glyphicon-user"></span>    @Html.ActionLink(album.Artist.Name, 
-                        "ArtistProfile", "Home", new { name = album.Artist.Name }, new { })
+                    <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
                 </div>
-            </div>
+            </a>
         }
     </div>
 }
@@ -66,20 +60,17 @@ else
     <div class="flex-container">
         @foreach (Track track in Model.Tracks)
         {
-            <div class="panel panel-success">
+            <a class="panel panel-success" href="/Home/Track?trackName=@track.Name&artistName=@track.Artist.Name">
                 <div class="panel-heading">
-                    <p class="text-center">
-                        @Html.ActionLink(track.Name, "Track", "Home",
-                        new { trackName = track.Name, artistName = track.Artist.Name }, new { })
-                    </p>
+                    <p class="text-center">@track.Name</p>
                 </div>
                 <div class="panel-body">
-                    <img class="center-block" src="@track.GetPictureLink()" />
+                    <img class="img-rounded center-block" src="@track.GetPictureLink()" />
                 </div>
                 <div class="panel-footer">
                     <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
                 </div>
-            </div>
+            </a>
         }
     </div>
 }
