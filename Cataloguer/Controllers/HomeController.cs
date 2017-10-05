@@ -1,13 +1,12 @@
 ﻿using Cataloguer.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 
 namespace Cataloguer.Controllers
 {
     public class HomeController : Controller
     {
-        ArtistContext database = new ArtistContext();
+        MusicRepository database = new MusicRepository();
 
         LastFMParser parser = new LastFMParser();
 
@@ -89,9 +88,9 @@ namespace Cataloguer.Controllers
                 LastFMArtists = parser.SearchArtists(value, FirstPage, newSearchElements),
                 LastFMAlbums = parser.SearchAlbums(value, FirstPage, newSearchElements),
                 LastFMTracks = parser.SearchTracks(value, FirstPage, newSearchElements),
-                LocalArtists = database.Artists.Where(a => a.Name == value).ToList(),
-                LocalAlbums = database.Albums.Where(a => a.Name == value).ToList(),
-                LocalTracks = database.Tracks.Where(t => t.Name == value).ToList()
+                LocalArtists = database.GetArtistsByName(value),
+                LocalAlbums = database.GetAlbumsByName(value),
+                LocalTracks = database.GetTracksByName(value)
             };
             ViewBag.SearchingValue = value;
             return View(results);

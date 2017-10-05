@@ -168,7 +168,7 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Album.cs" />
     <Compile Include="Models\Artist.cs" />
-    <Compile Include="Models\ArtistContext.cs" />
+    <Compile Include="Models\MusicContext.cs" />
     <Compile Include="Models\LastFMParser.cs" />
     <Compile Include="Models\SearchingResults.cs" />
     <Compile Include="Models\Track.cs" />

@@ -1,27 +1,25 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using Cataloguer.Models;
 
 namespace Cataloguer.Controllers
 {
     public class LocalController : Controller
     {
-        public ArtistContext database = new ArtistContext();
+        MusicRepository database = new MusicRepository();
 
         public ActionResult Index()
         {
-            return View(database.Artists.ToList());
+            return View(database.GetArtists());
         }
 
         public ActionResult ArtistProfile(string name)
         {
-            return View(database.Artists.First(a => a.Name == name));
+            return View(database.GetArtist(name));
         }
 
         public ActionResult Album(string albumName, string artistName)
         {
-            return View(database.Artists.First(a => a.Name == artistName).
-                Albums.First(a => a.Name == albumName));
+            return View(database.GetAlbum(albumName, artistName));
         }
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Cataloguer.Models;
 
 namespace LocalParser
 {
     public class Program
     {
-        public static ArtistContext database = new ArtistContext();
+        public static MusicRepository database = new MusicRepository();
 
         public static string mainDirectory = @"D:\Music\";
 
@@ -26,7 +25,7 @@ namespace LocalParser
                     ParseTracks(artistDirectory);
                 }
             }
-            database.SaveChanges();
+            database.Save();
         }
 
         private static void SetDataDirectory()
@@ -40,12 +39,12 @@ namespace LocalParser
         private static void AddArtist(string artistDirectory)
         {
             string artistName = new DirectoryInfo(artistDirectory).Name;
-            if (!ArtistExists(artistName))
+            if (!database.ArtistExists(artistName))
             {
                 Artist artist = new Artist(artistName);
                 artist.SetPictureLink("");
-                database.Artists.Add(artist);
-                database.SaveChanges();
+                database.AddArtist(artist);
+                database.Save();
             }
         }
 
@@ -65,25 +64,24 @@ namespace LocalParser
 
         private static void AddAlbumToArtist(string albumName, string artistName)
         {
-            if (!AlbumExists(albumName, artistName))
+            if (!database.AlbumExists(albumName, artistName))
             {
                 Album album = new Album(albumName);
                 album.SetPictureLink("");
-                database.Artists.First(a => a.Name == artistName).Albums.Add(album);
-                database.SaveChanges();
+                database.AddAlbumToArtist(album, artistName);
+                database.Save();
             }
         }
 
         private static void AddTrackToAlbumOfArtist(string trackDirectory, string albumName, string artistName)
         {
             string trackName = Path.GetFileNameWithoutExtension(trackDirectory);
-            if (!TrackExists(trackName, albumName, artistName))
+            if (!database.TrackExists(trackName, albumName, artistName))
             {
                 Track track = new Track(trackName);
                 track.LinkToAudio = trackDirectory;
                 track.SetPictureLink("");
-                database.Artists.First(a => a.Name == artistName).
-                    Albums.First(a => a.Name == albumName).Tracks.Add(track);
+                database.AddTrackToAlbumOfArtist(track, albumName, artistName);
             }
         }
 
@@ -100,41 +98,13 @@ namespace LocalParser
         private static void AddTrackToArtist(string trackDirectory, string artistName)
         {
             string trackName = Path.GetFileNameWithoutExtension(trackDirectory);
-            if (!TrackExists(trackName, artistName))
+            if (!database.TrackExists(trackName, artistName))
             {
                 Track track = new Track(trackName);
                 track.LinkToAudio = trackDirectory;
                 track.SetPictureLink("");
-                database.Artists.First(a => a.Name == artistName).Tracks.Add(track);
+                database.AddTrackToArtist(track, artistName);
             }
-        }
-
-        private static bool ArtistExists(string name)
-        {
-            if (database.Artists.Any(a => a.Name == name))
-                return true;
-            return false;
-        }
-
-        private static bool AlbumExists(string albumName, string artistName)
-        {
-            if (database.Albums.Any(a => a.Name == albumName && a.Artist.Name == artistName))
-                return true;
-            return false;
-        }
-
-        private static bool TrackExists(string trackName, string artistName)
-        {
-            if (database.Tracks.Any(t => t.Name == trackName && t.Artist.Name == artistName))
-                return true;
-            return false;
-        }
-
-        private static bool TrackExists(string trackName, string albumName, string artistName)
-        {
-            if (database.Tracks.Any(t => t.Name == trackName && t.Album.Name == albumName && t.Album.Artist.Name == artistName))
-                return true;
-            return false;
         }
     }
 }

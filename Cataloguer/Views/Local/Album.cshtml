@@ -11,7 +11,7 @@
     <div class="col-sm-9 col-md-9 col-lg-9">
         <h1 class="text-center">@Model.Name</h1>
         <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Local",
-            new { artistName = Model.Artist.Name }, new { })</h4>
+            new { name = Model.Artist.Name }, new { })</h4>
     </div>
 </div>
 @if (Model.Tracks.Count == 0)
