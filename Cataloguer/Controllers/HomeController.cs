@@ -16,7 +16,7 @@ namespace Cataloguer.Controllers
 
         public int albumsPerPage = 48;
 
-        public int tracksPerPage = 50;
+        public int tracksPerPage = 48;
 
         public int newSearchElements = 8;
 
@@ -53,7 +53,7 @@ namespace Cataloguer.Controllers
         public ActionResult ArtistTracks(string name, int page)
         {
             List<Track> tracks = parser.GetTracksOfArtist(name, page, tracksPerPage);
-            return PartialView("PartialTracksInRow", tracks);
+            return PartialView("PartialTracksInPanels", tracks);
         }
 
         public ActionResult ArtistAllAlbums(string name)

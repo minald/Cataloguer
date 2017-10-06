@@ -34,7 +34,7 @@ namespace Cataloguer.Models
             Artist artist = new Artist(name)
             {
                 Albums = GetAlbumsOfArtist(name, 1, 8),
-                Tracks = GetTracksOfArtist(name, 1, 10),
+                Tracks = GetTracksOfArtist(name, 1, 12),
                 Tags = GetTopTagsFrom(artistInfoMainNode.SelectNodes("//tags/tag"))
             };
             artist.SetPictureLink(artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
@@ -48,7 +48,7 @@ namespace Cataloguer.Models
         {
             Artist artist = new Artist(name)
             {
-                Tracks = GetTracksOfArtist(name, 1, 50)
+                Tracks = GetTracksOfArtist(name, 1, 48)
             };
             artist.SetPictureLink(GetPictureLinkOfArtist(name));
             return artist;
@@ -106,7 +106,7 @@ namespace Cataloguer.Models
             return albums;
         }
 
-        private string GetPictureLinkOfArtist(string name)
+        public string GetPictureLinkOfArtist(string name)
         {
             string url = СommonUrl + "method=artist.getinfo&artist=" + name;
             return GetXmlDocumentFrom(url).SelectSingleNode("//artist/image[@size='large']").InnerText;
@@ -257,6 +257,12 @@ namespace Cataloguer.Models
                 }
             }
             return document;
+        }
+
+        public string GetPictureLinkOfAlbum(string albumName, string artistName)
+        {
+            string url = СommonUrl + "method=album.getinfo&artist=" + artistName + "&album=" + albumName;
+            return GetXmlDocumentFrom(url).SelectSingleNode("//album/image[@size='large']").InnerText;
         }
     }
 }

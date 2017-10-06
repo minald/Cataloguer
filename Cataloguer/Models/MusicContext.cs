@@ -83,9 +83,19 @@ namespace Cataloguer.Models
             return database.Artists.First(a => a.Name == name);
         }
 
+        public void UpdateArtist(Artist artist)
+        {
+            database.Entry(artist).State = EntityState.Modified;
+        }
+
         public Album GetAlbum(string albumName, string artistName)
         {
             return database.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
+        }
+
+        public void UpdateAlbum(Album album)
+        {
+            database.Entry(album).State = EntityState.Modified;
         }
 
         public void AddArtist(Artist artist)

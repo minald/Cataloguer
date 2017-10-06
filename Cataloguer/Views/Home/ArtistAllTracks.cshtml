@@ -9,13 +9,15 @@
                                    "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
-@Html.Partial("PartialTableWithTracks", Model.Tracks)
+<div id="results" class="flex-container">
+    @Html.Partial("PartialTracksInPanels", Model.Tracks)
+</div>
 <img id="loading" class="center-block" src="~/Content/loading.gif" />
 <script>
     $(this).on('scroll', scrolling);
     var page = 2;
     function scrolling() {
-        if ($(this).scrollTop() >= ($('table').height() - $(this).height() - 100)){
+        if ($(this).scrollTop() >= ($('.flex-container').height() - $(this).height() - 100)){
             $(this).unbind('scroll');
             $.ajax({
                 beforeSend: function () {

@@ -21,7 +21,9 @@
     </div>
 </div>
 <h2 class="text-center">Top tracks</h2>
-@Html.Partial("PartialTableWithTracks", Model.Tracks)
+<div class="flex-container">
+    @Html.Partial("PartialTracksInPanels", Model.Tracks)
+</div>
 @if (Model.Tracks.Count > 9)
 {
     @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home", new { name = Model.Name }, new { })
