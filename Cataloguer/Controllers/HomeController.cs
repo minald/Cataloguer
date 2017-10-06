@@ -29,7 +29,7 @@ namespace Cataloguer.Controllers
         public ActionResult TopArtists(int page)
         {
             List<Artist> artists = parser.GetTopArtists(page, artistsPerPage);
-            return PartialView(artists);
+            return PartialView("PartialArtists", artists);
         }
 
         public ActionResult ArtistProfile(string name)
@@ -49,11 +49,11 @@ namespace Cataloguer.Controllers
             Artist artist = parser.GetArtistWithAllTracks(name);
             return View(artist);
         }
-
+        
         public ActionResult ArtistTracks(string name, int page)
         {
             List<Track> tracks = parser.GetTracksOfArtist(name, page, tracksPerPage);
-            return PartialView(tracks);
+            return PartialView("PartialTracksInRow", tracks);
         }
 
         public ActionResult ArtistAllAlbums(string name)
@@ -65,7 +65,7 @@ namespace Cataloguer.Controllers
         public ActionResult ArtistAlbums(string name, int page)
         {
             List<Album> albums = parser.GetAlbumsOfArtist(name, page, albumsPerPage);
-            return PartialView(albums);
+            return PartialView("PartialAlbums", albums);
         }
 
         public ActionResult Album(string albumName, string artistName)
@@ -99,19 +99,19 @@ namespace Cataloguer.Controllers
         public ActionResult SearchArtists(string value, int page)
         {
             List<Artist> artists = parser.SearchArtists(value, page, newSearchElements);
-            return PartialView(artists);
+            return PartialView("PartialArtists", artists);
         }
 
         public ActionResult SearchAlbums(string value, int page)
         {
             List<Album> albums = parser.SearchAlbums(value, page, newSearchElements);
-            return PartialView(albums);
+            return PartialView("PartialAlbums", albums);
         }
 
         public ActionResult SearchTracks(string value, int page)
         {
             List<Track> tracks = parser.SearchTracks(value, page, newSearchElements);
-            return PartialView(tracks);
+            return PartialView("PartialTracksInPanels", tracks);
         }
     }
 }

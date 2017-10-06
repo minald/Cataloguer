@@ -10,12 +10,7 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        <h5>
-            @foreach (string tag in Model.Tags)
-            {
-                <code>@tag</code>
-            }
-        </h5>
+        @Html.Partial("PartialTags", Model.Tags)
         <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Home", 
                     new { name = Model.Artist.Name }, new { })</h4>
         <h4>Scrobbles : @Model.GetScrobbles()</h4>

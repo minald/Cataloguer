@@ -10,20 +10,7 @@
 </h1>
 <h2 class="text-center">Top albums of all time</h2>
 <div id="results" class="flex-container">
-    @foreach (Album album in Model.Albums)
-    {
-        <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@Model.Name">
-            <div class="panel-heading">
-                <p class="text-center">@album.Name</p>
-            </div>
-            <div class="panel-body">
-                <img class="img-rounded center-block" src="@album.GetPictureLink()" />
-            </div>
-            <div class="panel-footer">
-                <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
-            </div>
-        </a>
-    }
+    @Html.Partial("PartialAlbums", Model.Albums);
 </div>
 <img id="loading" class="center-block" src="~/Content/loading.gif"/>
 <script>

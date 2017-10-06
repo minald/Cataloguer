@@ -1,0 +1,22 @@
+﻿@using Cataloguer.Models
+@model List<Album>
+
+@foreach (Album album in Model)
+{
+    <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
+        <div class="panel-heading">
+            <p class="text-center">@album.Name</p>
+        </div>
+        <div class="panel-body">
+            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
+        </div>
+        @if (album.GetScrobbles() != null)
+        {
+            <div class="panel-footer">
+                <p>
+                    <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
+                </p>
+            </div>
+        }
+    </a>
+}

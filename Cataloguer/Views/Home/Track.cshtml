@@ -4,19 +4,13 @@
     ViewBag.Title = Model.Name;
 }
 
-<h1 class="text-center">@Model.Name</h1>
 <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
         <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
-        <h1></h1>
-        <h5>
-            @foreach (string tag in Model.Tags)
-            {
-                <code>@tag</code>
-            }
-        </h5>
+        <h1 class="text-center">@Model.Name</h1>
+        @Html.Partial("PartialTags", Model.Tags)
         <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Home", 
                     new { name = Model.Artist.Name }, new { })</h4>
         @if (Model.Album != null)

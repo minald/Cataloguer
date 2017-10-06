@@ -14,34 +14,15 @@
 </div>
 @if (Model.Tracks.Count == 0)
 {
-    <h2 class="text-center">There are no tracks of this artist</h2>
+    <h4 class="text-center">There are no tracks of this artist</h4>
 }
 else
 {
-    <h2 class="text-center">Tracks</h2>
-    <table class="table table-hover table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Track track in Model.Tracks)
-            {
-                <tr>
-                    <td>@track.Name</td>
-                    <td>
-                        <audio controls src="@track.LinkToAudio"></audio>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    @Html.Partial("PartialTableWithTracks", Model.Tracks)
 }
 @if (Model.Albums.Count == 0)
 {
-    <h2 class="text-center">There are no albums of this artist</h2>
+    <h4 class="text-center">There are no albums of this artist</h4>
 }
 else
 {

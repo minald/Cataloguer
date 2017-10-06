@@ -1,0 +1,14 @@
+﻿@using Cataloguer.Models
+@model List<Artist>
+
+@foreach (Artist artist in Model)
+{
+    <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
+        <div class="panel-heading">
+            <p class="text-center">@artist.Name</p>
+        </div>
+        <div class="panel-body">
+            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
+        </div>
+    </a>
+}

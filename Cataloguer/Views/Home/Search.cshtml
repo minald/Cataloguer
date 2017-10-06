@@ -18,7 +18,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Last.fm artists",
     NoElementsMessage = "There are no artists in last.fm with this name",
@@ -26,7 +26,7 @@
     PanelCssClass = "panel panel-success",
     MusicObjects = musicObjects,
     ButtonId = "addArtists"
-});
+})
 @{
     musicObjects.Clear();
     foreach (Album album in Model.LastFMAlbums)
@@ -41,7 +41,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Last.fm albums",
     NoElementsMessage = "There are no albums in last.fm with this name",
@@ -49,7 +49,7 @@
     PanelCssClass = "panel panel-success",
     MusicObjects = musicObjects,
     ButtonId = "addAlbums"
-});
+})
 @{
     musicObjects.Clear();
     foreach (Track track in Model.LastFMTracks)
@@ -65,7 +65,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Last.fm tracks",
     NoElementsMessage = "There are no tracks in last.fm with this name",
@@ -73,7 +73,7 @@
     PanelCssClass = "panel panel-success",
     MusicObjects = musicObjects,
     ButtonId = "addTracks"
-});
+})
 @{
     musicObjects.Clear();
     foreach (Artist artist in Model.LocalArtists)
@@ -87,7 +87,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Local artists",
     NoElementsMessage = "There are no artists in local database with this name",
@@ -95,7 +95,7 @@
     PanelCssClass = "panel panel-info",
     MusicObjects = musicObjects,
     ButtonId = "addLocalArtists"
-});
+})
 
 @{
     musicObjects.Clear();
@@ -111,7 +111,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Local albums",
     NoElementsMessage = "There are no albums in local database with this name",
@@ -119,7 +119,7 @@
     PanelCssClass = "panel panel-info",
     MusicObjects = musicObjects,
     ButtonId = "addLocalAlbums"
-});
+})
 @{
     musicObjects.Clear();
     foreach (Track track in Model.LocalTracks)
@@ -135,7 +135,7 @@
         musicObjects.Add(musicObject);
     }
 }
-@Html.Partial("SearchPartialView", new ViewObject
+@Html.Partial("PartialSearchView", new ViewObject
 {
     Heading = "Local tracks",
     NoElementsMessage = "There are no tracks in local database with this name",
@@ -143,21 +143,23 @@
     PanelCssClass = "panel panel-info",
     MusicObjects = musicObjects,
     ButtonId = "addLocalTracks"
-});
+})
 <script>
     var artistPage = 2;
     $('#addArtists').click(function () {
         LoadNew('/Home/SearchArtists', artistPage, '#artists');
+        artistPage++;
     });
     var albumsPage = 2;
     $('#addAlbums').click(function () {
-        LoadNew('/Home/SearchAlbums', albumsPage, '#albums');
+         LoadNew('/Home/SearchAlbums', albumsPage, '#albums');
+         albumsPage++;
     });
     var tracksPage = 2;
     $('#addTracks').click(function () {
         LoadNew('/Home/SearchTracks', tracksPage, '#tracks');
+        tracksPage++;
     });
-
     function LoadNew(url, page, blockId) {
         $.ajax({
             url: url,
@@ -167,7 +169,6 @@
             },
             success: function (data) {
                 $(blockId).append(data);
-                page++;
             }
         });
     };

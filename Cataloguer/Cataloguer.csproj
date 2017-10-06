@@ -239,14 +239,15 @@
     <Content Include="Views\Local\Index.cshtml" />
     <Content Include="Views\Local\ArtistProfile.cshtml" />
     <Content Include="Views\Local\Album.cshtml" />
-    <Content Include="Views\Home\TopArtists.cshtml" />
-    <Content Include="Views\Home\ArtistTracks.cshtml" />
+    <Content Include="Views\Home\PartialTracksInRow.cshtml" />
     <Content Include="Views\Home\Track.cshtml" />
-    <Content Include="Views\Home\ArtistAlbums.cshtml" />
-    <Content Include="Views\Home\SearchTracks.cshtml" />
-    <Content Include="Views\Home\SearchArtists.cshtml" />
-    <Content Include="Views\Home\SearchAlbums.cshtml" />
-    <Content Include="Views\Home\SearchPartialView.cshtml" />
+    <Content Include="Views\Home\PartialTracksInPanels.cshtml" />
+    <Content Include="Views\Home\PartialArtists.cshtml" />
+    <Content Include="Views\Home\PartialAlbums.cshtml" />
+    <Content Include="Views\Home\PartialSearchView.cshtml" />
+    <Content Include="Views\Home\PartialTableWithTracks.cshtml" />
+    <Content Include="Views\Home\PartialTags.cshtml" />
+    <Content Include="Views\Local\PartialTableWithTracks.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

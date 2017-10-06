@@ -1,0 +1,23 @@
+﻿@using Cataloguer.Models
+@model List<Track>
+
+<h2 class="text-center">Tracklist</h2>
+<table class="table table-hover table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Track track in Model)
+            {
+            <tr>
+                <td>@track.Name</td>
+                <td>
+                    <audio controls src="@track.LinkToAudio"></audio>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

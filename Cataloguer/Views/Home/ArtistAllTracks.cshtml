@@ -9,26 +9,7 @@
                                    "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
-<table class="table table-hover table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Listeners</th>
-        </tr>
-    </thead>
-    <tbody id="results">
-        @foreach (Track track in Model.Tracks)
-        {
-            <tr>
-                <td>@track.Rank</td>
-                <td>@Html.ActionLink(track.Name, "Track", "Home", 
-                   new { trackName = track.Name, artistName = Model.Name }, new { })</td>
-                <td>@track.GetListeners()</td>
-        </tr>
-        }
-    </tbody>
-</table>
+@Html.Partial("PartialTableWithTracks", Model.Tracks)
 <img id="loading" class="center-block" src="~/Content/loading.gif" />
 <script>
     $(this).on('scroll', scrolling);

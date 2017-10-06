@@ -6,17 +6,7 @@
 
 <h1 class="text-center">Top artists from Last.fm</h1>
 <div id="results" class="flex-container">
-    @foreach (Artist artist in Model)
-    {
-        <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
-            <div class="panel-heading">
-                <p class="text-center">@artist.Name</p>
-            </div>
-            <div class="panel-body">
-                <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
-            </div>
-        </a>
-    }
+    @Html.Partial("PartialArtists", Model)
 </div>
 <img id="loading" class="center-block" src="~/Content/loading.gif"/>
 <script>

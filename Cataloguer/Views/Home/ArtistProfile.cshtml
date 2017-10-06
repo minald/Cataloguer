@@ -10,12 +10,7 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        <h5>
-            @foreach (string tag in Model.Tags)
-            {
-                <code>@tag</code>
-            }
-        </h5>
+        @Html.Partial("PartialTags", Model.Tags)
         <h4>Scrobbles : @Model.GetScrobbles()</h4>
         <h4>Listeners : @Model.GetListeners()</h4>
         @if (Model.GetShortBiography() != " ")
@@ -26,50 +21,14 @@
     </div>
 </div>
 <h2 class="text-center">Top tracks</h2>
-<table class="table table-hover table-striped table-bordered">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Listeners</th>
-            <th>Scrobbles</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Track track in Model.Tracks)
-        {
-            <tr>
-                <td>@track.Rank</td>
-                <td>@Html.ActionLink(track.Name, "Track", "Home", 
-                   new { trackName = track.Name, artistName = Model.Name }, new { })</td>
-                <td>@track.GetListeners()</td>
-                <td>@track.GetScrobbles()</td>
-            </tr>
-        }
-    </tbody>
-</table>
+@Html.Partial("PartialTableWithTracks", Model.Tracks)
 @if (Model.Tracks.Count > 9)
 {
     @Html.ActionLink("More tracks...", "ArtistAllTracks", "Home", new { name = Model.Name }, new { })
 }
 <h2 class="text-center">Top albums</h2>
 <div class="flex-container">
-    @foreach (Album album in Model.Albums)
-    {
-        <a href="/Home/Album?albumName=@album.Name&artistName=@Model.Name">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <p class="text-center">@album.Name</p>
-                </div>
-                <div class="panel-body">
-                    <img class="img-rounded center-block" src="@album.GetPictureLink()" />
-                </div>
-                <div class="panel-footer">
-                    <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
-                </div>
-            </div>
-        </a>
-    }
+    @Html.Partial("PartialAlbums", Model.Albums)
 </div>
 @if (Model.Albums.Count > 7)
 {
