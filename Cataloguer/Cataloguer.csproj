@@ -172,6 +172,7 @@
     <Compile Include="Models\LastFMParser.cs" />
     <Compile Include="Models\SearchingResults.cs" />
     <Compile Include="Models\Track.cs" />
+    <Compile Include="Models\ViewObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +246,7 @@
     <Content Include="Views\Home\SearchTracks.cshtml" />
     <Content Include="Views\Home\SearchArtists.cshtml" />
     <Content Include="Views\Home\SearchAlbums.cshtml" />
+    <Content Include="Views\Home\SearchPartialView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

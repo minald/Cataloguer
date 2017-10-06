@@ -2,228 +2,173 @@
 @model SearchingResults
 @{
     ViewBag.Title = ViewBag.SearchingValue;
+    List<MusicObject> musicObjects = new List<MusicObject>();
 }
 
 <h1 class="text-center">@ViewBag.SearchingValue</h1>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Last.fm artists</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LastFMArtists.Count == 0)
+@{ 
+    foreach(Artist artist in Model.LastFMArtists)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <h4 class="text-center">There are no artists in last.fm with this name</h4>
-        }
-        else
+            Name = artist.Name,
+            PageLink = "/Home/ArtistProfile?name=" + artist.Name,
+            PictureLink = artist.GetPictureLink()
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Last.fm artists",
+    NoElementsMessage = "There are no artists in last.fm with this name",
+    ContainerId = "artists",
+    PanelCssClass = "panel panel-success",
+    MusicObjects = musicObjects,
+    ButtonId = "addArtists"
+});
+@{
+    musicObjects.Clear();
+    foreach (Album album in Model.LastFMAlbums)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <div id="artists" class="flex-container">
-                @foreach (Artist artist in Model.LastFMArtists)
-                {
-                    <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@artist.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
-                        </div>
-                    </a>
-                }
-            </div>
-            <button id="addArtists" class="btn btn-primary center-block">More</button>
-        }
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Last.fm albums</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LastFMAlbums.Count == 0)
+            Name = album.Name,
+            PageLink = "/Home/Album?albumName=" + album.Name + "&artistName=" + album.Artist.Name,
+            PictureLink = album.GetPictureLink(),
+            ArtistName = album.Artist.Name
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Last.fm albums",
+    NoElementsMessage = "There are no albums in last.fm with this name",
+    ContainerId = "albums",
+    PanelCssClass = "panel panel-success",
+    MusicObjects = musicObjects,
+    ButtonId = "addAlbums"
+});
+@{
+    musicObjects.Clear();
+    foreach (Track track in Model.LastFMTracks)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <h4 class="text-center">There are no albums in last.fm with this name</h4>
-        }
-        else
+            Name = track.Name,
+            PageLink = "/Home/Track?trackName=" + track.Name + "&artistName=" + track.Artist.Name,
+            PictureLink = track.GetPictureLink(),
+            ArtistName = track.Artist.Name,
+            Listeners = track.GetListeners()
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Last.fm tracks",
+    NoElementsMessage = "There are no tracks in last.fm with this name",
+    ContainerId = "tracks",
+    PanelCssClass = "panel panel-success",
+    MusicObjects = musicObjects,
+    ButtonId = "addTracks"
+});
+@{
+    musicObjects.Clear();
+    foreach (Artist artist in Model.LocalArtists)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <div id="albums" class="flex-container">
-                @foreach (Album album in Model.LastFMAlbums)
-                {
-                    <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@album.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
-                        </div>
-                        <div class="panel-footer">
-                            <p>
-                                <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
-                            </p>
-                        </div>
-                    </a>
-                }
-            </div>
-            <button id="addAlbums" class="btn btn-primary center-block">More</button>
-        }
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Tracks</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LastFMTracks.Count == 0)
+            Name = artist.Name,
+            PageLink = "/Local/ArtistProfile?name=" + artist.Name,
+            PictureLink = artist.GetPictureLink()
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Local artists",
+    NoElementsMessage = "There are no artists in local database with this name",
+    ContainerId = "localArtists",
+    PanelCssClass = "panel panel-info",
+    MusicObjects = musicObjects,
+    ButtonId = "addLocalArtists"
+});
+
+@{
+    musicObjects.Clear();
+    foreach (Album album in Model.LocalAlbums)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <h4 class="text-center">There are no tracks in last.fm with this name</h4>
-        }
-        else
+            Name = album.Name,
+            PageLink = "/Local/Album?albumName=" + album.Name + "&artistName=" + album.Artist.Name,
+            PictureLink = album.GetPictureLink(),
+            ArtistName = album.Artist.Name
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Local albums",
+    NoElementsMessage = "There are no albums in local database with this name",
+    ContainerId = "localAlbums",
+    PanelCssClass = "panel panel-info",
+    MusicObjects = musicObjects,
+    ButtonId = "addLocalAlbums"
+});
+@{
+    musicObjects.Clear();
+    foreach (Track track in Model.LocalTracks)
+    {
+        MusicObject musicObject = new MusicObject
         {
-            <div id="tracks" class="flex-container">
-                @foreach (Track track in Model.LastFMTracks)
-                {
-                    <a class="panel panel-success" href="/Home/Track?trackName=@track.Name&artistName=@track.Artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@track.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@track.GetPictureLink()" />
-                        </div>
-                        <div class="panel-footer">
-                            <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
-                        </div>
-                    </a>
-                }
-            </div>
-            <button id="addTracks" class="btn btn-primary center-block">More</button>
-        }
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Local artists</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LocalArtists.Count == 0)
-        {
-            <h4 class="text-center">There are no artists in local database with this name</h4>
-        }
-        else
-        {
-            <div class="flex-container">
-                @foreach (Artist artist in Model.LocalArtists)
-                {
-                    <a class="panel panel-info" href="/Local/ArtistProfile?name=@artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@artist.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
-                        </div>
-                    </a>
-                }
-            </div>
-        } 
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Local albums</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LocalAlbums.Count == 0)
-        {
-            <h4 class="text-center">There are no albums in local database with this name</h4>
-        }
-        else
-        {
-            <div class="flex-container">
-                @foreach (Album album in Model.LocalAlbums)
-                {
-                    <a class="panel panel-info" href="/Local/Album?albumName=@album.Name&artistName=@album.Artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@album.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
-                        </div>
-                        <div class="panel-footer">
-                            <p>
-                                <span class="glyphicon glyphicon-user"></span>    @album.Artist.Name
-                            </p>
-                        </div>
-                    </a>
-                 }
-            </div>
-        }
-    </div>
-</div>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h2 class="text-center">Local tracks</h2>
-    </div>
-    <div class="panel-body">
-        @if (Model.LocalTracks.Count == 0)
-        {
-            <h4 class="text-center">There are no tracks in local database with this name</h4>
-        }
-        else
-        {
-            <div class="flex-container">
-                @foreach (Track track in Model.LocalTracks)
-                {
-                    <a class="panel panel-info" href="/Local/ArtistProfile?name=@track.Artist.Name">
-                        <div class="panel-heading">
-                            <p class="text-center">@track.Name</p>
-                        </div>
-                        <div class="panel-body">
-                            <img class="img-rounded center-block" src="@track.GetPictureLink()" />
-                        </div>
-                    </a>
-                }
-            </div>
-        }
-    </div>
-</div>
+            Name = track.Name,
+            PageLink = "/Home/Local?name=" + track.Artist.Name,
+            PictureLink = track.GetPictureLink(),
+            ArtistName = track.Artist.Name,
+            Listeners = track.GetListeners()
+        };
+        musicObjects.Add(musicObject);
+    }
+}
+@Html.Partial("SearchPartialView", new ViewObject
+{
+    Heading = "Local tracks",
+    NoElementsMessage = "There are no tracks in local database with this name",
+    ContainerId = "localTracks",
+    PanelCssClass = "panel panel-info",
+    MusicObjects = musicObjects,
+    ButtonId = "addLocalTracks"
+});
 <script>
     var artistPage = 2;
     $('#addArtists').click(function () {
-        $.ajax({
-            url: '/Home/SearchArtists',
-            data: {
-                value: '@ViewBag.SearchingValue',
-                page: artistPage
-            },
-            success: function (data) {
-                $('#artists').append(data);
-                artistPage++;
-            }
-        });
+        LoadNew('/Home/SearchArtists', artistPage, '#artists');
     });
     var albumsPage = 2;
     $('#addAlbums').click(function () {
-        $.ajax({
-            url: '/Home/SearchAlbums',
-            data: {
-                value: '@ViewBag.SearchingValue',
-                page: albumsPage
-            },
-            success: function (data) {
-                $('#albums').append(data);
-                albumsPage++;
-            }
-        });
+        LoadNew('/Home/SearchAlbums', albumsPage, '#albums');
     });
     var tracksPage = 2;
     $('#addTracks').click(function () {
+        LoadNew('/Home/SearchTracks', tracksPage, '#tracks');
+    });
+
+    function LoadNew(url, page, blockId) {
         $.ajax({
-            url: '/Home/SearchTracks',
+            url: url,
             data: {
                 value: '@ViewBag.SearchingValue',
-                page: tracksPage
+                page: page
             },
             success: function (data) {
-                $('#tracks').append(data);
-                tracksPage++;
+                $(blockId).append(data);
+                page++;
             }
         });
-    });
+    };
 </script>

@@ -46,12 +46,7 @@ namespace Cataloguer.Models
 
     public class MusicRepository
     {
-        private MusicContext database;
-
-        public MusicRepository()
-        {
-            database = new MusicContext();
-        }
+        private MusicContext database = new MusicContext();
 
         public List<Artist> GetArtists()
         {
