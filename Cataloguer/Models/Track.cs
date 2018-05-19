@@ -46,10 +46,7 @@ namespace Cataloguer.Models
         public void SetPictureLink(string pictureLink)
         {
             string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/174s/4128a6eb29f94943c9d206c08e625904";
-            if (pictureLink != "")
-                PictureLink = pictureLink;
-            else
-                PictureLink = defaultPictureLink;
+            PictureLink = PictureLink == "" ? defaultPictureLink : pictureLink;
         }
 
         public string GetPictureLink()
@@ -74,8 +71,7 @@ namespace Cataloguer.Models
             int allSeconds = Convert.ToInt32(seconds);
             int newMinutes = allSeconds / 60;
             int newSeconds = allSeconds % 60;
-            if(newSeconds < 10) Duration = newMinutes + " : 0" + newSeconds;
-            else Duration = newMinutes + " : " + newSeconds;
+            Duration = newMinutes + " : " + (newSeconds < 10 ? "0" : "") + newSeconds; 
         }
 
         public string GetDuration()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
@@ -43,10 +44,7 @@ namespace Cataloguer.Models
         public void SetPictureLink(string pictureLink)
         {
             string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f";
-            if (pictureLink != "")
-                PictureLink = pictureLink;
-            else
-                PictureLink = defaultPictureLink;
+            PictureLink = PictureLink == "" ? defaultPictureLink : pictureLink;
         }
 
         public string GetPictureLink()
@@ -109,7 +107,10 @@ namespace Cataloguer.Models
         {
             int indexOfUnnecessaryLink = non_normalizedBiography.IndexOf("<a href=");
             if(indexOfUnnecessaryLink != -1)
+            {
                 return non_normalizedBiography.Substring(0, indexOfUnnecessaryLink);
+            }
+                
             return non_normalizedBiography;
         }
     }

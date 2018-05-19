@@ -46,114 +46,76 @@ namespace Cataloguer.Models
 
     public class MusicRepository
     {
-        private MusicContext database = new MusicContext();
+        private MusicContext db = new MusicContext();
 
-        public List<Artist> GetArtists()
-        {
-            return database.Artists.ToList();
-        }
+        public List<Artist> GetArtists() => db.Artists.ToList();
 
-        public List<Artist> GetArtistsByName(string name)
-        {
-            return database.Artists.Where(a => a.Name == name).ToList();
-        }
+        public List<Artist> GetArtistsByName(string name) => db.Artists.Where(a => a.Name == name).ToList();
 
-        public List<Album> GetAlbums()
-        {
-            return database.Albums.ToList();
-        }
+        public List<Album> GetAlbums() => db.Albums.ToList();
 
-        public List<Album> GetAlbumsByName(string name)
-        {
-            return database.Albums.Where(a => a.Name == name).ToList();
-        }
+        public List<Album> GetAlbumsByName(string name) => db.Albums.Where(a => a.Name == name).ToList();
 
-        public List<Track> GetTracks()
-        {
-            return database.Tracks.ToList();
-        }
+        public List<Track> GetTracks() => db.Tracks.ToList();
 
-        public List<Track> GetTracksByName(string name)
-        {
-            return database.Tracks.Where(a => a.Name == name).ToList();
-        }
+        public List<Track> GetTracksByName(string name) => db.Tracks.Where(a => a.Name == name).ToList();
 
-        public Artist GetArtist(string name)
-        {
-            return database.Artists.First(a => a.Name == name);
-        }
+        public Artist GetArtist(string name) => db.Artists.First(a => a.Name == name);
 
         public void UpdateArtist(Artist artist)
         {
-            database.Entry(artist).State = EntityState.Modified;
+            db.Entry(artist).State = EntityState.Modified;
         }
 
         public Album GetAlbum(string albumName, string artistName)
         {
-            return database.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
+            return db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
         }
 
         public void UpdateAlbum(Album album)
         {
-            database.Entry(album).State = EntityState.Modified;
+            db.Entry(album).State = EntityState.Modified;
         }
 
         public void AddArtist(Artist artist)
         {
-            database.Artists.Add(artist);
+            db.Artists.Add(artist);
         }
 
         public void AddAlbum(Album album)
         {
-            database.Albums.Add(album);
+            db.Albums.Add(album);
         }
 
         public void AddAlbumToArtist(Album album, string artistName)
         {
-            database.Artists.First(a => a.Name == artistName).Albums.Add(album);
+            db.Artists.First(a => a.Name == artistName).Albums.Add(album);
         }
 
         public void AddTrackToAlbumOfArtist(Track track, string albumName, string artistName)
         {
-            database.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName).Tracks.Add(track);
+            db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName).Tracks.Add(track);
         }
 
         public void AddTrackToArtist(Track track, string artistName)
         {
-            database.Artists.First(a => a.Name == artistName).Tracks.Add(track);
+            db.Artists.First(a => a.Name == artistName).Tracks.Add(track);
         }
 
-        public bool ArtistExists(string name)
-        {
-            if (database.Artists.Any(a => a.Name == name))
-                return true;
-            return false;
-        }
+        public bool ArtistExists(string name) => db.Artists.Any(a => a.Name == name);
 
-        public bool AlbumExists(string albumName, string artistName)
-        {
-            if (database.Albums.Any(a => a.Name == albumName && a.Artist.Name == artistName))
-                return true;
-            return false;
-        }
+        public bool AlbumExists(string albumName, string artistName) => 
+            db.Albums.Any(a => a.Name == albumName && a.Artist.Name == artistName);
 
-        public bool TrackExists(string trackName, string artistName)
-        {
-            if (database.Tracks.Any(t => t.Name == trackName && t.Artist.Name == artistName))
-                return true;
-            return false;
-        }
+        public bool TrackExists(string trackName, string artistName) => 
+            db.Tracks.Any(t => t.Name == trackName && t.Artist.Name == artistName);
 
-        public bool TrackExists(string trackName, string albumName, string artistName)
-        {
-            if (database.Tracks.Any(t => t.Name == trackName && t.Album.Name == albumName && t.Album.Artist.Name == artistName))
-                return true;
-            return false;
-        }
+        public bool TrackExists(string trackName, string albumName, string artistName) =>
+            db.Tracks.Any(t => t.Name == trackName && t.Album.Name == albumName && t.Album.Artist.Name == artistName);
 
         public void Save()
         {
-            database.SaveChanges();
+            db.SaveChanges();
         }
     }
 }

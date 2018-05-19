@@ -17,7 +17,6 @@ namespace LocalParser
 
         public static void Main()
         {
-            SetDataDirectory();
             foreach (string artistDirectory in Directory.GetDirectories(mainDirectory))
             {
                 AddArtist(artistDirectory);
@@ -25,20 +24,14 @@ namespace LocalParser
                 {
                     ParseAlbums(artistDirectory);
                 }   
+
                 if (Directory.Exists(artistDirectory + @"\Tracks"))
                 {
                     ParseTracks(artistDirectory);
                 }
             }
-            database.Save();
-        }
 
-        private static void SetDataDirectory()
-        {
-            var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            string relative = @"..\..\..\Cataloguer\App_Data\";
-            string absolute = Path.GetFullPath(Path.Combine(baseDirectory, relative));
-            AppDomain.CurrentDomain.SetData("DataDirectory", absolute);
+            database.Save();
         }
 
         private static void AddArtist(string artistDirectory)
@@ -50,6 +43,7 @@ namespace LocalParser
             {
                 client.DownloadFile(artist.GetPictureLink(), picturePath);
             }
+
             SetArtistInfo(artist, picturePath);
         }
 
@@ -63,13 +57,14 @@ namespace LocalParser
             {
                 SetNewArtistInfo(artist, picturePath);
             }
+
             database.Save();
         }
 
         private static void SetExistingArtistInfo(Artist artist, string picturePath)
         {
             Artist newArtist = database.GetArtist(artist.Name);
-            newArtist.SetPictureLink(picturePath);
+            newArtist.SetPictureLink("file:///" + picturePath);
             newArtist.SetScrobbles(artist.GetScrobbles().Replace(" ", ""));
             newArtist.SetListeners(artist.GetListeners().Replace(" ", ""));
             newArtist.SetShortBiography(artist.GetShortBiography());
@@ -79,7 +74,7 @@ namespace LocalParser
         private static void SetNewArtistInfo(Artist artist, string picturePath)
         {
             Artist newArtist = new Artist(artist.Name);
-            newArtist.SetPictureLink(picturePath);
+            newArtist.SetPictureLink("file:///" + picturePath);
             newArtist.SetScrobbles(artist.GetScrobbles().Replace(" ", ""));
             newArtist.SetListeners(artist.GetListeners().Replace(" ", ""));
             newArtist.SetShortBiography(artist.GetShortBiography());
@@ -108,6 +103,7 @@ namespace LocalParser
             {
                 client.DownloadFile(album.GetPictureLink(), picturePath);
             }
+
             SetAlbumInfo(album, picturePath);
         }
 
@@ -121,13 +117,14 @@ namespace LocalParser
             {
                 SetNewAlbumInfo(album, picturePath);
             }
+
             database.Save();
         }
 
         private static void SetExistingAlbumInfo(Album album, string picturePath)
         {
             Album newAlbum = database.GetAlbum(album.Name, album.Artist.Name);
-            album.SetPictureLink(picturePath);
+            album.SetPictureLink("file:///" + picturePath);
             album.SetScrobbles(album.GetScrobbles().Replace(" ", ""));
             album.SetListeners(album.GetListeners().Replace(" ", ""));
             database.UpdateAlbum(album);
@@ -136,7 +133,7 @@ namespace LocalParser
         private static void SetNewAlbumInfo(Album album, string picturePath)
         {
             Album newAlbum = new Album(album.Name);
-            album.SetPictureLink(picturePath);
+            album.SetPictureLink("file:///" + picturePath);
             album.SetScrobbles(album.GetScrobbles().Replace(" ", ""));
             album.SetListeners(album.GetListeners().Replace(" ", ""));
             database.AddAlbumToArtist(album, album.Artist.Name);

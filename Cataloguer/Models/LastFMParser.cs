@@ -15,8 +15,7 @@ namespace Cataloguer.Models
 
         public List<Artist> GetTopArtists(int page, int limit)
         {
-            string url = СommonUrl + "method=geo.gettopartists" + 
-                "&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit;
+            string url = СommonUrl + "method=geo.gettopartists&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit;
             List<Artist> artists = new List<Artist>();
             foreach (XmlNode artistNode in GetXmlDocumentFrom(url).SelectNodes("//artist"))
             {
@@ -24,6 +23,7 @@ namespace Cataloguer.Models
                 artist.SetPictureLink(artistNode.SelectSingleNode("image[@size='large']").InnerText);
                 artists.Add(artist);
             }
+
             return artists;
         }
 
@@ -37,6 +37,7 @@ namespace Cataloguer.Models
                 Tracks = GetTracksOfArtist(name, 1, 12),
                 Tags = GetTopTagsFrom(artistInfoMainNode.SelectNodes("//tags/tag"))
             };
+
             artist.SetPictureLink(artistInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
             artist.SetScrobbles(artistInfoMainNode.SelectSingleNode(".//stats/playcount").InnerText);
             artist.SetListeners(artistInfoMainNode.SelectSingleNode(".//stats/listeners").InnerText);
@@ -50,17 +51,16 @@ namespace Cataloguer.Models
             {
                 Tracks = GetTracksOfArtist(name, 1, 48)
             };
+
             artist.SetPictureLink(GetPictureLinkOfArtist(name));
             return artist;
         }
 
         public List<Track> GetTracksOfArtist(string name, int page, int limit)
         {
-            string url = СommonUrl + "method=artist.gettoptracks&artist=" + name +
-                "&page=" + page + "&limit=" + limit;
+            string url = СommonUrl + "method=artist.gettoptracks&artist=" + name + "&page=" + page + "&limit=" + limit;
             XmlDocument artistTracksDocument = GetXmlDocumentFrom(url);
-            Artist artist = new Artist(artistTracksDocument.SelectSingleNode("//toptracks").
-                    Attributes["artist"].Value);
+            Artist artist = new Artist(artistTracksDocument.SelectSingleNode("//toptracks").Attributes["artist"].Value);
             List<Track> tracks = new List<Track>();
             foreach (XmlNode nodeWithTrack in artistTracksDocument.SelectNodes("//track"))
             {
@@ -68,12 +68,14 @@ namespace Cataloguer.Models
                 {
                     Rank = Convert.ToInt32(nodeWithTrack.Attributes["rank"].Value)
                 };
+
                 track.SetPictureLink(nodeWithTrack.SelectSingleNode(".//image[@size='large']").InnerText);
                 track.SetScrobbles(nodeWithTrack.SelectSingleNode(".//playcount").InnerText);
                 track.SetListeners(nodeWithTrack.SelectSingleNode(".//listeners").InnerText);
                 track.Artist = artist;
                 tracks.Add(track);
             }
+
             return tracks;
         }
 
@@ -83,17 +85,16 @@ namespace Cataloguer.Models
             {
                 Albums = GetAlbumsOfArtist(name, 1, 48)
             };
+
             artist.SetPictureLink(GetPictureLinkOfArtist(name));
             return artist;
         }
 
         public List<Album> GetAlbumsOfArtist(string name, int page, int limit)
         {
-            string url = СommonUrl + "method=artist.gettopalbums&artist=" + name +
-                "&page=" + page + "&limit=" + limit;
+            string url = СommonUrl + "method=artist.gettopalbums&artist=" + name + "&page=" + page + "&limit=" + limit;
             XmlDocument artistAlbumsDocument = GetXmlDocumentFrom(url);
-            Artist artist = new Artist(artistAlbumsDocument.SelectSingleNode("//topalbums").
-                    Attributes["artist"].Value);
+            Artist artist = new Artist(artistAlbumsDocument.SelectSingleNode("//topalbums").Attributes["artist"].Value);
             List<Album> albums = new List<Album>();
             foreach (XmlNode nodeWithTopAlbum in artistAlbumsDocument.SelectNodes("//album"))
             {
@@ -103,6 +104,7 @@ namespace Cataloguer.Models
                 album.Artist = artist;
                 albums.Add(album);
             }
+
             return albums;
         }
 
@@ -132,6 +134,7 @@ namespace Cataloguer.Models
                 Artist = new Artist(albumInfoMainNode.SelectSingleNode(".//artist").InnerText),
                 Tracks = GetTracksOfAlbumFrom(albumInfoMainNode.SelectNodes(".//tracks/track"))
             };
+
             album.SetPictureLink(albumInfoMainNode.SelectSingleNode(".//image[@size='large']").InnerText);
             album.SetScrobbles(albumInfoMainNode.SelectSingleNode(".//playcount").InnerText);
             album.SetListeners(albumInfoMainNode.SelectSingleNode(".//listeners").InnerText);
@@ -147,9 +150,11 @@ namespace Cataloguer.Models
                 {
                     Rank = Convert.ToInt32(nodeWithTrack.Attributes["rank"].Value)
                 };
+
                 track.SetDuration(nodeWithTrack.SelectSingleNode(".//duration").InnerText);
                 tracks.Add(track);
             }
+
             return tracks;
         }
 
@@ -165,6 +170,7 @@ namespace Cataloguer.Models
                 Album = album,
                 Tags = GetTopTagsFrom(trackInfoMainNode.SelectNodes(".//toptags/tag"))
             };
+
             track.SetPictureLink(trackInfoMainNode.SelectSingleNode(".//album/image[@size='large']")?.InnerText ?? "");
             track.SetDurationInMilliseconds(trackInfoMainNode.SelectSingleNode(".//duration").InnerText);
             track.SetListeners(trackInfoMainNode.SelectSingleNode(".//listeners").InnerText);
@@ -183,6 +189,7 @@ namespace Cataloguer.Models
                 album.SetPictureLink(trackInfoMainNode.SelectSingleNode(".//album/image[@size='large']").InnerText);
                 album.Artist = artist;
             }
+
             return album;
         }
 
@@ -194,6 +201,7 @@ namespace Cataloguer.Models
                 string tag = nodeWithTag.SelectSingleNode(".//name").InnerText;
                 tags.Add(tag);
             }
+
             return tags;
         }
 
@@ -207,6 +215,7 @@ namespace Cataloguer.Models
                 artist.SetPictureLink(artistNode.SelectSingleNode(".//image[@size='large']").InnerText);
                 artists.Add(artist);
             }
+
             return artists;
         }
 
@@ -223,6 +232,7 @@ namespace Cataloguer.Models
                 album.SetPictureLink(albumNode.SelectSingleNode(".//image[@size='large']").InnerText);
                 albums.Add(album);
             }
+
             return albums;
         }
 
@@ -240,6 +250,7 @@ namespace Cataloguer.Models
                 track.SetListeners(trackNode.SelectSingleNode(".//listeners").InnerText);
                 tracks.Add(track);
             }
+
             return tracks;
         }
 
@@ -256,6 +267,7 @@ namespace Cataloguer.Models
                     document.Load(xmlTextReader);
                 }
             }
+
             return document;
         }
 
