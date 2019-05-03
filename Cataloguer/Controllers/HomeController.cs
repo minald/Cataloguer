@@ -7,8 +7,12 @@ namespace Cataloguer.Controllers
 {
     public class HomeController : Controller
     {
-        Repository Database { get; set; } = new Repository();
-        LastFMParser Parser { get; set; } = new LastFMParser();
+        Repository Database { get; set; }
+
+        public HomeController(Repository repository)
+        {
+            Database = repository;
+        }
 
         public const int FirstPage = 1;
         public int artistsPerPage = 48;
@@ -18,61 +22,61 @@ namespace Cataloguer.Controllers
 
         public ActionResult Index()
         {
-            List<Artist> artists = Parser.GetTopArtists(1, artistsPerPage);
+            List<Artist> artists = LastFMParser.GetTopArtists(1, artistsPerPage);
             return View(artists);
         }
 
         public ActionResult TopArtists(int page)
         {
-            List<Artist> artists = Parser.GetTopArtists(page, artistsPerPage);
+            List<Artist> artists = LastFMParser.GetTopArtists(page, artistsPerPage);
             return PartialView("PartialArtists", artists);
         }
 
         public ActionResult ArtistProfile(string name)
         {
-            Artist artist = Parser.GetArtist(name);
+            Artist artist = LastFMParser.GetArtist(name);
             return View(artist);
         }
 
         public ActionResult ArtistBiography(string name)
         {
-            Artist artist = Parser.GetArtistWithBiography(name);
+            Artist artist = LastFMParser.GetArtistWithBiography(name);
             return View(artist);
         }
 
         public ActionResult ArtistAllTracks(string name)
         {
-            Artist artist = Parser.GetArtistWithAllTracks(name);
+            Artist artist = LastFMParser.GetArtistWithAllTracks(name);
             return View(artist);
         }
         
         public ActionResult ArtistTracks(string name, int page)
         {
-            List<Track> tracks = Parser.GetTracksOfArtist(name, page, tracksPerPage);
+            List<Track> tracks = LastFMParser.GetTracksOfArtist(name, page, tracksPerPage);
             return PartialView("PartialTracksInPanels", tracks);
         }
 
         public ActionResult ArtistAllAlbums(string name)
         {
-            Artist artist = Parser.GetArtistWithAllAlbums(name);
+            Artist artist = LastFMParser.GetArtistWithAllAlbums(name);
             return View(artist);
         }
 
         public ActionResult ArtistAlbums(string name, int page)
         {
-            List<Album> albums = Parser.GetAlbumsOfArtist(name, page, albumsPerPage);
+            List<Album> albums = LastFMParser.GetAlbumsOfArtist(name, page, albumsPerPage);
             return PartialView("PartialAlbums", albums);
         }
 
         public ActionResult Album(string albumName, string artistName)
         {
-            Album album = Parser.GetAlbum(albumName, artistName);
+            Album album = LastFMParser.GetAlbum(albumName, artistName);
             return View(album);
         }
 
         public ActionResult Track(string trackName, string artistName)
         {
-            Track track = Parser.GetTrack(trackName, artistName);
+            Track track = LastFMParser.GetTrack(trackName, artistName);
             return View(track);
         }
 
@@ -81,9 +85,9 @@ namespace Cataloguer.Controllers
         {
             SearchingResults results = new SearchingResults
             {
-                LastFMArtists = Parser.SearchArtists(value, FirstPage, newSearchElements),
-                LastFMAlbums = Parser.SearchAlbums(value, FirstPage, newSearchElements),
-                LastFMTracks = Parser.SearchTracks(value, FirstPage, newSearchElements),
+                LastFMArtists = LastFMParser.SearchArtists(value, FirstPage, newSearchElements),
+                LastFMAlbums = LastFMParser.SearchAlbums(value, FirstPage, newSearchElements),
+                LastFMTracks = LastFMParser.SearchTracks(value, FirstPage, newSearchElements),
                 LocalArtists = Database.GetArtistsByName(value),
                 LocalAlbums = Database.GetAlbumsByName(value),
                 LocalTracks = Database.GetTracksByName(value)
@@ -94,19 +98,19 @@ namespace Cataloguer.Controllers
 
         public ActionResult SearchArtists(string value, int page)
         {
-            List<Artist> artists = Parser.SearchArtists(value, page, newSearchElements);
+            List<Artist> artists = LastFMParser.SearchArtists(value, page, newSearchElements);
             return PartialView("PartialArtists", artists);
         }
 
         public ActionResult SearchAlbums(string value, int page)
         {
-            List<Album> albums = Parser.SearchAlbums(value, page, newSearchElements);
+            List<Album> albums = LastFMParser.SearchAlbums(value, page, newSearchElements);
             return PartialView("PartialAlbums", albums);
         }
 
         public ActionResult SearchTracks(string value, int page)
         {
-            List<Track> tracks = Parser.SearchTracks(value, page, newSearchElements);
+            List<Track> tracks = LastFMParser.SearchTracks(value, page, newSearchElements);
             return PartialView("PartialTracksInPanels", tracks);
         }
 

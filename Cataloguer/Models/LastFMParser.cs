@@ -7,13 +7,15 @@ using System.Xml;
 
 namespace Cataloguer.Models
 {
-    public class LastFMParser
+    //Documentation https://www.last.fm/ru/api
+    public static class LastFMParser
     {
-        public const string СommonUrl = "http://ws.audioscrobbler.com/2.0/?api_key=f39425750fc23d743fbf853d9585a46c&";
+        // Alternative key - 96d047d302a8707f3a7410873466dbfd
+        private const string СommonUrl = "http://ws.audioscrobbler.com/2.0/?api_key=f39425750fc23d743fbf853d9585a46c&";
 
-        public string CounrtyForSearch = "belarus";
+        private readonly static string CounrtyForSearch = "belarus";
 
-        public List<Artist> GetTopArtists(int page, int limit)
+        public static List<Artist> GetTopArtists(int page, int limit)
         {
             string url = СommonUrl + "method=geo.gettopartists&country=" + CounrtyForSearch + "&page=" + page + "&limit=" + limit;
             List<Artist> artists = new List<Artist>();
@@ -27,7 +29,7 @@ namespace Cataloguer.Models
             return artists;
         }
 
-        public Artist GetArtist(string name)
+        public static Artist GetArtist(string name)
         {
             string url = СommonUrl + "method=artist.getinfo&artist=" + name;
             XmlNode artistInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//artist");
@@ -45,7 +47,7 @@ namespace Cataloguer.Models
             return artist;
         }
 
-        public Artist GetArtistWithAllTracks(string name)
+        public static Artist GetArtistWithAllTracks(string name)
         {
             Artist artist = new Artist(name)
             {
@@ -56,7 +58,7 @@ namespace Cataloguer.Models
             return artist;
         }
 
-        public List<Track> GetTracksOfArtist(string name, int page, int limit)
+        public static List<Track> GetTracksOfArtist(string name, int page, int limit)
         {
             string url = СommonUrl + "method=artist.gettoptracks&artist=" + name + "&page=" + page + "&limit=" + limit;
             XmlDocument artistTracksDocument = GetXmlDocumentFrom(url);
@@ -79,7 +81,7 @@ namespace Cataloguer.Models
             return tracks;
         }
 
-        public Artist GetArtistWithAllAlbums(string name)
+        public static Artist GetArtistWithAllAlbums(string name)
         {
             Artist artist = new Artist(name)
             {
@@ -90,7 +92,7 @@ namespace Cataloguer.Models
             return artist;
         }
 
-        public List<Album> GetAlbumsOfArtist(string name, int page, int limit)
+        public static List<Album> GetAlbumsOfArtist(string name, int page, int limit)
         {
             string url = СommonUrl + "method=artist.gettopalbums&artist=" + name + "&page=" + page + "&limit=" + limit;
             XmlDocument artistAlbumsDocument = GetXmlDocumentFrom(url);
@@ -108,13 +110,13 @@ namespace Cataloguer.Models
             return albums;
         }
 
-        public string GetPictureLinkOfArtist(string name)
+        public static string GetPictureLinkOfArtist(string name)
         {
             string url = СommonUrl + "method=artist.getinfo&artist=" + name;
             return GetXmlDocumentFrom(url).SelectSingleNode("//artist/image[@size='large']").InnerText;
         }
 
-        public Artist GetArtistWithBiography(string name)
+        public static Artist GetArtistWithBiography(string name)
         {
             string url = СommonUrl + "method=artist.getinfo&artist=" + name;
             XmlNode artistInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//artist");
@@ -124,7 +126,7 @@ namespace Cataloguer.Models
             return artist;
         }
 
-        public Album GetAlbum(string albumName, string artistName)
+        public static Album GetAlbum(string albumName, string artistName)
         {
             string url = СommonUrl + "method=album.getinfo&artist=" + artistName + "&album=" + albumName;
             XmlNode albumInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//album");
@@ -141,7 +143,7 @@ namespace Cataloguer.Models
             return album;
         }
 
-        private List<Track> GetTracksOfAlbumFrom(XmlNodeList nodesWithTracks)
+        private static List<Track> GetTracksOfAlbumFrom(XmlNodeList nodesWithTracks)
         {
             List<Track> tracks = new List<Track>();
             foreach (XmlNode nodeWithTrack in nodesWithTracks)
@@ -158,7 +160,7 @@ namespace Cataloguer.Models
             return tracks;
         }
 
-        public Track GetTrack(string trackName, string artistName)
+        public static Track GetTrack(string trackName, string artistName)
         {
             string url = СommonUrl + "method=track.getInfo&artist=" + artistName + "&track=" + trackName;
             XmlNode trackInfoMainNode = GetXmlDocumentFrom(url).SelectSingleNode("//track");
@@ -179,7 +181,7 @@ namespace Cataloguer.Models
             return track;
         }
 
-        private Album GetAlbumOfTrackFrom(XmlNode trackInfoMainNode, Artist artist)
+        private static Album GetAlbumOfTrackFrom(XmlNode trackInfoMainNode, Artist artist)
         {
             string albumName = trackInfoMainNode.SelectSingleNode(".//album/title")?.InnerText ?? "";
             Album album = null;
@@ -193,7 +195,7 @@ namespace Cataloguer.Models
             return album;
         }
 
-        private List<Tag> GetTopTagsFrom(XmlNodeList nodesWithTags)
+        private static List<Tag> GetTopTagsFrom(XmlNodeList nodesWithTags)
         {
             var tags = new List<Tag>();
             foreach (XmlNode nodeWithTag in nodesWithTags)
@@ -205,7 +207,7 @@ namespace Cataloguer.Models
             return tags;
         }
 
-        public List<Artist> SearchArtists(string value, int page, int limit)
+        public static List<Artist> SearchArtists(string value, int page, int limit)
         {
             string url = СommonUrl + "method=artist.search&artist=" + value + "&page=" + page + "&limit=" + limit;
             List<Artist> artists = new List<Artist>();
@@ -219,7 +221,7 @@ namespace Cataloguer.Models
             return artists;
         }
 
-        public List<Album> SearchAlbums(string value, int page, int limit)
+        public static List<Album> SearchAlbums(string value, int page, int limit)
         {
             string url = СommonUrl + "method=album.search&album=" + value + "&page=" + page + "&limit=" + limit;
             List<Album> albums = new List<Album>();
@@ -236,7 +238,7 @@ namespace Cataloguer.Models
             return albums;
         }
 
-        public List<Track> SearchTracks(string value, int page, int limit)
+        public static List<Track> SearchTracks(string value, int page, int limit)
         {
             string url = СommonUrl + "method=track.search&track=" + value + "&page=" + page + "&limit=" + limit;
             List<Track> tracks = new List<Track>();
@@ -254,7 +256,7 @@ namespace Cataloguer.Models
             return tracks;
         }
 
-        private XmlDocument GetXmlDocumentFrom(string url)
+        private static XmlDocument GetXmlDocumentFrom(string url)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
@@ -271,7 +273,7 @@ namespace Cataloguer.Models
             return document;
         }
 
-        public string GetPictureLinkOfAlbum(string albumName, string artistName)
+        public static string GetPictureLinkOfAlbum(string albumName, string artistName)
         {
             string url = СommonUrl + "method=album.getinfo&artist=" + artistName + "&album=" + albumName;
             return GetXmlDocumentFrom(url).SelectSingleNode("//album/image[@size='large']").InnerText;

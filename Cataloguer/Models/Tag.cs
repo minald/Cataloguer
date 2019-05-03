@@ -6,9 +6,6 @@
 
         public string Name { get; set; }
 
-        public Tag(string name)
-        {
-            Name = name;
-        }
+        public Tag(string name) => Name = name;
     }
 }

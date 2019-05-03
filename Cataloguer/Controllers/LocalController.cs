@@ -5,21 +5,14 @@ namespace Cataloguer.Controllers
 {
     public class LocalController : Controller
     {
-        Repository database = new Repository();
+        private Repository Db { get; set; }
 
-        public ActionResult Index()
-        {
-            return View(database.GetArtists());
-        }
+        public LocalController(Repository repository) => Db = repository;
 
-        public ActionResult ArtistProfile(string name)
-        {
-            return View(database.GetArtist(name));
-        }
+        public ActionResult Index() => View(Db.GetArtists());
 
-        public ActionResult Album(string albumName, string artistName)
-        {
-            return View(database.GetAlbum(albumName, artistName));
-        }
+        public ActionResult ArtistProfile(string name) => View(Db.GetArtist(name));
+
+        public ActionResult Album(string albumName, string artistName) => View(Db.GetAlbum(albumName, artistName));
     }
 }
