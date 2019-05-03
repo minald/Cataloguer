@@ -29,7 +29,7 @@ namespace Cataloguer.Models
         [Column]
         private string Info { get; set; }
 
-        public virtual List<string> Tags { get; set; }
+        public virtual List<Tag> Tags { get; set; }
 
         public virtual Album Album { get; set; }
 
@@ -40,7 +40,7 @@ namespace Cataloguer.Models
         public Track(String name)
         {
             Name = name;
-            Tags = new List<string>();
+            Tags = new List<Tag>();
         }
 
         public void SetPictureLink(string pictureLink)

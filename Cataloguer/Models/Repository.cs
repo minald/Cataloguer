@@ -1,52 +1,13 @@
-﻿using System;
+﻿using Cataloguer.Data;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
-using System.Reflection;
 
 namespace Cataloguer.Models
 {
-    public class MusicContext : DbContext
+    public class Repository
     {
-        public DbSet<Artist> Artists { get; set; }
-
-        public DbSet<Album> Albums { get; set; }
-
-        public DbSet<Track> Tracks { get; set; }
-
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            modelBuilder.Conventions.Add(new NonPublicColumnAttributeConvention());
-        }
-    }
-
-    public sealed class NonPublicColumnAttributeConvention : Convention
-    {
-        public NonPublicColumnAttributeConvention()
-        {
-            Types().Having(NonPublicProperties).Configure((config, properties) =>
-            {
-                foreach (PropertyInfo prop in properties)
-                {
-                    config.Property(prop);
-                }
-            });
-        }
-
-        private IEnumerable<PropertyInfo> NonPublicProperties(Type type)
-        {
-            var matchingProperties = type.
-                GetProperties(BindingFlags.SetProperty | BindingFlags.GetProperty | BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(propInfo => propInfo.GetCustomAttributes(typeof(ColumnAttribute), true).Length > 0).ToArray();
-            return matchingProperties.Length == 0 ? null : matchingProperties;
-        }
-    }
-
-    public class MusicRepository
-    {
-        private MusicContext db = new MusicContext();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public List<Artist> GetArtists() => db.Artists.ToList();
 
@@ -104,10 +65,10 @@ namespace Cataloguer.Models
 
         public bool ArtistExists(string name) => db.Artists.Any(a => a.Name == name);
 
-        public bool AlbumExists(string albumName, string artistName) => 
+        public bool AlbumExists(string albumName, string artistName) =>
             db.Albums.Any(a => a.Name == albumName && a.Artist.Name == artistName);
 
-        public bool TrackExists(string trackName, string artistName) => 
+        public bool TrackExists(string trackName, string artistName) =>
             db.Tracks.Any(t => t.Name == trackName && t.Artist.Name == artistName);
 
         public bool TrackExists(string trackName, string albumName, string artistName) =>

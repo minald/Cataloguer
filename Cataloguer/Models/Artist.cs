@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
-    public class Album
+    public class Artist
     {
         public int Id { get; set; }
 
@@ -19,24 +19,31 @@ namespace Cataloguer.Models
         [Column]
         private string Listeners { get; set; }
 
+        [Column]
+        private string ShortBiography { get; set; }
+
+        [Column]
+        private string FullBiography { get; set; }
+
+        public virtual List<Album> Albums { get; set; }
+
         public virtual List<Track> Tracks { get; set; }
 
-        public virtual List<string> Tags { get; set; }
+        public virtual List<Tag> Tags { get; set; }
 
-        public virtual Artist Artist { get; set; }
+        public Artist() { }
 
-        public Album() { }
-
-        public Album(string name)
+        public Artist(string name)
         {
             Name = name;
+            Albums = new List<Album>();
             Tracks = new List<Track>();
-            Tags = new List<string>();
+            Tags = new List<Tag>();
         }
 
         public void SetPictureLink(string pictureLink)
         {
-            string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/174s/c6f59c1e5e7240a4c0d427abd71f3dbb";
+            string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/avatar170s/2a96cbd8b46e442fc41c2b86b821562f";
             PictureLink = PictureLink == "" ? defaultPictureLink : pictureLink;
         }
 
@@ -74,6 +81,37 @@ namespace Cataloguer.Models
             else number = number.Insert(digits - 6, " ");
             if (digits <= 9) return number;
             else return number.Insert(digits - 9, " ");
+        }
+
+        public void SetShortBiography(string shortBiography)
+        {
+            ShortBiography = NormalizeBiography(shortBiography);
+        }
+
+        public string GetShortBiography()
+        {
+            return ShortBiography;
+        }
+
+        public void SetFullBiography(string fullBiography)
+        {
+            FullBiography = NormalizeBiography(fullBiography);
+        }
+
+        public string GetFullBiography()
+        {
+            return FullBiography;
+        }
+
+        private string NormalizeBiography(string non_normalizedBiography)
+        {
+            int indexOfUnnecessaryLink = non_normalizedBiography.IndexOf("<a href=");
+            if(indexOfUnnecessaryLink != -1)
+            {
+                return non_normalizedBiography.Substring(0, indexOfUnnecessaryLink);
+            }
+                
+            return non_normalizedBiography;
         }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.Web.Mvc;
-using Cataloguer.Models;
+﻿using Cataloguer.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Cataloguer.Controllers
 {
     public class LocalController : Controller
     {
-        MusicRepository database = new MusicRepository();
+        Repository database = new Repository();
 
         public ActionResult Index()
         {

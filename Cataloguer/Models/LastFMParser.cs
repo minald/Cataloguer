@@ -193,13 +193,13 @@ namespace Cataloguer.Models
             return album;
         }
 
-        private List<string> GetTopTagsFrom(XmlNodeList nodesWithTags)
+        private List<Tag> GetTopTagsFrom(XmlNodeList nodesWithTags)
         {
-            List<string> tags = new List<string>();
+            var tags = new List<Tag>();
             foreach (XmlNode nodeWithTag in nodesWithTags)
             {
                 string tag = nodeWithTag.SelectSingleNode(".//name").InnerText;
-                tags.Add(tag);
+                tags.Add(new Tag(tag));
             }
 
             return tags;
