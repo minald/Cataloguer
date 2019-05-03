@@ -1,0 +1,39 @@
+﻿<Window x:Class="lab2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Title="Number Recognizer" Height="640" Width="525" ResizeMode="NoResize">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="500"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Name="TestData" Header="Test data" Click="TestData_Click"></MenuItem>
+        </Menu>
+        <Canvas Grid.Row="1" Margin="5" Name="CanvasConrtol" 
+                MouseDown="CanvasConrtol_MouseMove" MouseMove="CanvasConrtol_MouseMove">
+            <Canvas.Background>
+                <SolidColorBrush Color="White" Opacity="0"/>
+            </Canvas.Background>
+        </Canvas>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="0" Margin="15" Name="Clear" Click="Clear_Click">Clear</Button>
+            <Button Grid.Column="1" Margin="15" Name="Recognize" Click="Recognize_Click">Recognize</Button>
+            <Button Grid.Column="2" Margin="15" Name="Learn" Click="Learn_Click">Learn</Button>
+        </Grid>
+    </Grid>
+</Window>

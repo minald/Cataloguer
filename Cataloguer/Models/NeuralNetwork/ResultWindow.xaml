@@ -1,0 +1,25 @@
+﻿<Window x:Class="lab2.ResultWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Height="150" Width="250" ResizeMode="NoResize"
+        Title="Result" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="35" />
+            <RowDefinition Height="1*" />
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Name="NetworkAnswerLabel" Margin="5,0"
+               HorizontalContentAlignment="Right" VerticalContentAlignment="Center"></Label>
+        <Label Grid.Row="1" Grid.Column="0" 
+               HorizontalContentAlignment="Right" VerticalContentAlignment="Center">Correct answer is</Label>
+        <TextBox Grid.Row="1" Grid.Column="1" Margin="7" Name="CorrectAnswerTextBox"></TextBox>
+        <Button Grid.Row="2" Grid.ColumnSpan="2" Margin="70,6" HorizontalContentAlignment="Center" Name="OkButton" Click="OkButton_Click">OK</Button>
+    </Grid>
+</Window>
