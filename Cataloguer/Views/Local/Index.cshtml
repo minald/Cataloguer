@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model List<Artist>
+﻿@model List<Artist>
 @{
     ViewBag.Title = "My artists";
 }
@@ -16,7 +15,7 @@
                 </p>
             </div>
             <div class="panel-body">
-                <img class="center-block" src="@artist.GetPictureLink()" />
+                <img class="center-block" src="@artist.PictureLink" />
             </div>
             <div class="panel-footer">
                 <p class="text-center">

@@ -1,9 +1,8 @@
-﻿@using Cataloguer.Models
-@model List<string>
+﻿@model List<Tag>
 
 <h5>
-    @foreach (string tag in Model)
-            {
-        <code>@tag</code>
+    @foreach (var tag in Model)
+    {
+        <code>@tag.Name</code>
     }
 </h5>

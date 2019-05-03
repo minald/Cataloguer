@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model List<Track>
+﻿@model List<Track>
 
 @foreach (Track track in Model)
 {
@@ -7,7 +6,7 @@
         <td>@track.Rank</td>
         <td>@Html.ActionLink(track.Name, "Track", "Home",
            new { trackName = track.Name, artistName = track.Artist.Name }, new { })</td>
-        <td>@track.GetListeners()</td>
-        <td>@track.GetScrobbles()</td>
+        <td>@track.Listeners</td>
+        <td>@track.Scrobbles</td>
     </tr>
 }

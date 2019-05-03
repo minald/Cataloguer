@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model List<Album>
+﻿@model List<Album>
 
 @foreach (Album album in Model)
 {
@@ -8,13 +7,13 @@
             <p class="text-center">@album.Name</p>
         </div>
         <div class="panel-body">
-            <img class="img-rounded center-block" src="@album.GetPictureLink()" />
+            <img class="img-rounded center-block" src="@album.PictureLink" />
         </div>
-        @if (album.GetScrobbles() != null)
+        @if (album.Scrobbles != null)
         {
             <div class="panel-footer">
                 <p>
-                    <span class="glyphicon glyphicon-headphones"></span>    @album.GetScrobbles()
+                    <span class="glyphicon glyphicon-headphones"></span>    @album.Scrobbles
                 </p>
             </div>
         }

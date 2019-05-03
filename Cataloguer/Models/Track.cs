@@ -1,38 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
     public class Track
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
-
-        [Column]
-        private string PictureLink { get; set; }
-
+        public string PictureLink { get; set; }
         public string LinkToAudio { get; set; }
-
         public int Rank { get; set; }
-
-        [Column]
-        private string Duration { get; set; }
-
-        [Column]
-        private string Scrobbles { get; set; }
-
-        [Column]
-        private string Listeners { get; set; }
-
-        [Column]
-        private string Info { get; set; }
+        public string Duration { get; set; }
+        public string Scrobbles { get; set; }
+        public string Listeners { get; set; }
+        public string Info { get; set; }
 
         public virtual List<Tag> Tags { get; set; }
-
         public virtual Album Album { get; set; }
-
         public virtual Artist Artist { get; set; }
 
         public Track() { }
@@ -47,11 +31,6 @@ namespace Cataloguer.Models
         {
             string defaultPictureLink = "https://lastfm-img2.akamaized.net/i/u/174s/4128a6eb29f94943c9d206c08e625904";
             PictureLink = PictureLink == "" ? defaultPictureLink : pictureLink;
-        }
-
-        public string GetPictureLink()
-        {
-            return PictureLink;
         }
 
         public void SetDurationInMilliseconds(string milliseconds)
@@ -74,29 +53,14 @@ namespace Cataloguer.Models
             Duration = newMinutes + " : " + (newSeconds < 10 ? "0" : "") + newSeconds; 
         }
 
-        public string GetDuration()
-        {
-            return Duration;
-        }
-
         public void SetScrobbles(string scrobbles)
         {
             Scrobbles = NormalizeNumber(scrobbles);
         }
 
-        public string GetScrobbles()
-        {
-            return Scrobbles;
-        }
-
         public void SetListeners(string listeners)
         {
             Listeners = NormalizeNumber(listeners);
-        }
-
-        public string GetListeners()
-        {
-            return Listeners;
         }
 
         private string NormalizeNumber(string number)
@@ -113,11 +77,6 @@ namespace Cataloguer.Models
         public void SetInfo(string info)
         {
             Info = NormalizeInfo(info);
-        }
-
-        public string GetInfo()
-        {
-            return Info;
         }
 
         private string NormalizeInfo(string non_normalizedInfo)

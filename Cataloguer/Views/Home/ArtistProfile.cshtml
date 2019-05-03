@@ -1,21 +1,20 @@
-﻿@using Cataloguer.Models
-@model Artist
+﻿@model Artist
 @{
     ViewBag.Title = Model.Name;
 }
 
 <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
-        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+        <img width="100%" class="img-thumbnail" src="@Model.PictureLink" />
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
         @Html.Partial("PartialTags", Model.Tags)
-        <h4>Scrobbles : @Model.GetScrobbles()</h4>
-        <h4>Listeners : @Model.GetListeners()</h4>
-        @if (Model.GetShortBiography() != " ")
+        <h4>Scrobbles : @Model.Scrobbles</h4>
+        <h4>Listeners : @Model.Listeners</h4>
+        @if (Model.ShortBiography != " ")
         {
-            <p>@Model.GetShortBiography()</p>
+            <p>@Model.ShortBiography</p>
             <p>@Html.ActionLink("See more...", "ArtistBiography", "Home", new { name = Model.Name }, new { })</p>
         }  
     </div>

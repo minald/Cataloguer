@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model List<Track>
+﻿@model List<Track>
 
 @foreach (Track track in Model)
 {
@@ -8,10 +7,10 @@
             <p class="text-center">@track.Name</p>
         </div>
         <div class="panel-body">
-            <img class="img-rounded center-block" src="@track.GetPictureLink()" />
+            <img class="img-rounded center-block" src="@track.PictureLink" />
         </div>
         <div class="panel-footer">
-            <span class="glyphicon glyphicon-headphones"></span>    @track.GetListeners()
+            <span class="glyphicon glyphicon-headphones"></span>    @track.Listeners
         </div>
     </a>
 }

@@ -1,11 +1,10 @@
-﻿@using Cataloguer.Models
-@model Artist
+﻿@model Artist
 @{
     ViewBag.Title = Model.Name;
 }
 
 <h1 class="text-center">
-    <img class="img-thumbnail" src="@Model.GetPictureLink()" />    @Html.ActionLink(Model.Name,
+    <img class="img-thumbnail" src="@Model.PictureLink" />    @Html.ActionLink(Model.Name,
                                    "ArtistProfile", "Home", new { name = Model.Name }, new { })
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>

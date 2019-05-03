@@ -1,20 +1,19 @@
-﻿@using Cataloguer.Models
-@model Album
+﻿@model Album
 @{
     ViewBag.Title = Model.Name;
 }
 
 <div class="row">
     <div class="col-sm-4 col-md-4 col-lg-4">
-        <img width="100%" class="img-thumbnail" src="@Model.GetPictureLink()" />
+        <img width="100%" class="img-thumbnail" src="@Model.PictureLink" />
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
         @Html.Partial("PartialTags", Model.Tags)
         <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Home", 
                     new { name = Model.Artist.Name }, new { })</h4>
-        <h4>Scrobbles : @Model.GetScrobbles()</h4>
-        <h4>Listeners : @Model.GetListeners()</h4>
+        <h4>Scrobbles : @Model.Scrobbles</h4>
+        <h4>Listeners : @Model.Listeners</h4>
     </div>
 </div>
 @if(Model.Tracks.Count == 0)
@@ -39,7 +38,7 @@ else
                     <td>@track.Rank</td>
                     <td>@Html.ActionLink(track.Name, "Track", "Home", 
                        new { trackName = track.Name, artistName = Model.Artist.Name }, new { })</td>
-                    <td>@track.GetDuration()</td>
+                    <td>@track.Duration</td>
                 </tr>
             }
         </tbody>

@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model List<Artist>
+﻿@model List<Artist>
 
 @foreach (Artist artist in Model)
 {
@@ -8,7 +7,7 @@
             <p class="text-center">@artist.Name</p>
         </div>
         <div class="panel-body">
-            <img class="img-rounded center-block" src="@artist.GetPictureLink()" />
+            <img class="img-rounded center-block" src="@artist.PictureLink" />
         </div>
     </a>
 }

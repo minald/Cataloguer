@@ -1,14 +1,14 @@
-﻿@using Cataloguer.Models
-@model List<Artist>
+﻿@model List<Artist>
 @{
     ViewBag.Title = "Top artists";
 }
 
 <h1 class="text-center">Top artists from Last.fm</h1>
 <div id="results" class="flex-container">
+    @*<partial name="PartialArtists" model="Model"/>*@
     @Html.Partial("PartialArtists", Model)
 </div>
-<img id="loading" class="center-block" src="~/Content/loading.gif"/>
+<img id="loading" class="center-block" src="~/images/loading.gif"/>
 <script>
     $(this).on('scroll', scrolling);
     var page = 2;

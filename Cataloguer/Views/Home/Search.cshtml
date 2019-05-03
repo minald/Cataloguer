@@ -1,5 +1,4 @@
-﻿@using Cataloguer.Models
-@model SearchingResults
+﻿@model SearchingResults
 @{
     ViewBag.Title = ViewBag.SearchingValue;
     List<MusicObject> musicObjects = new List<MusicObject>();
@@ -13,7 +12,7 @@
         {
             Name = artist.Name,
             PageLink = "/Home/ArtistProfile?name=" + artist.Name,
-            PictureLink = artist.GetPictureLink()
+            PictureLink = artist.PictureLink
         };
         musicObjects.Add(musicObject);
     }
@@ -35,7 +34,7 @@
         {
             Name = album.Name,
             PageLink = "/Home/Album?albumName=" + album.Name + "&artistName=" + album.Artist.Name,
-            PictureLink = album.GetPictureLink(),
+            PictureLink = album.PictureLink,
             ArtistName = album.Artist.Name
         };
         musicObjects.Add(musicObject);
@@ -58,9 +57,9 @@
         {
             Name = track.Name,
             PageLink = "/Home/Track?trackName=" + track.Name + "&artistName=" + track.Artist.Name,
-            PictureLink = track.GetPictureLink(),
+            PictureLink = track.PictureLink,
             ArtistName = track.Artist.Name,
-            Listeners = track.GetListeners()
+            Listeners = track.Listeners
         };
         musicObjects.Add(musicObject);
     }
@@ -82,7 +81,7 @@
         {
             Name = artist.Name,
             PageLink = "/Local/ArtistProfile?name=" + artist.Name,
-            PictureLink = artist.GetPictureLink()
+            PictureLink = artist.PictureLink
         };
         musicObjects.Add(musicObject);
     }
@@ -105,7 +104,7 @@
         {
             Name = album.Name,
             PageLink = "/Local/Album?albumName=" + album.Name + "&artistName=" + album.Artist.Name,
-            PictureLink = album.GetPictureLink(),
+            PictureLink = album.PictureLink,
             ArtistName = album.Artist.Name
         };
         musicObjects.Add(musicObject);
@@ -128,9 +127,9 @@
         {
             Name = track.Name,
             PageLink = "/Home/Local?name=" + track.Artist.Name,
-            PictureLink = track.GetPictureLink(),
+            PictureLink = track.PictureLink,
             ArtistName = track.Artist.Name,
-            Listeners = track.GetListeners()
+            Listeners = track.Listeners
         };
         musicObjects.Add(musicObject);
     }

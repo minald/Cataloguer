@@ -1,34 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
 
 namespace Cataloguer.Models
 {
     public class Artist
     {
         public int Id { get; set; }
-
         public string Name { get; set; }
-
-        [Column]
-        private string PictureLink { get; set; }
-
-        [Column]
-        private string Scrobbles { get; set; }
-
-        [Column]
-        private string Listeners { get; set; }
-
-        [Column]
-        private string ShortBiography { get; set; }
-
-        [Column]
-        private string FullBiography { get; set; }
+        public string PictureLink { get; set; }
+        public string Scrobbles { get; set; }
+        public string Listeners { get; set; }
+        public string ShortBiography { get; set; }
+        public string FullBiography { get; set; }
 
         public virtual List<Album> Albums { get; set; }
-
         public virtual List<Track> Tracks { get; set; }
-
         public virtual List<Tag> Tags { get; set; }
 
         public Artist() { }
@@ -47,29 +32,14 @@ namespace Cataloguer.Models
             PictureLink = PictureLink == "" ? defaultPictureLink : pictureLink;
         }
 
-        public string GetPictureLink()
-        {
-            return PictureLink;
-        }
-
         public void SetScrobbles(string scrobbles)
         {
             Scrobbles = NormalizeNumber(scrobbles);
         }
 
-        public string GetScrobbles()
-        {
-            return Scrobbles;
-        }
-
         public void SetListeners(string listeners)
         {
             Listeners = NormalizeNumber(listeners);
-        }
-
-        public string GetListeners()
-        {
-            return Listeners;
         }
 
         private string NormalizeNumber(string number)
@@ -88,19 +58,9 @@ namespace Cataloguer.Models
             ShortBiography = NormalizeBiography(shortBiography);
         }
 
-        public string GetShortBiography()
-        {
-            return ShortBiography;
-        }
-
         public void SetFullBiography(string fullBiography)
         {
             FullBiography = NormalizeBiography(fullBiography);
-        }
-
-        public string GetFullBiography()
-        {
-            return FullBiography;
         }
 
         private string NormalizeBiography(string non_normalizedBiography)

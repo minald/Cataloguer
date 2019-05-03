@@ -1,12 +1,12 @@
-﻿@using Cataloguer.Models
-@model Artist
+﻿@model Artist
 @{
     ViewBag.Title = Model.Name;
 }
+
 <div style="float: left; margin: 30px">
     <h1 class="text-center">@Html.ActionLink(Model.Name, "ArtistProfile", "Home", 
                            new { name = Model.Name }, new { })</h1>
-    <img class="img-thumbnail center-block" height="300px" src="@Model.GetPictureLink()" />
+    <img class="img-thumbnail center-block" height="300px" src="@Model.PictureLink" />
 </div>
 
-<h5 style="margin-top: 80px">@Model.GetFullBiography()</h5>
+<h5 style="margin-top: 80px">@Model.FullBiography</h5>
