@@ -17,16 +17,7 @@
     <Folder Include="Models\NeuralNetwork\" />
   </ItemGroup>
   <ItemGroup>
-    <None Update="Models\NeuralNetwork\App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
     <None Update="Models\NeuralNetwork\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Models\NeuralNetwork\ResultWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Models\NeuralNetwork\TestDataWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>

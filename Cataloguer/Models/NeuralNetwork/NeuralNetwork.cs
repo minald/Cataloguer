@@ -21,7 +21,7 @@ namespace lab2
         public static double a = 0.05;
         public static int InputLayerLength = MainWindow.N * MainWindow.N;
         public static int HiddenLayerLength = 12;
-        public static int OutputLayerLength = Int32.Parse(ConfigurationManager.AppSettings["OutputLayerLength"]);
+        public static int OutputLayerLength = 26; //Int32.Parse(ConfigurationManager.AppSettings["OutputLayerLength"]);
         public int[] InputLayer = new int[InputLayerLength];
         public double[] HiddenLayer = new double[HiddenLayerLength];
         public double[] ExpectedHidden = new double[HiddenLayerLength];
@@ -134,7 +134,7 @@ namespace lab2
 
         public void Learn()
         {
-            int iterationsAmount = Int32.Parse(ConfigurationManager.AppSettings["LearningIterations"]);
+            int iterationsAmount = 100; //Int32.Parse(ConfigurationManager.AppSettings["LearningIterations"]);
             for (int iteration = 0; iteration < iterationsAmount; iteration++)
             {
                 foreach (var handwrittenImage in Dataset)
