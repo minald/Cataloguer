@@ -14,8 +14,20 @@ namespace Cataloguer.Data
 
         public DbSet<Tag> Tags { get; set; }
 
+        public DbSet<Country> Countries { get; set; }
+
+        public DbSet<Language> Languages { get; set; }
+
+        public DbSet<Temperament> Temperaments { get; set; }
+
         public ApplicationDbContext() : base() { }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Seed();
+        }
     }
 }
