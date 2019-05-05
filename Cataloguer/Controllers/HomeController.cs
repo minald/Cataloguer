@@ -83,15 +83,10 @@ namespace Cataloguer.Controllers
         [HttpGet]
         public ActionResult Search(string value)
         {
-            SearchingResults results = new SearchingResults
-            {
-                LastFMArtists = LastFMParser.SearchArtists(value, FirstPage, newSearchElements),
-                LastFMAlbums = LastFMParser.SearchAlbums(value, FirstPage, newSearchElements),
-                LastFMTracks = LastFMParser.SearchTracks(value, FirstPage, newSearchElements),
-                LocalArtists = Database.GetArtistsByName(value),
-                LocalAlbums = Database.GetAlbumsByName(value),
-                LocalTracks = Database.GetTracksByName(value)
-            };
+            var artists = LastFMParser.SearchArtists(value, FirstPage, newSearchElements);
+            var albums = LastFMParser.SearchAlbums(value, FirstPage, newSearchElements);
+            var tracks = LastFMParser.SearchTracks(value, FirstPage, newSearchElements);
+            var results = new SearchingResults(artists, albums, tracks);
             ViewBag.SearchingValue = value;
             return View(results);
         }

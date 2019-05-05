@@ -1,0 +1,17 @@
+﻿@model Album
+
+<a asp-controller="Home" asp-action="Album" asp-route-albumName="@Model.Name"
+   asp-route-artistName="@Model.Artist.Name" class="panel panel-success">
+    <div class="panel-heading">
+        <p class="text-center">@Model.Name</p>
+    </div>
+    <div class="panel-body">
+        <img class="img-rounded center-block" src="@Model.PictureLink" />
+    </div>
+    <div class="panel-footer">
+        <p>
+            <span class="glyphicon glyphicon-user"></span>    @Model.Artist.Name
+        </p>
+    </div>
+</a>
+

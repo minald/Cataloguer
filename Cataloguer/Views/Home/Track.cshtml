@@ -20,5 +20,9 @@
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>
         <p>@Model.Info</p>
+        @if (!String.IsNullOrWhiteSpace(Model.LinkToAudio))
+        {
+            <audio controls src="@Model.LinkToAudio"></audio>
+        }
     </div>
 </div>
