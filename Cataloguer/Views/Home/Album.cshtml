@@ -9,9 +9,8 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        @Html.Partial("PartialTags", Model.Tags)
-        <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Home", 
-                    new { name = Model.Artist.Name }, new { })</h4>
+        <partial name="_TagList" model="Model.Tags"/>
+        <h4>Artist : <a asp-controller="Home" asp-action="Artist" asp-route-name="@Model.Artist.Name">@Model.Artist.Name</a></h4>
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>
     </div>
@@ -36,8 +35,10 @@ else
             {
                 <tr>
                     <td>@track.Rank</td>
-                    <td>@Html.ActionLink(track.Name, "Track", "Home", 
-                       new { trackName = track.Name, artistName = Model.Artist.Name }, new { })</td>
+                    <td>
+                        <a asp-controller="Home" asp-action="Track" asp-route-trackName="@track.Name" 
+                           asp-route-artistName="@Model.Artist.Name">@track.Name</a>
+                    </td>
                     <td>@track.Duration</td>
                 </tr>
             }

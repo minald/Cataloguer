@@ -9,13 +9,12 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        @Html.Partial("PartialTags", Model.Tags)
-        <h4>Artist : @Html.ActionLink(Model.Artist.Name, "ArtistProfile", "Home", 
-                    new { name = Model.Artist.Name }, new { })</h4>
+        <partial name="_TagList" model="Model.Tags"/>
+        <h4>Artist : <a asp-controller="Home" asp-action="Artist" asp-route-name="@Model.Artist.Name">@Model.Artist.Name</a></h4>
         @if (Model.Album != null)
         {
-            <h4>Album : @Html.ActionLink(Model.Album.Name, "Album", "Home", 
-                       new { albumName = Model.Album.Name, artistName = Model.Artist.Name }, new { }) </h4>
+            <h4>Album : <a asp-controller="Home" asp-action="Album" asp-route-albumName="@Model.Album.Name" 
+                asp-route-artistName="@Model.Artist.Name">@Model.Album.Name</a></h4>
         }
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>

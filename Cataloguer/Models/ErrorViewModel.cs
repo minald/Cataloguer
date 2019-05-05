@@ -6,6 +6,8 @@ namespace Cataloguer.Models
     {
         public string RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public ErrorViewModel(string requestId) => RequestId = requestId;
+
+        public bool ShowRequestId => !String.IsNullOrEmpty(RequestId);
     }
 }

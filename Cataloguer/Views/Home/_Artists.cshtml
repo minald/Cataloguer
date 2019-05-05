@@ -1,8 +1,8 @@
-﻿@model List<Artist>
+﻿@model IEnumerable<Artist>
 
 @foreach (Artist artist in Model)
 {
-    <a class="panel panel-success" href="/Home/ArtistProfile?name=@artist.Name">
+    <a asp-controller="Home" asp-action="Artist" asp-route-name="@artist.Name" class="panel panel-success">
         <div class="panel-heading">
             <p class="text-center">@artist.Name</p>
         </div>

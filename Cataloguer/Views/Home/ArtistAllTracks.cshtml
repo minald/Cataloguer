@@ -4,19 +4,19 @@
 }
 
 <h1 class="text-center">
-    <img class="img-thumbnail" src="@Model.PictureLink" />    @Html.ActionLink(Model.Name,
-                                   "ArtistProfile", "Home", new { name = Model.Name }, new { })
+    <img class="img-thumbnail" src="@Model.PictureLink" />    <a asp-controller="Home"
+        asp-action="Artist" asp-route-name="@Model.Name">@Model.Name</a>
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
 <div id="results" class="flex-container">
-    @Html.Partial("PartialTracksInPanels", Model.Tracks)
+    <partial name="_Tracks" model="Model.Tracks" />
 </div>
-<img id="loading" class="center-block" src="~/Content/loading.gif" />
+<img id="loading" class="center-block" src="~/images/loading.gif" />
 <script>
     $(this).on('scroll', scrolling);
     var page = 2;
     function scrolling() {
-        if ($(this).scrollTop() >= ($('.flex-container').height() - $(this).height() - 100)){
+        if ($(this).scrollTop() >= $('.flex-container').height() - $(this).height() - 100) {
             $(this).unbind('scroll');
             $.ajax({
                 beforeSend: function () {

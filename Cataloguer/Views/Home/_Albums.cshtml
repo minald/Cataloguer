@@ -1,8 +1,9 @@
-﻿@model List<Album>
+﻿@model IEnumerable<Album>
 
 @foreach (Album album in Model)
 {
-    <a class="panel panel-success" href="/Home/Album?albumName=@album.Name&artistName=@album.Artist.Name">
+    <a asp-controller="Home" asp-action="Album" asp-route-albumName="@album.Name" 
+       asp-route-artistName="@album.Artist.Name" class="panel panel-success">
         <div class="panel-heading">
             <p class="text-center">@album.Name</p>
         </div>

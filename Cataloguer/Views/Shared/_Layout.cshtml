@@ -25,11 +25,11 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Top Artists</a>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Artists</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-controller="Local" asp-action="Index" class="navbar-brand">Local catalog</a></li>
+                    <li><a asp-controller="Chart" asp-action="Index" class="navbar-brand">Chart</a></li>
                     <li>
                         <form method="get" action="/Home/Search" class="form-inline">
                             <input type="text" name="value" class="form-control">
@@ -44,11 +44,12 @@
     <partial name="_CookieConsentPartial" />
     <div class="container body-content">
         @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2019 - Cataloguer</p>
+        </footer>
     </div>
-    <hr />
-    <footer>
-        <p>&copy; 2019 - Cataloguer</p>
-    </footer>
+    
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
