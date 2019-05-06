@@ -25,6 +25,7 @@ namespace Cataloguer.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly UrlEncoder _urlEncoder;
+        private readonly Repository _repository;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
@@ -34,13 +35,15 @@ namespace Cataloguer.Controllers
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
-          UrlEncoder urlEncoder)
+          UrlEncoder urlEncoder,
+          Repository repository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _urlEncoder = urlEncoder;
+            _repository = repository;
         }
 
         [TempData]
@@ -55,37 +58,28 @@ namespace Cataloguer.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var model = new IndexViewModel
-            {
-                Username = user.UserName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber,
-                IsEmailConfirmed = user.EmailConfirmed,
-                StatusMessage = StatusMessage
-            };
-
-            return View(model);
+            ViewBag.StatusMessage = StatusMessage;
+            return View(user);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model)
+        public async Task<IActionResult> Index(ApplicationUser user)
         {
             if (!ModelState.IsValid)
             {
-                return View(model);
+                return View(user);
             }
 
-            var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
             var email = user.Email;
-            if (model.Email != email)
+            if (user.Email != email)
             {
-                var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
+                var setEmailResult = await _userManager.SetEmailAsync(user, user.Email);
                 if (!setEmailResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting email for user with ID '{user.Id}'.");
@@ -93,15 +87,16 @@ namespace Cataloguer.Controllers
             }
 
             var phoneNumber = user.PhoneNumber;
-            if (model.PhoneNumber != phoneNumber)
+            if (user.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, model.PhoneNumber);
+                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, user.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
                     throw new ApplicationException($"Unexpected error occurred setting phone number for user with ID '{user.Id}'.");
                 }
             }
 
+            _repository.Update(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }

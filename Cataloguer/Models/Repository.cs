@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Cataloguer.Data;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Cataloguer.Models
 {
@@ -28,5 +29,26 @@ namespace Cataloguer.Models
 
         public Album GetAlbum(string albumName, string artistName) 
             => Db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
+
+        public void Update(ApplicationUser obj)
+        {
+            var existingItem = Db.Users.Find(obj.Id);
+            if (existingItem == null)
+            {
+                Db.Add(obj);
+            }
+            else
+            {
+                Db.Entry(existingItem).CurrentValues.SetValues(obj);
+            }
+
+            Db.SaveChanges();
+        }
+
+        public SelectList GetCountries() => new SelectList(Db.Countries, "Id", "Name");
+
+        public SelectList GetLanguages() => new SelectList(Db.Languages, "Id", "Name");
+
+        public SelectList GetTemperaments() => new SelectList(Db.Temperaments, "Id", "Name");
     }
 }

@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
 
 namespace Cataloguer.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public DateTime Age { get; set; }
+        public int BirthYear { get; set; }
 
         public double Gender { get; set; } // 0 is female, 1 is male
 
+        public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public List<Language> Languages { get; set; }
+        public int LanguageId { get; set; }
+        public Language Language { get; set; }
 
+        public int TemperamentId { get; set; }
         public Temperament Temperament { get; set; }
     }
 }

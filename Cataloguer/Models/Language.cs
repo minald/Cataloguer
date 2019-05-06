@@ -8,6 +8,8 @@
 
         public int Value { get; set; }
 
+        public Language() { }
+
         public Language(int id, string name, int value) : this(name, value) => Id = id;
 
         public Language(string name, int value)

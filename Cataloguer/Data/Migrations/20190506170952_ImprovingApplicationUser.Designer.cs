@@ -11,9 +11,10 @@ using System;
 namespace Cataloguer.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190506170952_ImprovingApplicationUser")]
+    partial class ImprovingApplicationUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -138,9 +139,7 @@ namespace Cataloguer.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Value")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
+                    b.Property<int>("Value");
 
                     b.HasKey("Id");
 
@@ -154,9 +153,7 @@ namespace Cataloguer.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Value")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
+                    b.Property<int>("Value");
 
                     b.HasKey("Id");
 
@@ -194,9 +191,7 @@ namespace Cataloguer.Data.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int>("Value")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(1);
+                    b.Property<int>("Value");
 
                     b.HasKey("Id");
 

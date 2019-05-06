@@ -30,6 +30,9 @@ namespace Cataloguer.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Country>().Property(c => c.Value).HasDefaultValue(1);
+            modelBuilder.Entity<Language>().Property(l => l.Value).HasDefaultValue(1);
+            modelBuilder.Entity<Temperament>().Property(t => t.Value).HasDefaultValue(1);
         }
     }
 }
