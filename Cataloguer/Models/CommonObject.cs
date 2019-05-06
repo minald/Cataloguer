@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
@@ -7,8 +8,11 @@ namespace Cataloguer.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [NotMapped]
         public string PictureLink { get; set; }
+        [NotMapped]
         public string Scrobbles { get; set; }
+        [NotMapped]
         public string Listeners { get; set; }
 
         public virtual List<Tag> Tags { get; set; } = new List<Tag>();

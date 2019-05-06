@@ -12,8 +12,6 @@ namespace Cataloguer.Data
 
         public DbSet<Track> Tracks { get; set; }
 
-        public DbSet<Tag> Tags { get; set; }
-
         public DbSet<Country> Countries { get; set; }
 
         public DbSet<Language> Languages { get; set; }

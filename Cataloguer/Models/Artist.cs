@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
     public class Artist : CommonObject
     {
+        [NotMapped]
         public string ShortBiography { get; set; }
+        [NotMapped]
         public string FullBiography { get; set; }
 
         public virtual List<Album> Albums { get; set; } = new List<Album>();
