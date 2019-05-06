@@ -31,7 +31,8 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-controller="Chart" asp-action="Index" class="navbar-brand">Chart</a></li>
                     <li>
-                        <form method="get" action="/Home/Search" class="form-inline">
+                        <form method="get" asp-controller="Home" asp-action="Search" 
+                              class="form-inline" style="margin-top: 8px; margin-bottom: 8px;">
                             <input type="text" name="value" class="form-control">
                             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                         </form>

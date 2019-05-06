@@ -1,0 +1,6 @@
+{
+    "directory": "wwwroot/lib",
+    "registry": {
+        "search": "https://registry.bower.io"
+    }
+}
