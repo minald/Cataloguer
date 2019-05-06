@@ -30,7 +30,7 @@ namespace Cataloguer.Models
         public Album GetAlbum(string albumName, string artistName) 
             => Db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
 
-        public void Update(ApplicationUser obj)
+        public void InsertOrUpdate(ApplicationUser obj)
         {
             var existingItem = Db.Users.Find(obj.Id);
             if (existingItem == null)
@@ -40,6 +40,38 @@ namespace Cataloguer.Models
             else
             {
                 Db.Entry(existingItem).CurrentValues.SetValues(obj);
+            }
+
+            Db.SaveChanges();
+        }
+
+        public void InsertOrUpdate(Artist obj)
+        {
+            var existingItem = Db.Set<Artist>().FirstOrDefault(x => x.Name == obj.Name);
+            if (existingItem == null)
+            {
+                Db.Add(obj);
+            }
+            else if(!string.IsNullOrWhiteSpace(obj.Scrobbles))
+            {
+                existingItem.Scrobbles = obj.Scrobbles;
+            }
+
+            Db.SaveChanges();
+        }
+
+        public void InsertOrUpdate(Track obj)
+        {
+            obj.Artist = Db.Set<Artist>().FirstOrDefault(a => a.Name == obj.Artist.Name);
+            var existingItem = Db.Set<Track>()
+                .FirstOrDefault(x => x.Name == obj.Name && x.Artist.Id == obj.Artist.Id);
+            if (existingItem == null)
+            {
+                Db.Add(obj);
+            }
+            else if(!string.IsNullOrWhiteSpace(obj.Scrobbles))
+            {
+                existingItem.Scrobbles = obj.Scrobbles;
             }
 
             Db.SaveChanges();

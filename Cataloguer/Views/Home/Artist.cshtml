@@ -25,7 +25,8 @@
 </div>
 @if (Model.Tracks.Count > 9)
 {
-    <a asp-controller="Home" asp-action="ArtistAllTracks" asp-route-name="@Model.Name">More tracks...</a>
+    <a asp-controller="Home" asp-action="ArtistAllTracks" 
+       asp-route-name="@Model.Name" class="btn btn-info">More tracks...</a>
 }
 <h2 class="text-center">Top albums</h2>
 <div class="flex-container">
@@ -33,5 +34,6 @@
 </div>
 @if (Model.Albums.Count > 7)
 {
-    <a asp-controller="Home" asp-action="ArtistAllAlbums" asp-route-name="@Model.Name">More albums...</a>
+    <a asp-controller="Home" asp-action="ArtistAllAlbums" 
+       asp-route-name="@Model.Name" class="btn btn-info">More albums...</a>
 }

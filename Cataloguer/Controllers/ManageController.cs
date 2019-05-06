@@ -96,7 +96,7 @@ namespace Cataloguer.Controllers
                 }
             }
 
-            _repository.Update(user);
+            _repository.InsertOrUpdate(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToAction(nameof(Index));
         }

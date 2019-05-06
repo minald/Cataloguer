@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Cataloguer.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using Cataloguer.Models;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Cataloguer.Controllers
 {
@@ -13,23 +11,49 @@ namespace Cataloguer.Controllers
         private readonly int itemsPerPage = 48;
         private readonly int newSearchElements = 8;
 
+        private Repository Repository { get; set; }
+
+        public HomeController(Repository repository) => Repository = repository;
+
         public ActionResult Index()
-            => View(LastFMParser.GetTopArtists(itemsPerPage));
+        {
+            IEnumerable<Artist> artists = LastFMParser.GetTopArtists(itemsPerPage);
+            artists.ToList().ForEach(a => Repository.InsertOrUpdate(a));
+            return View(artists);
+        }
 
         public ActionResult TopArtists(int page)
-            => PartialView("_Artists", LastFMParser.GetTopArtists(page, itemsPerPage));
+        {
+            IEnumerable<Artist> artists = LastFMParser.GetTopArtists(page, itemsPerPage);
+            artists.ToList().ForEach(a => Repository.InsertOrUpdate(a));
+            return PartialView("_Artists", LastFMParser.GetTopArtists(page, itemsPerPage));
+        }
 
         public ActionResult Artist(string name)
-            => View(LastFMParser.GetArtist(name));
+        {
+            Artist artist = LastFMParser.GetArtist(name);
+            Repository.InsertOrUpdate(artist);
+            artist.Tracks.ForEach(t => Repository.InsertOrUpdate(t));
+            return View(artist);
+        }
 
         public ActionResult ArtistBiography(string name)
             => View(LastFMParser.GetArtistWithBiography(name));
 
         public ActionResult ArtistAllTracks(string name)
-            => View(LastFMParser.GetArtistWithAllTracks(name));
+        {
+            Artist artist = LastFMParser.GetArtistWithAllTracks(name);
+            Repository.InsertOrUpdate(artist);
+            artist.Tracks.ForEach(t => Repository.InsertOrUpdate(t));
+            return View(artist);
+        }
 
         public ActionResult ArtistTracks(string name, int page)
-            => PartialView("_Tracks", LastFMParser.GetTracksOfArtist(name, itemsPerPage, page));
+        {
+            IEnumerable<Track> tracks = LastFMParser.GetTracksOfArtist(name, itemsPerPage, page);
+            tracks.ToList().ForEach(t => Repository.InsertOrUpdate(t));
+            return PartialView("_Tracks", tracks);
+        }
 
         public ActionResult ArtistAllAlbums(string name)
             => View(LastFMParser.GetArtistWithAllAlbums(name));
@@ -41,53 +65,43 @@ namespace Cataloguer.Controllers
             => View(LastFMParser.GetAlbum(albumName, artistName));
 
         public ActionResult Track(string trackName, string artistName)
-            => View(LastFMParser.GetTrack(trackName, artistName));
+        {
+            Track track = LastFMParser.GetTrack(trackName, artistName);
+            Repository.InsertOrUpdate(track);
+            return View(track);
+        }
 
         public ActionResult Search(string value)
         {
             List<Artist> artists = LastFMParser.SearchArtists(value, newSearchElements).ToList();
+            artists.ForEach(a => Repository.InsertOrUpdate(a));
             List<Album> albums = LastFMParser.SearchAlbums(value, newSearchElements).ToList();
             List<Track> tracks = LastFMParser.SearchTracks(value, newSearchElements).ToList();
+            tracks.ForEach(t => Repository.InsertOrUpdate(t));
             var results = new SearchingResults(artists, albums, tracks);
             ViewBag.SearchingValue = value;
             return View(results);
         }
 
         public ActionResult SearchArtists(string value, int page)
-            => PartialView("_Artists", LastFMParser.SearchArtists(value, newSearchElements, page));
+        {
+            IEnumerable<Artist> artists = LastFMParser.SearchArtists(value, newSearchElements, page);
+            artists.ToList().ForEach(a => Repository.InsertOrUpdate(a));
+            return PartialView("_Artists", artists);
+        }
 
-        public ActionResult SearchAlbums(string value, int page)
+        public ActionResult SearchAlbums(string value, int page) 
             => PartialView("_Albums", LastFMParser.SearchAlbums(value, newSearchElements, page));
 
         public ActionResult SearchTracks(string value, int page)
-            => PartialView("_Tracks", LastFMParser.SearchTracks(value, newSearchElements, page));
+        {
+            IEnumerable<Track> tracks = LastFMParser.SearchTracks(value, newSearchElements, page);
+            tracks.ToList().ForEach(t => Repository.InsertOrUpdate(t));
+            return PartialView("_Tracks", tracks);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
             => View(new ErrorViewModel(Activity.Current?.Id ?? HttpContext.TraceIdentifier));
-
-        //public IActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
     }
 }
