@@ -11,8 +11,8 @@ namespace Cataloguer.Models
         public int CountryId { get; set; }
         public Country Country { get; set; }
 
-        public int LanguageId { get; set; }
-        public Language Language { get; set; }
+        public int SecondLanguageId { get; set; }
+        public Language SecondLanguage { get; set; }
 
         public int TemperamentId { get; set; }
         public Temperament Temperament { get; set; }

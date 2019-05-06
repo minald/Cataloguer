@@ -216,7 +216,7 @@ namespace Cataloguer.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CountryId = 1, LanguageId = 1, TemperamentId = 1 };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, CountryId = 1, SecondLanguageId = 1, TemperamentId = 1 };
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
