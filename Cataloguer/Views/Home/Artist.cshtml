@@ -9,7 +9,7 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        <partial name="_TagList" model="Model.Tags" />
+        @Html.Partial("_TagList", Model.Tags)
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>
         @if (!String.IsNullOrWhiteSpace(Model.ShortBiography))
@@ -21,7 +21,7 @@
 </div>
 <h2 class="text-center">Top tracks</h2>
 <div class="flex-container">
-    <partial name="_Tracks" model="Model.Tracks" />
+    @Html.Partial("_Tracks", Model.Tracks)
 </div>
 @if (Model.Tracks.Count > 9)
 {
@@ -29,7 +29,7 @@
 }
 <h2 class="text-center">Top albums</h2>
 <div class="flex-container">
-    <partial name="_Albums" model="Model.Albums" />
+    @Html.Partial("_Albums", Model.Albums)
 </div>
 @if (Model.Albums.Count > 7)
 {

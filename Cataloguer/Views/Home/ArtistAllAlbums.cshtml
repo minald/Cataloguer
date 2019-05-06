@@ -9,7 +9,7 @@
 </h1>
 <h2 class="text-center">Top albums of all time</h2>
 <div id="results" class="flex-container">
-    <partial name="_Albums" model="Model.Albums" />
+    @Html.Partial("_Albums", Model.Albums)
 </div>
 <img id="loading" class="center-block" src="~/images/loading.gif"/>
 <script>

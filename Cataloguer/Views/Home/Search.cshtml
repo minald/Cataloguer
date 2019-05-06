@@ -18,7 +18,7 @@
             <div id="artists" class="flex-container">
                 @foreach (Artist artist in Model.Artists)
                 {
-                    <partial name="_SearchCardArtist" model="artist" />
+                    @Html.Partial("_SearchCardArtist", artist)
                 }
             </div>
             <button id="add_artists" class="btn btn-primary center-block">More</button>
@@ -39,7 +39,7 @@
             <div id="albums" class="flex-container">
                 @foreach (Album album in Model.Albums)
                 {
-                    <partial name="_SearchCardAlbum" model="album" />
+                    @Html.Partial("_SearchCardAlbum", album)
                 }
             </div>
             <button id="add_albums" class="btn btn-primary center-block">More</button>
@@ -58,9 +58,9 @@
         else
         {
             <div id="tracks" class="flex-container">
-                @foreach (Track tracks in Model.Tracks)
+                @foreach (Track track in Model.Tracks)
                 {
-                    <partial name="_SearchCardTrack" model="tracks" />
+                    @Html.Partial("_SearchCardTrack", track)
                 }
             </div>
             <button id="add_tracks" class="btn btn-primary center-block">More</button>

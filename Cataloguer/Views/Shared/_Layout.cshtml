@@ -29,28 +29,30 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-controller="Chart" asp-action="Index" class="navbar-brand">Chart</a></li>
                     <li>
-                        <form method="get" asp-controller="Home" asp-action="Search" 
+                        <form method="get" asp-controller="Home" asp-action="Search"
                               class="form-inline" style="margin-top: 8px; margin-bottom: 8px;">
                             <input type="text" name="value" class="form-control">
                             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                         </form>
                     </li>
                 </ul>
-                <partial name="_LoginPartial" />
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
-    <partial name="_CookieConsentPartial" />
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2019 - Cataloguer</p>
+            <p>&copy; 2019 - test2</p>
         </footer>
     </div>
-    
+
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

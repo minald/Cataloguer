@@ -1,6 +1,6 @@
-﻿using Cataloguer.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Cataloguer.Data;
 
 namespace Cataloguer.Models
 {

@@ -9,7 +9,7 @@
 </h1>
 <h2 class="text-center">Top tracks of all time</h2>
 <div id="results" class="flex-container">
-    <partial name="_Tracks" model="Model.Tracks" />
+    @Html.Partial("_Tracks", Model.Tracks)
 </div>
 <img id="loading" class="center-block" src="~/images/loading.gif" />
 <script>

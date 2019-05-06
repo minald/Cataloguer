@@ -9,7 +9,7 @@
     </div>
     <div class="col-sm-8 col-md-8 col-lg-8">
         <h1 class="text-center">@Model.Name</h1>
-        <partial name="_TagList" model="Model.Tags"/>
+        @Html.Partial("_TagList", Model.Tags)
         <h4>Artist : <a asp-controller="Home" asp-action="Artist" asp-route-name="@Model.Artist.Name">@Model.Artist.Name</a></h4>
         <h4>Scrobbles : @Model.Scrobbles</h4>
         <h4>Listeners : @Model.Listeners</h4>
