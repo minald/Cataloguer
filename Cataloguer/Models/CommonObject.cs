@@ -8,10 +8,9 @@ namespace Cataloguer.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Scrobbles { get; set; }
         [NotMapped]
         public string PictureLink { get; set; }
-        [NotMapped]
-        public string Scrobbles { get; set; }
         [NotMapped]
         public string Listeners { get; set; }
 
