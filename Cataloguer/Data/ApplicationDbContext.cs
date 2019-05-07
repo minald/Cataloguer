@@ -18,6 +18,8 @@ namespace Cataloguer.Data
 
         public DbSet<Temperament> Temperaments { get; set; }
 
+        public DbSet<Rating> Ratings { get; set; }
+
         public ApplicationDbContext() : base() { }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
