@@ -23,13 +23,25 @@ namespace Cataloguer.Models
 
         public List<Album> GetAlbumsByName(string name) => Db.Albums.Where(a => a.Name == name).ToList();
 
+        public Track GetTrack(int id) => Db.Tracks.Include(t => t.Artist).FirstOrDefault(t => t.Id == id);
+
+        public Track GetTrack(string trackName, string artistName) 
+            => Db.Tracks.FirstOrDefault(t => t.Name == trackName && t.Artist.Name == artistName);
+
         public List<Track> GetTracks() => Db.Tracks.ToList();
 
         public List<Track> GetTopTracks(int amount) => Db.Tracks.Include(t => t.Artist)
             .OrderByDescending(t => Convert.ToInt64(t.Scrobbles.Replace(" ", ""))).Take(amount).ToList();
 
-        public List<Track> GetTopUserTracks(string userId) => Db.Ratings.Include(r => r.Track).ThenInclude(t => t.Artist)
-            .Where(r => r.ApplicationUser.Id == userId).OrderBy(r => r.Rank).Select(r => r.Track).ToList();
+        public IEnumerable<Track> GetTopUserTracks(string userId)
+        {
+            var tracks = Db.Ratings.Where(r => r.ApplicationUser.Id == userId)
+                .OrderBy(r => r.Rank).Select(r => r.Track);
+            foreach (Track track in tracks)
+            {
+                yield return GetTrack(track.Id);
+            }
+        }
 
         public List<Track> GetTracksByName(string name) => Db.Tracks.Where(a => a.Name == name).ToList();
 
@@ -38,51 +50,68 @@ namespace Cataloguer.Models
         public Album GetAlbum(string albumName, string artistName) 
             => Db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
 
-        public void InsertOrUpdate(ApplicationUser obj)
+        public void InsertOrUpdate(ApplicationUser user)
         {
-            var existingItem = Db.Users.Find(obj.Id);
+            var existingItem = Db.Users.Find(user.Id);
             if (existingItem == null)
             {
-                Db.Add(obj);
+                Db.Add(user);
             }
             else
             {
-                Db.Entry(existingItem).CurrentValues.SetValues(obj);
+                Db.Entry(existingItem).CurrentValues.SetValues(user);
             }
 
             Db.SaveChanges();
         }
 
-        public void InsertOrUpdate(Artist obj)
+        public void InsertOrUpdate(Artist artist)
         {
-            var existingItem = Db.Set<Artist>().FirstOrDefault(x => x.Name == obj.Name);
+            var existingItem = Db.Set<Artist>().FirstOrDefault(x => x.Name == artist.Name);
             if (existingItem == null)
             {
-                Db.Add(obj);
+                Db.Add(artist);
             }
-            else if(!string.IsNullOrWhiteSpace(obj.Scrobbles))
+            else if(!string.IsNullOrWhiteSpace(artist.Scrobbles))
             {
-                existingItem.Scrobbles = obj.Scrobbles;
+                existingItem.Scrobbles = artist.Scrobbles;
             }
 
             Db.SaveChanges();
         }
 
-        public void InsertOrUpdate(Track obj)
+        public void InsertOrUpdate(Track track)
         {
-            obj.Artist = Db.Set<Artist>().FirstOrDefault(a => a.Name == obj.Artist.Name);
+            track.Artist = Db.Set<Artist>().FirstOrDefault(a => a.Name == track.Artist.Name);
             var existingItem = Db.Set<Track>()
-                .FirstOrDefault(x => x.Name == obj.Name && x.Artist.Id == obj.Artist.Id);
+                .FirstOrDefault(x => x.Name == track.Name && x.Artist.Id == track.Artist.Id);
             if (existingItem == null)
             {
-                Db.Add(obj);
+                Db.Add(track);
             }
-            else if(!string.IsNullOrWhiteSpace(obj.Scrobbles))
+            else if(!string.IsNullOrWhiteSpace(track.Scrobbles))
             {
-                existingItem.Scrobbles = obj.Scrobbles;
+                existingItem.Scrobbles = track.Scrobbles;
             }
 
             Db.SaveChanges();
+        }
+
+        public void InsertRating(Rating rating)
+        {
+            Db.Ratings.Add(rating);
+            Db.SaveChanges();
+        }
+
+        public void DeleteRating(ApplicationUser applicationUser, Track track)
+        {
+            Rating rating = Db.Ratings
+                .FirstOrDefault(r => r.ApplicationUser.Id == applicationUser.Id && r.Track.Id == track.Id);
+            if (rating != null)
+            {
+                Db.Ratings.Remove(rating);
+                Db.SaveChanges();
+            }
         }
 
         public SelectList GetCountries() => new SelectList(Db.Countries, "Id", "Name");

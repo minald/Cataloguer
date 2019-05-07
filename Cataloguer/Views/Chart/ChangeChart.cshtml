@@ -7,6 +7,7 @@
             <th>Track name</th>
             <th>Artist name</th>
             <th>Scrobbles</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -21,6 +22,12 @@
                 </td>
                 <td>@track.Artist.Name</td>
                 <td style="min-width: 120px;">@track.Scrobbles</td>
+                <td>
+                    <form asp-controller="Chart" asp-action="RemoveFromClientChart" asp-route-trackName="@track.Name"
+                          asp-route-artistName="@track.Artist.Name" method="post">
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

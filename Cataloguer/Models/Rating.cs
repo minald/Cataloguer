@@ -9,5 +9,14 @@
         public Track Track { get; set; }
 
         public int Rank { get; set; }
+
+        public Rating() { }
+
+        public Rating(ApplicationUser applicationUser, Track track, int rank)
+        {
+            ApplicationUser = applicationUser;
+            Track = track;
+            Rank = rank;
+        }
     }
 }
