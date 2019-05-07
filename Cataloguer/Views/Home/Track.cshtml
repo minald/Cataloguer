@@ -25,5 +25,9 @@
         {
             <audio controls src="@Model.LinkToAudio"></audio>
         }
+        <div class="text-center">
+            <a asp-controller="Home" asp-action="DownloadTrack" asp-route-trackName="@Model.Name"
+               asp-route-artistName="@Model.Artist.Name" class="btn btn-primary">Download</a>
+        </div>
     </div>
 </div>

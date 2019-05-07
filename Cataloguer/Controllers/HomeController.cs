@@ -1,4 +1,5 @@
 ﻿using Cataloguer.Models;
+using Cataloguer.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -71,6 +72,15 @@ namespace Cataloguer.Controllers
             return View(track);
         }
 
+        public ActionResult DownloadTrack(string trackName, string artistName, [FromServices]IDownloader downloader)
+        {
+            Track track = LastFMParser.GetTrack(trackName, artistName);
+            downloader.Download(trackName, artistName);
+            return View("Track", track);
+        }
+
+        #region Search
+
         public ActionResult Search(string value)
         {
             List<Artist> artists = LastFMParser.SearchArtists(value, newSearchElements).ToList();
@@ -99,6 +109,8 @@ namespace Cataloguer.Controllers
             tracks.ToList().ForEach(t => Repository.InsertOrUpdate(t));
             return PartialView("_Tracks", tracks);
         }
+
+        #endregion
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

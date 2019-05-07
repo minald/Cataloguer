@@ -25,6 +25,7 @@ namespace Cataloguer
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
             services.AddScoped<Repository>();
+            services.AddTransient<IDownloader, Downloader>();
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddMvc();
         }
