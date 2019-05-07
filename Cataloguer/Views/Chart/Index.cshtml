@@ -1,0 +1,18 @@
+﻿@model ChartViewModel
+
+<div class="row">
+    <div class="col-xs-6">
+        <h2 class="text-center">Chart</h2>
+        @Html.Partial("_TracksTable", Model.Chart)
+        <div class="text-center">
+            <a asp-action="FullChart" class="btn btn-primary">See more</a>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <h2 class="text-center">My rating</h2>
+        @Html.Partial("_TracksTable", Model.UserRating)
+        <div class="text-center">
+            <a asp-action="ChangeChart" class="btn btn-primary">Change chart</a>
+        </div>
+    </div>
+</div>

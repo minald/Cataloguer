@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cataloguer.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace Cataloguer.Models
 {
@@ -22,6 +24,12 @@ namespace Cataloguer.Models
         public List<Album> GetAlbumsByName(string name) => Db.Albums.Where(a => a.Name == name).ToList();
 
         public List<Track> GetTracks() => Db.Tracks.ToList();
+
+        public List<Track> GetTopTracks(int amount) => Db.Tracks.Include(t => t.Artist)
+            .OrderByDescending(t => Convert.ToInt64(t.Scrobbles.Replace(" ", ""))).Take(amount).ToList();
+
+        public List<Track> GetTopUserTracks(string userId) => Db.Ratings.Include(r => r.Track).ThenInclude(t => t.Artist)
+            .Where(r => r.ApplicationUser.Id == userId).OrderBy(r => r.Rank).Select(r => r.Track).ToList();
 
         public List<Track> GetTracksByName(string name) => Db.Tracks.Where(a => a.Name == name).ToList();
 
