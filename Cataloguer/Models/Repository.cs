@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Cataloguer.Data;
+using Cataloguer.Models.NeuralNetwork;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,8 @@ namespace Cataloguer.Models
 
         public Repository(ApplicationDbContext context) => Db = context;
 
+        #region Music entities
+
         public List<Artist> GetArtists() => Db.Artists.ToList();
 
         public List<Artist> GetArtistsByName(string name) => Db.Artists.Where(a => a.Name == name).ToList();
@@ -27,6 +30,8 @@ namespace Cataloguer.Models
 
         public Track GetTrack(string trackName, string artistName) 
             => Db.Tracks.FirstOrDefault(t => t.Name == trackName && t.Artist.Name == artistName);
+
+        public int GetTracksAmount() => Db.Tracks.Count();
 
         public List<Track> GetTracks() => Db.Tracks.ToList();
 
@@ -49,6 +54,10 @@ namespace Cataloguer.Models
 
         public Album GetAlbum(string albumName, string artistName) 
             => Db.Artists.First(a => a.Name == artistName).Albums.First(a => a.Name == albumName);
+
+        #endregion
+
+        #region Neural network entities
 
         public void InsertOrUpdate(ApplicationUser user)
         {
@@ -114,10 +123,18 @@ namespace Cataloguer.Models
             }
         }
 
+        public List<Rating> GetRatings() => Db.Ratings.Include(r => r.ApplicationUser).ToList();
+
+        public List<Bias> GetBiases() => Db.Biases.ToList();
+
+        public List<Weight> GetWeights() => Db.Weights.ToList();
+
         public SelectList GetCountries() => new SelectList(Db.Countries, "Id", "Name");
 
         public SelectList GetLanguages() => new SelectList(Db.Languages, "Id", "Name");
 
         public SelectList GetTemperaments() => new SelectList(Db.Temperaments, "Id", "Name");
+
+#endregion
     }
 }

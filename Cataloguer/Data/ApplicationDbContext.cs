@@ -1,4 +1,5 @@
 ﻿using Cataloguer.Models;
+using Cataloguer.Models.NeuralNetwork;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,10 @@ namespace Cataloguer.Data
         public DbSet<Temperament> Temperaments { get; set; }
 
         public DbSet<Rating> Ratings { get; set; }
+
+        public DbSet<Bias> Biases { get; set; }
+
+        public DbSet<Weight> Weights { get; set; }
 
         public ApplicationDbContext() : base() { }
 
