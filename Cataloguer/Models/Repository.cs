@@ -133,11 +133,11 @@ namespace Cataloguer.Models
 
         public List<Weight> GetWeights() => Db.Weights.ToList();
 
-        public /*async Task*/void AddBiasesAndWeightsAsync(List<Bias> biases, List<Weight> weights)
+        public void AddBiasesAndWeights(List<Bias> biases, List<Weight> weights)
         {
             Db.Biases.AddRange(biases);
             Db.Weights.AddRange(weights);
-            /*await*/ Db.SaveChanges/*Async*/();
+            Db.SaveChanges();
         }
 
         public void RemoveAllBiasesAndWeights()
@@ -147,12 +147,14 @@ namespace Cataloguer.Models
             Db.SaveChanges();
         }
 
+        public string GetConfigKeyValue(string name) => Db.ConfigKeys.FirstOrDefault(k => k.Name == name)?.Value;
+
         public SelectList GetCountries() => new SelectList(Db.Countries, "Id", "Name");
 
         public SelectList GetLanguages() => new SelectList(Db.Languages, "Id", "Name");
 
         public SelectList GetTemperaments() => new SelectList(Db.Temperaments, "Id", "Name");
 
-#endregion
+        #endregion
     }
 }

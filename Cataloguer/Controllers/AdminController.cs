@@ -24,10 +24,10 @@ namespace Cataloguer.Controllers
             return View();
         }
 
-        public /*async Task<IActionResult>*/ IActionResult Learn()
+        public IActionResult Learn()
         {
             NeuralNetwork.Learn();
-            /*await*/ NeuralNetwork.SaveAsync();
+            NeuralNetwork.SaveAsync();
             return View(nameof(Index));
         }
     }

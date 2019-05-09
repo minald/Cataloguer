@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Cataloguer.Models.NeuralNetwork
 {
@@ -15,31 +13,30 @@ namespace Cataloguer.Models.NeuralNetwork
         /// <summary>
         /// Learning rate
         /// </summary>
-        public float a;
-        public int InputLayerLength;
-        public int HiddenLayerLength;
-        public int OutputLayerLength;
-        public float[] InputLayer;
-        public float[] HiddenLayer;
-        public float[] ExpectedHidden;
-        public float[] OutputLayer;
-        public float[] ExpectedOutput;
-        public float[,] WeightsInputHidden;
-        public float[] BiasesHidden;
-        public float[,] WeightsHiddenOutput;
-        public float[] BiasesOutput;
-        public List<DatasetItem> Dataset { get; set; } = new List<DatasetItem>();
-        public List<Bias> Biases { get; set; } = new List<Bias>();
-        public List<Weight> Weights { get; set; } = new List<Weight>();
+        private readonly float a;
+        private readonly int IterationsAmount;
+        private readonly int InputLayerLength = 7;
+        private readonly int HiddenLayerLength;
+        private int OutputLayerLength { get; set; }
+        private float[] InputLayer;
+        private float[] HiddenLayer;
+        private float[] ExpectedHidden;
+        private float[] OutputLayer;
+        private float[] ExpectedOutput;
+        private float[,] WeightsInputHidden;
+        private float[] BiasesHidden;
+        private float[,] WeightsHiddenOutput;
+        private float[] BiasesOutput;
+        private List<DatasetItem> Dataset { get; set; } = new List<DatasetItem>();
 
         #endregion
 
         public NeuralNetwork(Repository repository)
         {
             Repository = repository;
-            a = 0.08f;
-            InputLayerLength = 7;
-            HiddenLayerLength = 100;
+            a = Convert.ToSingle(repository.GetConfigKeyValue("LearningRate"));
+            IterationsAmount = Convert.ToInt32(repository.GetConfigKeyValue("LearningIterations"));
+            HiddenLayerLength = Convert.ToInt32(repository.GetConfigKeyValue("HiddenLayerLength"));
             OutputLayerLength = repository.GetTracksAmount();
             InputLayer = new float[InputLayerLength];
             HiddenLayer = new float[HiddenLayerLength];
@@ -47,8 +44,6 @@ namespace Cataloguer.Models.NeuralNetwork
             OutputLayer = new float[OutputLayerLength];
             ExpectedOutput = new float[OutputLayerLength];
 
-            Biases = repository.GetBiases();
-            Weights = repository.GetWeights();
             LoadBiases();
             LoadWeights();
             List<Rating> ratings = repository.GetRatings();
@@ -60,6 +55,7 @@ namespace Cataloguer.Models.NeuralNetwork
         {
             BiasesHidden = new float[HiddenLayerLength];
             BiasesOutput = new float[OutputLayerLength];
+            List<Bias> Biases = Repository.GetBiases();
             if (Biases.Count == 0)
             {
                 BiasesHidden.InitializeRandomVector();
@@ -76,6 +72,7 @@ namespace Cataloguer.Models.NeuralNetwork
         {
             WeightsInputHidden = new float[InputLayerLength, HiddenLayerLength];
             WeightsHiddenOutput = new float[HiddenLayerLength, OutputLayerLength];
+            List<Weight> Weights = Repository.GetWeights();
             if (Weights.Count == 0)
             {
                 WeightsInputHidden.InitializeRandomMatrix();
@@ -184,8 +181,7 @@ namespace Cataloguer.Models.NeuralNetwork
 
         public void Learn()
         {
-            int iterationsAmount = 10000; // This parameter can be configurable
-            for (int iteration = 0; iteration < iterationsAmount; iteration++)
+            for (int iteration = 0; iteration < IterationsAmount; iteration++)
             {
                 foreach (var datasetItem in Dataset)
                 {
@@ -204,14 +200,14 @@ namespace Cataloguer.Models.NeuralNetwork
                         {
                             float DzDw = HiddenLayer[i];
                             float DcDw = DcDa * DaDz * DzDw;
-                            WeightsHiddenOutput[i, j] -= a * DcDw;
+                            WeightsHiddenOutput[i, j] -= MaxByModule(a * DcDw);
 
                             float DcDb = DcDa * DaDz;
-                            BiasesOutput[j] -= a * DcDb;
+                            BiasesOutput[j] -= MaxByModule(a * DcDb);
 
                             float DzDaMinus1 = WeightsHiddenOutput[i, j];
                             float DcDaMinus1 = DcDa * DaDz * DzDaMinus1;
-                            ExpectedHidden[i] -= DcDaMinus1;
+                            ExpectedHidden[i] -= MaxByModule(DcDaMinus1);
                         }
                     }
                     for (int j = 0; j < HiddenLayerLength; j++)
@@ -223,27 +219,33 @@ namespace Cataloguer.Models.NeuralNetwork
                         {
                             float DzDw = InputLayer[i];
                             float DcDw = DcDa * DaDz * DzDw;
-                            WeightsInputHidden[i, j] -= a * DcDw;
+                            WeightsInputHidden[i, j] -= MaxByModule(a * DcDw);
 
                             float DcDb = DcDa * DaDz;
-                            BiasesHidden[j] -= a * DcDb;
+                            BiasesHidden[j] -= MaxByModule(a * DcDb);
                         }
                     }
                 }
             }
         }
 
-        public /*async Task*/void SaveAsync()
+        private float MaxByModule(float x)
+        {
+            float maxModule = (float)Math.Max(Math.Abs(x), 0.00001);
+            return maxModule * Math.Sign(x);
+        }
+
+        public void SaveAsync()
         {
             Repository.RemoveAllBiasesAndWeights();
 
             List<Bias> biasesHidden = ConvertFromArray(BiasesHidden, 1).ToList();
             List<Weight> weightsInputHidden = ConvertFromMatrix(WeightsInputHidden, 0).ToList();
-            /*await*/ Repository.AddBiasesAndWeightsAsync(biasesHidden, weightsInputHidden);
+            Repository.AddBiasesAndWeights(biasesHidden, weightsInputHidden);
 
             List<Bias> biasesOutput = ConvertFromArray(BiasesOutput, 2).ToList();
             List<Weight> weightsHiddenOutput = ConvertFromMatrix(WeightsHiddenOutput, 1).ToList();
-            /*await*/ Repository.AddBiasesAndWeightsAsync(biasesOutput, weightsHiddenOutput);
+            Repository.AddBiasesAndWeights(biasesOutput, weightsHiddenOutput);
         }
 
         private IEnumerable<Bias> ConvertFromArray(float[] biases, byte layer)

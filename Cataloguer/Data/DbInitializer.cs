@@ -1,4 +1,5 @@
 ﻿using Cataloguer.Models;
+using Cataloguer.Models.NeuralNetwork;
 using System.Linq;
 
 namespace Cataloguer.Data
@@ -85,6 +86,13 @@ namespace Cataloguer.Data
                 db.Add(new Temperament("Sanguine", 2));
                 db.Add(new Temperament("Phlegmatic", 3));
                 db.Add(new Temperament("Melancholic", 4));
+            }
+
+            if (!db.ConfigKeys.Any())
+            {
+                db.Add(new ConfigKey("LearningIterations", "1000"));
+                db.Add(new ConfigKey("LearningRate", "0.15"));
+                db.Add(new ConfigKey("HiddenLayerLength", "100"));
             }
 
             db.SaveChanges();

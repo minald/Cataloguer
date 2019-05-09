@@ -25,6 +25,8 @@ namespace Cataloguer.Data
 
         public DbSet<Weight> Weights { get; set; }
 
+        public DbSet<ConfigKey> ConfigKeys { get; set; }
+
         public ApplicationDbContext() : base() { }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
