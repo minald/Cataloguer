@@ -1,14 +1,16 @@
-﻿using Cataloguer.Models;
-using Cataloguer.Models.NeuralNetwork;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
-namespace lab2
+namespace Cataloguer.Models.NeuralNetwork
 {
     public class NeuralNetwork
     {
         #region Properties
+
+        private Repository Repository { get; set; }
 
         /// <summary>
         /// Learning rate
@@ -26,7 +28,7 @@ namespace lab2
         public float[] BiasesHidden;
         public float[,] WeightsHiddenOutput;
         public float[] BiasesOutput;
-        public List<DatasetItem> Dataset = new List<DatasetItem>();
+        public List<DatasetItem> Dataset { get; set; } = new List<DatasetItem>();
         public List<Bias> Biases { get; set; } = new List<Bias>();
         public List<Weight> Weights { get; set; } = new List<Weight>();
 
@@ -34,7 +36,8 @@ namespace lab2
 
         public NeuralNetwork(Repository repository)
         {
-            a = 0.05f;
+            Repository = repository;
+            a = 0.08f;
             InputLayerLength = 7;
             HiddenLayerLength = 100;
             OutputLayerLength = repository.GetTracksAmount();
@@ -80,7 +83,7 @@ namespace lab2
             }
             else
             {
-                IEnumerable<Weight> weightsInputHidden = Weights.Where(w => w.FromLayer == 0);
+                List<Weight> weightsInputHidden = Weights.Where(w => w.FromLayer == 0).ToList();
                 for (int i = 0; i < InputLayerLength; i++)
                 {
                     for (int j = 0; j < HiddenLayerLength; j++)
@@ -90,13 +93,14 @@ namespace lab2
                     }
                 }
 
-                IEnumerable<Weight> weightsHiddenOutput = Weights.Where(w => w.FromLayer == 1);
+                List<Weight> weightsHiddenOutput = Weights.Where(w => w.FromLayer == 1).ToList();
                 for (int i = 0; i < HiddenLayerLength; i++)
                 {
+                    List<Weight> weightsFromI = weightsHiddenOutput.Where(w => w.FromNumber == i).ToList();
                     for (int j = 0; j < OutputLayerLength; j++)
                     {
-                        WeightsHiddenOutput[i, j] = weightsHiddenOutput
-                            .FirstOrDefault(w => w.FromNumber == i && w.ToNumber == j)?.Value ?? 0;
+                        WeightsHiddenOutput[i, j] = weightsFromI
+                            .FirstOrDefault(w => w.ToNumber == j)?.Value ?? 0;
                     }
                 }
             }
@@ -142,10 +146,20 @@ namespace lab2
             }
         }
 
-        public int GetAssumptiveResult()
+        public List<KeyValuePair<Track, float>> GetAssumptiveRating(ApplicationUser user)
         {
-            double maximum = OutputLayer.Max();
-            return Array.FindIndex(OutputLayer, x => x == maximum);
+            InputLayer = user.GetInputData();
+            CalculateHiddenLayer();
+            CalculateOutputLayer();
+
+            Dictionary<Track, float> assumptiveRating = new Dictionary<Track, float>();
+            List<Track> tracks = Repository.GetTracks().OrderBy(t => t.Id).ToList();
+            for (int i = 0; i < OutputLayerLength; i++)
+            {
+                assumptiveRating.Add(tracks[i], OutputLayer[i]);
+            }
+
+            return assumptiveRating.OrderByDescending(r => r.Value).Take(20).ToList();
         }
 
         private float CalculateSigmoid(float x) => 1 / (float)(1 + Math.Exp(-x));
@@ -170,7 +184,7 @@ namespace lab2
 
         public void Learn()
         {
-            int iterationsAmount = 100; // This parameter can be configurable
+            int iterationsAmount = 10000; // This parameter can be configurable
             for (int iteration = 0; iteration < iterationsAmount; iteration++)
             {
                 foreach (var datasetItem in Dataset)
@@ -219,16 +233,38 @@ namespace lab2
             }
         }
 
-        //public void Dispose()
-        //{
-        //    string weightsAndBiases = JsonConvert.SerializeObject(WeightsInputHidden) + Environment.NewLine + 
-        //        JsonConvert.SerializeObject(BiasesHidden) + Environment.NewLine +
-        //        JsonConvert.SerializeObject(WeightsHiddenOutput) + Environment.NewLine +
-        //        JsonConvert.SerializeObject(BiasesOutput);
-        //    File.WriteAllText(StoragePath, weightsAndBiases);
+        public /*async Task*/void SaveAsync()
+        {
+            Repository.RemoveAllBiasesAndWeights();
 
-        //    string dataset = JsonConvert.SerializeObject(Dataset);
-        //    File.WriteAllText(DatasetPath, dataset);
-        //}
+            List<Bias> biasesHidden = ConvertFromArray(BiasesHidden, 1).ToList();
+            List<Weight> weightsInputHidden = ConvertFromMatrix(WeightsInputHidden, 0).ToList();
+            /*await*/ Repository.AddBiasesAndWeightsAsync(biasesHidden, weightsInputHidden);
+
+            List<Bias> biasesOutput = ConvertFromArray(BiasesOutput, 2).ToList();
+            List<Weight> weightsHiddenOutput = ConvertFromMatrix(WeightsHiddenOutput, 1).ToList();
+            /*await*/ Repository.AddBiasesAndWeightsAsync(biasesOutput, weightsHiddenOutput);
+        }
+
+        private IEnumerable<Bias> ConvertFromArray(float[] biases, byte layer)
+        {
+            for (int i = 0; i < biases.Length; i++)
+            {
+                yield return new Bias(layer, i, biases[i]);
+            }
+        }
+
+        private IEnumerable<Weight> ConvertFromMatrix(float[,] weights, byte layer)
+        {
+            int n = weights.GetLength(0);
+            int m = weights.GetLength(1);
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    yield return new Weight(layer, i, j, weights[i, j]);
+                }
+            }
+        }
     }
 }

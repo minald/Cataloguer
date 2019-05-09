@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 
-namespace lab2
+namespace Cataloguer.Models.NeuralNetwork
 {
     public static class Extensions
     {

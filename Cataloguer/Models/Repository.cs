@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cataloguer.Data;
 using Cataloguer.Models.NeuralNetwork;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -123,11 +124,28 @@ namespace Cataloguer.Models
             }
         }
 
-        public List<Rating> GetRatings() => Db.Ratings.Include(r => r.ApplicationUser).ToList();
+        public List<Rating> GetRatings() => Db.Ratings
+            .Include(r => r.ApplicationUser).ThenInclude(u => u.Country)
+            .Include(r => r.ApplicationUser).ThenInclude(u => u.SecondLanguage)
+            .Include(r => r.ApplicationUser).ThenInclude(u => u.Temperament).ToList();
 
         public List<Bias> GetBiases() => Db.Biases.ToList();
 
         public List<Weight> GetWeights() => Db.Weights.ToList();
+
+        public /*async Task*/void AddBiasesAndWeightsAsync(List<Bias> biases, List<Weight> weights)
+        {
+            Db.Biases.AddRange(biases);
+            Db.Weights.AddRange(weights);
+            /*await*/ Db.SaveChanges/*Async*/();
+        }
+
+        public void RemoveAllBiasesAndWeights()
+        {
+            Db.Biases.RemoveRange(Db.Biases);
+            Db.Weights.RemoveRange(Db.Weights);
+            Db.SaveChanges();
+        }
 
         public SelectList GetCountries() => new SelectList(Db.Countries, "Id", "Name");
 

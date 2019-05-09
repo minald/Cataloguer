@@ -1,4 +1,5 @@
 ﻿using Cataloguer.Models;
+using Cataloguer.Models.NeuralNetwork;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,9 @@ namespace Cataloguer.Controllers
             List<Track> chart = Repository.GetTopTracks(amount: 20);
             ApplicationUser currentUser = await GetUserAsync();
             List<Track> userRating = Repository.GetTopUserTracks(currentUser.Id).ToList();
-            return View(new ChartViewModel(chart, userRating));
+            var neuralNetwork = new NeuralNetwork(Repository);
+            List<KeyValuePair<Track, float>> assumptiveRating = neuralNetwork.GetAssumptiveRating(currentUser);
+            return View(new ChartViewModel(chart, userRating, assumptiveRating));
         }
 
         public IActionResult FullChart() => View(Repository.GetTopTracks(amount: 1000));

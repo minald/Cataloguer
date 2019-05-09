@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Cataloguer.Models.NeuralNetwork
@@ -12,20 +11,9 @@ namespace Cataloguer.Models.NeuralNetwork
 
         public DatasetItem(ApplicationUser user, List<Rating> ratings, List<Track> tracks, int outputLayerLength)
         {
-            InitializeInputData(user);
+            InputData = user.GetInputData();
             OutputData = new float[outputLayerLength];
             InitializeOutputData(ratings, tracks);
-        }
-
-        public void InitializeInputData(ApplicationUser user)
-        {
-            InputData[0] = (float)(user.Country.Value1 + 180) / 360;
-            InputData[1] = (float)(user.Country.Value2 + 180) / 360;
-            InputData[2] = (float)(user.SecondLanguage.Value1 + 180) / 360;
-            InputData[3] = (float)(user.SecondLanguage.Value2 + 180) / 360;
-            InputData[4] = (DateTime.Now.Year - user.BirthYear) / 100;
-            InputData[5] = (float)user.Gender;
-            InputData[6] = (user.Temperament.Value - 1) / 3;
         }
 
         public void InitializeOutputData(List<Rating> ratings, List<Track> tracks)
