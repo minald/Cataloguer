@@ -1,12 +1,17 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Cataloguer.Models
 {
     public class Track : CommonObject
     {
+        [NotMapped]
         public string LinkToAudio { get; set; }
+        [NotMapped]
         public int Rank { get; set; }
+        [NotMapped]
         public string Duration { get; set; }
+        [NotMapped]
         public string Info { get; set; }
 
         public virtual Album Album { get; set; }

@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Album>
+
+@foreach (Album album in Model)
+{
+    <a asp-controller="Home" asp-action="Album" asp-route-albumName="@album.Name" 
+       asp-route-artistName="@album.Artist.Name" class="panel panel-success">
+        <div class="panel-heading">
+            <p class="text-center">@album.Name</p>
+        </div>
+        <div class="panel-body">
+            <img class="img-rounded center-block" src="@album.PictureLink" />
+        </div>
+        @if (album.Scrobbles != null)
+        {
+            <div class="panel-footer">
+                <p>
+                    <span class="glyphicon glyphicon-headphones"></span>    @album.Scrobbles
+                </p>
+            </div>
+        }
+    </a>
+}

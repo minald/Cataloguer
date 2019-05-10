@@ -1,0 +1,34 @@
+﻿@model List<Track>
+
+<table class="table table-bordered table-condensed table-hover table-striped" style="background-color: aliceblue;">
+    <thead class="thead-dark">
+        <tr>
+            <th>#</th>
+            <th>Track name</th>
+            <th>Artist name</th>
+            <th>Scrobbles</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (int i = 1; i <= Model.Count; i++)
+        {
+            Track track = Model.ElementAt(i - 1);
+            <tr>
+                <th>@i</th>
+                <td>
+                    <a asp-controller="Home" asp-action="Track" asp-route-trackName="@track.Name"
+                       asp-route-artistName="@track.Artist.Name">@track.Name</a>
+                </td>
+                <td>@track.Artist.Name</td>
+                <td style="min-width: 120px;">@track.Scrobbles</td>
+                <td>
+                    <form asp-controller="Chart" asp-action="RemoveFromClientChart" asp-route-trackName="@track.Name"
+                          asp-route-artistName="@track.Artist.Name" method="post">
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

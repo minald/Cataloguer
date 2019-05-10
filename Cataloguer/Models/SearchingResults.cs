@@ -4,18 +4,17 @@ namespace Cataloguer.Models
 {
     public class SearchingResults
     {
-        public List<Artist> LastFMArtists { get; set; }
+        public List<Artist> Artists { get; set; }
 
-        public List<Album> LastFMAlbums { get; set; }
+        public List<Album> Albums { get; set; }
 
-        public List<Track> LastFMTracks { get; set; }
+        public List<Track> Tracks { get; set; }
 
-        public List<Artist> LocalArtists { get; set; }
-
-        public List<Album> LocalAlbums { get; set; }
-
-        public List<Track> LocalTracks { get; set; }
-
-        public SearchingResults() { }
+        public SearchingResults(List<Artist> artists, List<Album> albums, List<Track> tracks)
+        {
+            Artists = artists;
+            Albums = albums;
+            Tracks = tracks;
+        }
     }
 }

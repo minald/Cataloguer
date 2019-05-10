@@ -4,9 +4,7 @@
 }
 
 <div style="float: left; margin: 30px">
-    <h1 class="text-center">@Html.ActionLink(Model.Name, "ArtistProfile", "Home", 
-                           new { name = Model.Name }, new { })</h1>
+    <h1 class="text-center"><a asp-controller="Home" asp-action="Artist" asp-route-name="@Model.Name">@Model.Name</a></h1>
     <img class="img-thumbnail center-block" height="300px" src="@Model.PictureLink" />
 </div>
-
-<h5 style="margin-top: 80px">@Model.FullBiography</h5>
+<p style="margin-top: 30px">@Model.FullBiography</p>

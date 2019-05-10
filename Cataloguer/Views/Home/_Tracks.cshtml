@@ -1,0 +1,17 @@
+﻿@model IEnumerable<Track>
+
+@foreach (Track track in Model)
+{
+    <a asp-controller="Home" asp-action="Track" asp-route-trackName="@track.Name" 
+       asp-route-artistName="@track.Artist.Name" class="panel panel-success">
+        <div class="panel-heading">
+            <p class="text-center">@track.Name</p>
+        </div>
+        <div class="panel-body">
+            <img class="img-rounded center-block" src="@track.PictureLink" />
+        </div>
+        <div class="panel-footer">
+            <span class="glyphicon glyphicon-headphones"></span>    @track.Listeners
+        </div>
+    </a>
+}

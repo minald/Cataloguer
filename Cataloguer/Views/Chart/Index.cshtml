@@ -1,0 +1,46 @@
+﻿@model ChartViewModel
+
+<div class="row">
+    <div class="col-xs-4">
+        <h2 class="text-center">Chart</h2>
+        @Html.Partial("_TracksTable", Model.Chart)
+        <div class="text-center">
+            <a asp-action="FullChart" class="btn btn-primary">See more</a>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <h2 class="text-center">Assumptive chart</h2>
+        <table class="table table-bordered table-condensed table-hover table-striped" style="background-color: aliceblue;">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Track name</th>
+                    <th style="width: 200px;">Artist name</th>
+                    <th style="min-width: 60px;">Rating</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 1; i <= Model.AssumptiveRating.Count; i++)
+                {
+                    Track track = Model.AssumptiveRating.ElementAt(i - 1).Key;
+                    <tr>
+                        <th>@i</th>
+                        <td>
+                            <a asp-controller="Home" asp-action="Track" asp-route-trackName="@track.Name"
+                               asp-route-artistName="@track.Artist.Name">@track.Name</a>
+                        </td>
+                        <td>@track.Artist.Name</td>
+                        <td>@(Model.AssumptiveRating.ElementAt(i - 1).Value * 100)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-xs-4">
+        <h2 class="text-center">My chart</h2>
+        @Html.Partial("_TracksTable", Model.UserRating)
+        <div class="text-center">
+            <a asp-action="ChangeChart" class="btn btn-primary">Change chart</a>
+        </div>
+    </div>
+</div>

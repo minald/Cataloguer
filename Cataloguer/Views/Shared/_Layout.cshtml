@@ -3,8 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Cataloguer</title>
-
+    <title>@ViewData["Title"]</title>
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="~/css/site.css" />
@@ -26,30 +25,32 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Top Artists</a>
+                <a asp-controller="Home" asp-action="Index" class="navbar-brand">Artists</a>
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-controller="Local" asp-action="Index" class="navbar-brand">Local catalog</a></li>
+                    <li><a asp-controller="Chart" asp-action="Index" class="navbar-brand">Chart</a></li>
+                    <li><a asp-controller="Admin" asp-action="Index" class="navbar-brand">Admin</a></li>
                     <li>
-                        <form method="get" action="/Home/Search" class="form-inline">
+                        <form method="get" asp-controller="Home" asp-action="Search"
+                              class="form-inline" style="margin-top: 8px; margin-bottom: 8px;">
                             <input type="text" name="value" class="form-control">
                             <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
                         </form>
                     </li>
                 </ul>
-                <partial name="_LoginPartial" />
+                @await Html.PartialAsync("_LoginPartial")
             </div>
         </div>
     </nav>
-    <partial name="_CookieConsentPartial" />
     <div class="container body-content">
         @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; 2019 - Cataloguer</p>
+        </footer>
     </div>
-    <hr />
-    <footer>
-        <p>&copy; 2019 - Cataloguer</p>
-    </footer>
+
     <script src="~/js/site.min.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>

@@ -1,0 +1,39 @@
+﻿@model Artist
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="row">
+    <div class="col-sm-3">
+        <img class="img-thumbnail" src="@Model.PictureLink" style="width: 100%;" />
+    </div>
+    <div class="col-sm-9">
+        <h1 class="text-center">@Model.Name</h1>
+        @Html.Partial("_TagList", Model.Tags)
+        <h4>Scrobbles : @Model.Scrobbles</h4>
+        <h4>Listeners : @Model.Listeners</h4>
+        @if (!String.IsNullOrWhiteSpace(Model.ShortBiography))
+        {
+            <p>@Model.ShortBiography</p>
+            <a asp-controller="Home" asp-action="ArtistBiography" asp-route-name="@Model.Name">See more...</a>
+        }
+    </div>
+</div>
+<h2 class="text-center">Top tracks</h2>
+<div class="flex-container">
+    @Html.Partial("_Tracks", Model.Tracks)
+</div>
+@if (Model.Tracks.Count > 9)
+{
+    <a asp-controller="Home" asp-action="ArtistAllTracks" 
+       asp-route-name="@Model.Name" class="btn btn-info">More tracks...</a>
+}
+<h2 class="text-center">Top albums</h2>
+<div class="flex-container">
+    @Html.Partial("_Albums", Model.Albums)
+</div>
+@if (Model.Albums.Count > 7)
+{
+    <a asp-controller="Home" asp-action="ArtistAllAlbums" 
+       asp-route-name="@Model.Name" class="btn btn-info">More albums...</a>
+}

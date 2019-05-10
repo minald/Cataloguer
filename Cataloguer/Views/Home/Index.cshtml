@@ -1,19 +1,18 @@
-﻿@model List<Artist>
+﻿@model IEnumerable<Artist>
 @{
     ViewBag.Title = "Top artists";
 }
 
 <h1 class="text-center">Top artists from Last.fm</h1>
 <div id="results" class="flex-container">
-    @*<partial name="PartialArtists" model="Model"/>*@
-    @Html.Partial("PartialArtists", Model)
+    @Html.Partial("_Artists", Model)
 </div>
 <img id="loading" class="center-block" src="~/images/loading.gif"/>
 <script>
     $(this).on('scroll', scrolling);
     var page = 2;
     function scrolling() {
-        if ($(this).scrollTop() >= ($('#results').height() - $(this).height() - 100)){
+        if ($(this).scrollTop() >= $('#results').height() - $(this).height() - 100) {
             $(this).unbind('scroll');
             $.ajax({
                 beforeSend: function () {
