@@ -27,7 +27,7 @@ namespace Cataloguer.Controllers
         {
             IEnumerable<Artist> artists = LastFMParser.GetTopArtists(page, itemsPerPage);
             artists.ToList().ForEach(a => Repository.InsertOrUpdate(a));
-            return PartialView("_Artists", LastFMParser.GetTopArtists(page, itemsPerPage));
+            return PartialView("_Artists", artists);
         }
 
         public ActionResult Artist(string name)
